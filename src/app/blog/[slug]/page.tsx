@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { Mdx } from "@/components/mdx";
+import { Comments } from "@/components/comments";
 import { TagPill } from "@/components/tag-pill";
 import { site } from "@/lib/site";
 import { articleJsonLd } from "@/lib/seo";
@@ -77,6 +78,7 @@ export default async function PostPage({
         )}
       </header>
       <Mdx source={post.content} />
+      <Comments />
     </article>
   );
 }
