@@ -1,6 +1,8 @@
+import { site } from "@/lib/site";
+
 const SOCIALS = [
-  { href: "https://github.com/titouanlebocq", label: "GitHub" },
-  { href: "https://www.linkedin.com/in/titouanlebocq", label: "LinkedIn" },
+  { href: site.social.github, label: "GitHub" },
+  { href: site.social.linkedin, label: "LinkedIn" },
 ];
 
 export function Footer({ year }: { year: number }) {

@@ -13,7 +13,7 @@ describe("Footer", () => {
     render(<Footer year={2026} />);
     expect(screen.getByRole("link", { name: /github/i })).toHaveAttribute(
       "href",
-      "https://github.com/titouanlebocq",
+      "https://github.com/LEBOCQTitouan",
     );
   });
 });
