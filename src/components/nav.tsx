@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Logo } from "@/components/logo";
 
 const LINKS = [
   { href: "/work", label: "Work" },
@@ -12,8 +13,9 @@ export function Nav() {
     <header className="flex items-center justify-between py-6">
       <Link
         href="/"
-        className="text-sm font-bold tracking-tight transition-colors hover:text-accent"
+        className="flex items-center gap-2 text-sm font-bold tracking-tight transition-colors hover:text-accent"
       >
+        <Logo className="h-6 w-6" />
         Titouan Lebocq
       </Link>
       <nav className="flex items-center gap-5 text-sm text-muted">
