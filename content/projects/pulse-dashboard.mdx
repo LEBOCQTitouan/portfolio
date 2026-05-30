@@ -1,0 +1,23 @@
+---
+title: Pulse Dashboard
+summary: A real-time analytics dashboard — streaming backend and a polished, fast UI.
+role: Full-stack engineer
+stack: [Next.js, WebSockets, Rust, ClickHouse]
+category: both
+featured: false
+order: 3
+links:
+  repo: https://github.com/titouanlebocq/pulse
+  demo: https://pulse.example.com
+---
+
+## Overview
+
+End-to-end ownership of a live metrics dashboard: a Rust ingestion service
+feeding a ClickHouse store, surfaced through a Next.js UI over WebSockets.
+
+## Highlights
+
+- Sub-second end-to-end latency from event to rendered chart.
+- Backpressure handling so the UI degrades gracefully under spikes.
+- Interface tuned for at-a-glance reading on large wall displays.

@@ -1,0 +1,22 @@
+---
+title: Ledger Engine
+summary: A distributed double-entry ledger that stays correct and fast under load.
+role: Lead backend engineer
+stack: [Go, Postgres, Kafka, gRPC]
+category: systems
+featured: true
+order: 1
+links:
+  repo: https://github.com/titouanlebocq/ledger-engine
+---
+
+## Overview
+
+A horizontally-scalable double-entry ledger with strict consistency guarantees,
+designed to never lose or double-count a transaction.
+
+## Highlights
+
+- Idempotent writes keyed by client-supplied transaction IDs.
+- Append-only event log with periodic balance snapshots.
+- p99 write latency under 12ms at 10k transactions/second.
