@@ -42,3 +42,7 @@ next-env.d.ts
 
 # brainstorming companion files
 .superpowers/
+
+# OpenNext / Cloudflare build output
+.open-next/
+.wrangler/
