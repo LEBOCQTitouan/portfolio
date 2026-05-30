@@ -725,10 +725,14 @@ git commit -m "feat: compose layout with nav, footer, and home placeholder"
 
 ---
 
-## Task 9: Project README and Vercel deployment
+## Task 9: Project README and Cloudflare (OpenNext) deployment
+
+Set up the Cloudflare deploy pipeline via the official OpenNext adapter (`@opennextjs/cloudflare`), so the site runs on the Cloudflare Workers server runtime (keeping dynamic features available for later phases). Verify a **local** Cloudflare preview build works (no Cloudflare account needed); the **production** deploy is gated on your interactive `wrangler login`.
 
 **Files:**
 - Modify: `README.md` (full replace)
+- Create: `open-next.config.ts`, `wrangler.jsonc`
+- Modify: `next.config.ts` (dev bindings init), `package.json` (scripts), `.gitignore` (ignore `.open-next/`)
 
 - [ ] **Step 1: Replace `README.md`**
 
@@ -739,16 +743,18 @@ Personal portfolio and technical blog. Engineering with the craft of design.
 
 ## Stack
 
-Next.js (App Router) · TypeScript · Tailwind CSS v4 · next-themes · Vitest
+Next.js (App Router) · TypeScript · Tailwind CSS v4 · next-themes · Vitest · Cloudflare (OpenNext)
 
 ## Development
 
-```bash
+\`\`\`bash
 npm install      # install dependencies
 npm run dev      # start the dev server
 npm test         # run the test suite
-npm run build    # production build
-```
+npm run build    # production build (next build)
+npm run preview  # build + run the Cloudflare worker locally
+npm run deploy   # build + deploy to Cloudflare (needs `wrangler login`)
+\`\`\`
 
 ## Project structure
 
@@ -758,31 +764,105 @@ npm run build    # production build
 - `docs/superpowers/` — design spec and implementation plans
 ```
 
-- [ ] **Step 2: Commit**
+- [ ] **Step 2: Commit the README**
 
 ```bash
-git add -A
+git add README.md
 git commit -m "docs: add project README"
 ```
 
-- [ ] **Step 3: Deploy to Vercel (requires interactive login)**
-
-This step needs your Vercel account. In the terminal, run the login yourself (interactive):
-
-```
-! npx vercel login
-```
-
-Then deploy a preview, and finally production:
+- [ ] **Step 3: Install the Cloudflare adapter + wrangler**
 
 ```bash
-npx vercel        # creates/links the project, deploys a preview
-npx vercel --prod # promotes to production
+npm install --save-dev @opennextjs/cloudflare@latest wrangler@latest
 ```
 
-Expected: Vercel prints a live URL. Confirm the deployed site loads, theming works, and the home placeholder renders. Vercel auto-detects Next.js — no extra configuration needed.
+Expected: installs without peer-dependency errors. (`@opennextjs/cloudflare` provides the `opennextjs-cloudflare` CLI; `wrangler` is the Cloudflare deploy/dev tool.)
 
-(If you'd rather connect the GitHub repo through the Vercel dashboard for automatic deploys on push, do that instead — push the repo to GitHub first, then "Import Project" in Vercel.)
+- [ ] **Step 4: Create `open-next.config.ts`**
+
+```ts
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+
+export default defineCloudflareConfig();
+```
+
+- [ ] **Step 5: Create `wrangler.jsonc`**
+
+```jsonc
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "portfolio",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
+}
+```
+
+(`nodejs_compat` + a `compatibility_date` ≥ 2024-09-23 are required by the adapter. `name` is the Worker name.)
+
+- [ ] **Step 6: Add the dev-bindings hook to `next.config.ts`**
+
+Append to the END of `next.config.ts` (after the existing `export default nextConfig;` line), so `npm run dev` can access Cloudflare bindings in local dev:
+
+```ts
+// Enable Cloudflare bindings during `next dev` (OpenNext adapter)
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev();
+```
+
+- [ ] **Step 7: Add deploy scripts to `package.json`**
+
+In the `"scripts"` object, add:
+
+```json
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+```
+
+- [ ] **Step 8: Ignore the build output**
+
+```bash
+printf '\n# OpenNext / Cloudflare build output\n.open-next/\n.wrangler/\n' >> .gitignore
+```
+
+- [ ] **Step 9: Verify the Cloudflare build locally (no account needed)**
+
+```bash
+npx opennextjs-cloudflare build
+```
+
+Expected: completes and produces `.open-next/worker.js` and `.open-next/assets/`. If the adapter's API differs from the config above (version drift), consult `npx opennextjs-cloudflare --help` and the generated error messages, adjust `open-next.config.ts` / `wrangler.jsonc` accordingly, and report what changed. Then confirm `npm run build`, `npm test`, and `npx tsc --noEmit` are all still green.
+
+- [ ] **Step 10: Commit the deploy pipeline**
+
+```bash
+git add -A
+git commit -m "build: add Cloudflare (OpenNext) deploy pipeline"
+```
+
+- [ ] **Step 11: Production deploy (requires interactive Cloudflare login — done by the human)**
+
+This step needs your Cloudflare account. In the terminal, run the login yourself (interactive):
+
+```
+! npx wrangler login
+```
+
+Then deploy:
+
+```bash
+npm run deploy
+```
+
+Expected: builds via OpenNext and deploys; wrangler prints a live `*.workers.dev` URL. Confirm the deployed site loads, theming works, and the home placeholder renders.
+
+(Alternatively, connect the GitHub repo in the Cloudflare dashboard — "Workers & Pages" → import — for automatic deploys on push. Push the repo to GitHub first.)
 
 ---
 
@@ -795,7 +875,7 @@ Expected: Vercel prints a live URL. Confirm the deployed site loads, theming wor
 - Inter font + typographic baseline → Task 4 ✓
 - Layout / nav / footer → Tasks 6, 7, 8 ✓
 - Test harness (Vitest + Testing Library) → Task 2 ✓
-- Deploy to Vercel → Task 9 ✓
+- Cloudflare (OpenNext) deploy pipeline → Task 9 ✓
 - (Content layer, SEO, OG, RSS, analytics, etc. are later phases — correctly out of scope here.)
 
 **Type consistency:** `ThemeToggle` (no props) used by `Nav`; `Footer` takes `{ year: number }` consistently in test and layout; `ThemeProvider` forwards next-themes props. Token utility names (`bg-background`, `text-foreground`, `text-accent`, `text-muted`, `border-border`) defined in Task 3 and used consistently in Tasks 5–8.
