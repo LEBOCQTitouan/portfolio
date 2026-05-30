@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-export function CopyButton({ text }: { text: string }) {
+export function CopyButton({ getText }: { getText: () => string }) {
   const [copied, setCopied] = useState(false);
 
   async function copy() {
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(getText());
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   }

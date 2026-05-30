@@ -5,11 +5,10 @@ import { CopyButton } from "@/components/copy-button";
 
 export function Pre(props: ComponentPropsWithoutRef<"pre">) {
   const ref = useRef<HTMLPreElement>(null);
-  const text = () => ref.current?.textContent ?? "";
 
   return (
     <div className="group relative">
-      <CopyButton text={text()} />
+      <CopyButton getText={() => ref.current?.textContent ?? ""} />
       <pre
         ref={ref}
         {...props}
