@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAllPostMeta, getAllTags } from "@/lib/posts";
 import { BlogExplorer } from "@/components/blog-explorer";
+import { Newsletter } from "@/components/newsletter";
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -22,6 +23,9 @@ export default function BlogIndexPage() {
         ) : (
           <BlogExplorer posts={posts} allTags={tags} />
         )}
+      </div>
+      <div className="mt-12">
+        <Newsletter />
       </div>
     </section>
   );
