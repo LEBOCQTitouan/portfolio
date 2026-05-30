@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Nav } from "@/components/nav";
+import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -27,7 +29,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-6">
+            <Nav />
+            <main className="flex-1 py-8">{children}</main>
+            <Footer year={new Date().getFullYear()} />
+          </div>
         </ThemeProvider>
       </body>
     </html>
