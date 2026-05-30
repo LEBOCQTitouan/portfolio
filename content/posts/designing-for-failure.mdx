@@ -1,0 +1,31 @@
+---
+title: Designing for Failure
+date: 2026-01-15
+summary: Resilient systems assume things break. Here is how I design backends that fail gracefully instead of catastrophically.
+tags: [systems, reliability]
+---
+
+## Failure is the default
+
+Every dependency you call will, eventually, be slow or unavailable. The
+question is not *if* but *how* your system behaves when it happens.
+
+### Timeouts and budgets
+
+Give every outbound call a deadline. A request without a timeout is a request
+that can hang forever.
+
+```ts
+async function fetchWithTimeout(url: string, ms: number) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  try {
+    return await fetch(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
+```
+
+When a dependency degrades, fail fast and shed load rather than letting
+queues grow without bound.
