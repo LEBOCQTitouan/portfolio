@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts, getAllTags } from "@/lib/posts";
+import { getAllProjects } from "@/lib/projects";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -17,5 +18,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${site.url}/blog/tags/${tag}`,
     lastModified: new Date(),
   }));
-  return [...staticRoutes, ...postRoutes, ...tagRoutes];
+  const projectRoutes = getAllProjects().map((project) => ({
+    url: `${site.url}/work/${project.slug}`,
+    lastModified: new Date(),
+  }));
+  return [...staticRoutes, ...postRoutes, ...tagRoutes, ...projectRoutes];
 }
