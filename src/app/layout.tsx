@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     template: "%s · Titouan Lebocq",
   },
   description: "Software engineer — engineering with the craft of design.",
+  openGraph: {
+    title: "Titouan Lebocq",
+    description: "Software engineer — engineering with the craft of design.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
