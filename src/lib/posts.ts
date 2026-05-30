@@ -27,6 +27,8 @@ export type Post = {
   content: string;
 };
 
+export type PostMeta = Omit<Post, "content">;
+
 function toISODate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
@@ -69,6 +71,20 @@ export function getAllPosts(): Post[] {
     .filter((p) => process.env.NODE_ENV === "development" || !p.draft)
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
   return posts;
+}
+
+/** Post metadata without the (heavy) MDX body — safe to pass to client components. */
+export function getAllPostMeta(): PostMeta[] {
+  return getAllPosts().map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    date: p.date,
+    summary: p.summary,
+    tags: p.tags,
+    cover: p.cover,
+    draft: p.draft,
+    readingTimeMinutes: p.readingTimeMinutes,
+  }));
 }
 
 export function getPostBySlug(slug: string): Post | undefined {

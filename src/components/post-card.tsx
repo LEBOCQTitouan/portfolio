@@ -1,8 +1,8 @@
 import Link from "next/link";
-import type { Post } from "@/lib/posts";
+import type { PostMeta } from "@/lib/posts";
 import { TagPill } from "@/components/tag-pill";
 
-export function PostCard({ post }: { post: Post }) {
+export function PostCard({ post }: { post: PostMeta }) {
   return (
     <article className="border-b border-border py-6">
       <div className="flex items-baseline justify-between gap-4 text-sm text-muted">
