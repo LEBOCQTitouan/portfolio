@@ -4,6 +4,7 @@ import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { Mdx } from "@/components/mdx";
 import { TagPill } from "@/components/tag-pill";
 import { site } from "@/lib/site";
+import { articleJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -48,6 +49,12 @@ export default async function PostPage({
 
   return (
     <article className="py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd(post)).replace(/</g, "\\u003c"),
+        }}
+      />
       <header className="mb-8">
         <div className="flex items-baseline justify-between gap-4 text-sm text-muted">
           <time dateTime={post.date}>
