@@ -67,7 +67,7 @@ export function getAllPosts(): Post[] {
       return parsePost(raw, slugFromFilename(f));
     })
     .filter((p) => process.env.NODE_ENV === "development" || !p.draft)
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
   return posts;
 }
 

@@ -48,6 +48,6 @@ describe("parsePost", () => {
 
   it("throws a descriptive error when a required field is missing", () => {
     const bad = `---\ndate: 2026-02-01\nsummary: No title.\n---\n\nBody.`;
-    expect(() => parsePost(bad, "bad")).toThrow(/bad/);
+    expect(() => parsePost(bad, "bad")).toThrow(/post "bad"/);
   });
 });
