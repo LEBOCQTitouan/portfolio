@@ -16,7 +16,7 @@ It is both a **portfolio** (code projects, professional experience, visual/desig
 
 - **Next.js (App Router) + TypeScript + Tailwind CSS.**
 - **MDX content in-repo.** Content layer parsed at build with type-safe frontmatter. Preferred: `contentlayer2`; fallback `next-mdx-remote` if Contentlayer proves unstable with the chosen Next version. Decision finalized at plan time after a compatibility check.
-- **Hosting:** Vercel.
+- **Hosting:** Cloudflare (Pages/Workers) via the OpenNext adapter (`@opennextjs/cloudflare`) — edge runtime, EU presence, no Vercel dependency. Dynamic features (OG image route, newsletter API route) run on the Cloudflare server runtime.
 - **Analytics:** **Plausible** (cookieless, EU-hosted, no consent banner) behind a thin `lib/analytics` abstraction so heatmaps (Matomo or Microsoft Clarity) can be added later as a one-file change. No heatmap at launch.
 - **Theming:** light + dark via `next-themes`, first-class both ways.
 - **Quality bar:** Lighthouse ~100 across the board; accessible (semantic HTML, keyboard nav, visible focus, `prefers-reduced-motion` respected); fully responsive.
@@ -79,7 +79,7 @@ The rest of the app depends on `lib/content`'s interface, not on how MDX is load
 
 ## 8. Phasing (each phase independently shippable)
 
-1. **Foundation** — Next.js + TS + Tailwind + `next-themes`; layout/nav/footer; design tokens; deploy to Vercel.
+1. **Foundation** — Next.js + TS + Tailwind + `next-themes`; layout/nav/footer; design tokens; Cloudflare (OpenNext) deploy pipeline.
 2. **Blog core** — content layer + `lib/content`; post pages; `MDXComponents` (syntax highlighting + copy); reading time; tags; RSS; SEO + dynamic OG images.
 3. **Work / projects** — project model; `/work` index; `/work/[slug]` detail.
 4. **Landing v0** — hero + pillars wired to real featured content.
