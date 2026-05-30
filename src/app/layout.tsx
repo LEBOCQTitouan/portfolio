@@ -4,10 +4,12 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { site } from "@/lib/site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: {
     default: "Titouan Lebocq",
     template: "%s · Titouan Lebocq",
