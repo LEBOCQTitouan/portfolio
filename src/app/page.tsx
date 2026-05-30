@@ -1,16 +1,71 @@
+import Link from "next/link";
+import { Hero } from "@/components/landing/hero";
+import { PillarCard } from "@/components/landing/pillar-card";
+import { ProjectCard } from "@/components/project-card";
+import { PostCard } from "@/components/post-card";
+import { getFeaturedProjects, getAllProjects } from "@/lib/projects";
+import { getAllPosts } from "@/lib/posts";
+
 export default function HomePage() {
+  const featured = getFeaturedProjects();
+  const projects = (featured.length > 0 ? featured : getAllProjects()).slice(
+    0,
+    2,
+  );
+  const posts = getAllPosts().slice(0, 3);
+
   return (
-    <section className="py-16">
-      <p className="text-sm font-semibold uppercase tracking-wide text-accent">
-        Software Engineer · Design-led
-      </p>
-      <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-        Engineering with the craft of design.
-      </h1>
-      <p className="mt-4 max-w-xl text-muted">
-        I build robust backend systems and interfaces people love — pushing
-        technology to its limits without ever losing clarity.
-      </p>
-    </section>
+    <div>
+      <Hero />
+
+      <section className="py-8" aria-label="What I do">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <PillarCard
+            label="Systems"
+            description="Distributed, fast, reliable backends."
+            href="/work"
+          />
+          <PillarCard
+            label="Interfaces"
+            description="Polished, accessible, delightful UI."
+            href="/work"
+          />
+        </div>
+      </section>
+
+      {projects.length > 0 && (
+        <section className="py-8">
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-2xl font-bold tracking-tight">Selected work</h2>
+            <Link href="/work" className="text-sm text-accent hover:underline">
+              View all →
+            </Link>
+          </div>
+          <div className="mt-2">
+            {projects.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {posts.length > 0 && (
+        <section className="py-8">
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-2xl font-bold tracking-tight">
+              Latest writing
+            </h2>
+            <Link href="/blog" className="text-sm text-accent hover:underline">
+              Read all →
+            </Link>
+          </div>
+          <div className="mt-2">
+            {posts.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
   );
 }
