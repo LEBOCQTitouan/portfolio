@@ -6,7 +6,7 @@ export const site = {
   url: "https://portfolio.titouanlebocq.workers.dev",
   author: "Titouan Lebocq",
   social: {
-    github: "https://github.com/titouanlebocq",
-    linkedin: "https://www.linkedin.com/in/titouanlebocq",
+    github: "https://github.com/LEBOCQTitouan",
+    linkedin: "https://www.linkedin.com/in/titouan-lebocq/",
   },
 } as const;
