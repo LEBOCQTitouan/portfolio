@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { getAllPosts } from "@/lib/posts";
-import { PostCard } from "@/components/post-card";
+import { getAllPostMeta, getAllTags } from "@/lib/posts";
+import { BlogExplorer } from "@/components/blog-explorer";
+import { Newsletter } from "@/components/newsletter";
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default function BlogIndexPage() {
-  const posts = getAllPosts();
+  const posts = getAllPostMeta();
+  const tags = getAllTags();
   return (
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">Writing</h1>
@@ -19,8 +21,11 @@ export default function BlogIndexPage() {
         {posts.length === 0 ? (
           <p className="text-muted">No posts yet.</p>
         ) : (
-          posts.map((post) => <PostCard key={post.slug} post={post} />)
+          <BlogExplorer posts={posts} allTags={tags} />
         )}
+      </div>
+      <div className="mt-12">
+        <Newsletter />
       </div>
     </section>
   );

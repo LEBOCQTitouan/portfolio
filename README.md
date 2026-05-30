@@ -23,3 +23,11 @@ npm run deploy   # build + deploy to Cloudflare (needs `wrangler login`)
 - `src/components` — UI components
 - `content/` — MDX posts and projects (added in Phase 2)
 - `docs/superpowers/` — design spec and implementation plans
+
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in what you have. Everything degrades gracefully when unset — the newsletter form returns a friendly message, comments and analytics simply don't render.
+
+- `BUTTONDOWN_API_KEY` — newsletter (server-only). In production set it as a Cloudflare secret: `npx wrangler secret put BUTTONDOWN_API_KEY`.
+- `NEXT_PUBLIC_GISCUS_*` — comments config from https://giscus.app (enable GitHub Discussions on the repo first).
+- `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — your domain for Plausible analytics.
