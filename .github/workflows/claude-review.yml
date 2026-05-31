@@ -1,0 +1,49 @@
+name: Claude Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Cancel a superseded review when new commits are pushed to the same PR
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    name: Claude Code Review
+    # Opt-in: set repo variable CLAUDE_REVIEW=true once the
+    # CLAUDE_CODE_OAUTH_TOKEN secret is configured, so PRs stay green
+    # until the reviewer is intentionally enabled.
+    if: vars.CLAUDE_REVIEW == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Review this pull request. It targets a Next.js (App Router) +
+            TypeScript + Tailwind v4 portfolio deployed to Cloudflare Workers
+            via OpenNext, tested with Vitest (TDD).
+
+            Focus on issues that matter and cite file:line:
+            - Correctness: logic errors, edge cases, and SSR/hydration pitfalls
+              (e.g. reading client-only state during render, client/server
+              boundary mistakes).
+            - Accessibility: semantics, ARIA, keyboard support, and
+              prefers-reduced-motion (this project gates all motion behind it).
+            - Worker size budget: the Cloudflare free tier caps the Worker at
+              3 MiB gzipped. Flag heavy dependencies or imports that could blow
+              it (e.g. pulling the full `shiki` language bundle).
+            - Quality: clear naming, single-responsibility files, DRY/YAGNI,
+              and meaningful test coverage.
+
+            Be specific and actionable. If the change is small and clean, say so
+            briefly rather than inventing nitpicks.
