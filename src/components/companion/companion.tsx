@@ -11,13 +11,16 @@ import { scrollProgress, interpolateOrb } from "./hero-phase";
 import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
 import { useT } from "@/i18n/use-t";
+import { isLocale, defaultLocale } from "@/i18n/config";
 
 const DESKTOP_QUERY = "(min-width: 640px)";
 const CORNER_ANCHOR: Anchor = { x: 88, y: 86, side: "left" };
 
 export function Companion() {
   const pathname = usePathname();
-  const lines = getNarration(pathname);
+  const seg = pathname.split("/")[1];
+  const lang = isLocale(seg) ? seg : defaultLocale;
+  const lines = getNarration(pathname, lang);
   const { t } = useT();
   const reducedMotion = useReducedMotion();
 

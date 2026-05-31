@@ -1,6 +1,6 @@
 import type { NarrationMap } from "./types";
 
-export const script: NarrationMap = {
+export const en: NarrationMap = {
   "/": [
     { id: "hero", mood: "warm", text: "Hey — I'm Titouan. Let me show you around.", anchor: { x: 72, y: 30, side: "left" } },
     { id: "pillars", mood: "focused", text: "I live where systems thinking meets interface craft.", anchor: { x: 30, y: 50, side: "right" } },
@@ -30,3 +30,8 @@ export const script: NarrationMap = {
     { id: "project-body", mood: "calm", text: "And here's how it actually came together.", anchor: { x: 30, y: 50, side: "right" } },
   ],
 };
+
+// Temporary placeholder: real FR narration is added in Task 9.
+export const fr: NarrationMap = en;
+
+export const script = { en, fr };
