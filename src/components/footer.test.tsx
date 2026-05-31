@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer";
 import { en } from "@/i18n/dictionaries/en";
 
 function renderFooter(year = 2026) {
-  return render(<Footer year={year} t={en.footer} />);
+  return render(<Footer year={year} t={en.footer} lang="en" />);
 }
 
 describe("Footer", () => {

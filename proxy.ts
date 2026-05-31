@@ -9,7 +9,12 @@ export function proxy(request: NextRequest) {
   const hasLocale = locales.some(
     (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
   );
-  if (hasLocale) return NextResponse.next();
+  if (hasLocale) {
+    const current = locales.find((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`))!;
+    const res = NextResponse.next();
+    res.cookies.set("NEXT_LOCALE", current, { path: "/", maxAge: 60 * 60 * 24 * 365 });
+    return res;
+  }
 
   const cookie = request.cookies.get(LOCALE_COOKIE)?.value ?? null;
   const locale = negotiateLocale(cookie, request.headers.get("accept-language"));

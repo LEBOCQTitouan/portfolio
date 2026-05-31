@@ -17,10 +17,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang, tag } = await params;
   const locale = isLocale(lang) ? lang : defaultLocale;
+  const dict = await getDictionary(locale);
   const routePath = `/blog/tags/${tag}`;
   return {
     title: `#${tag}`,
-    description: `Posts tagged "${tag}".`,
+    description: `${dict.blog.taggedPrefix} « ${tag} ».`,
     alternates: {
       canonical: `${site.url}/${locale}${routePath}`,
       languages: {

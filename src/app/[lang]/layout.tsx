@@ -76,7 +76,7 @@ export default async function RootLayout({
               <main id="main" className="flex-1 py-8 animate-in">
                 {children}
               </main>
-              <Footer year={new Date().getFullYear()} t={dict.footer} />
+              <Footer year={new Date().getFullYear()} t={dict.footer} lang={lang} />
             </div>
             <Companion />
           </TranslationProvider>

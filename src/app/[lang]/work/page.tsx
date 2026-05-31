@@ -52,7 +52,7 @@ export default async function WorkPage({ params }: { params: Promise<{ lang: str
           <p className="text-muted">{dict.work.empty}</p>
         ) : (
           projects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+            <ProjectCard key={project.slug} project={project} lang={lang} />
           ))
         )}
       </div>

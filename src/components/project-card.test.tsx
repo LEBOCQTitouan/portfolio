@@ -18,14 +18,14 @@ const project: Project = {
 
 describe("ProjectCard", () => {
   it("links to the project detail page", () => {
-    render(<ProjectCard project={project} />);
+    render(<ProjectCard project={project} lang="en" />);
     expect(
       screen.getByRole("link", { name: /ledger engine/i }),
-    ).toHaveAttribute("href", "/work/ledger-engine");
+    ).toHaveAttribute("href", "/en/work/ledger-engine");
   });
 
   it("shows role, summary, and stack", () => {
-    render(<ProjectCard project={project} />);
+    render(<ProjectCard project={project} lang="en" />);
     expect(screen.getByText(/lead backend engineer/i)).toBeInTheDocument();
     expect(screen.getByText(/distributed double-entry/i)).toBeInTheDocument();
     expect(screen.getByText("Go")).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe("ProjectCard", () => {
   });
 
   it("shows the category", () => {
-    render(<ProjectCard project={project} />);
+    render(<ProjectCard project={project} lang="en" />);
     expect(screen.getByText(/systems/i)).toBeInTheDocument();
   });
 });

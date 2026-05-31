@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { site } from "@/core/domain/site";
 import type { Dictionary } from "@/i18n/dictionaries/en";
+import type { Locale } from "@/i18n/config";
+import { localizedHref } from "@/i18n/localized-href";
 
-export function Footer({ year, t }: { year: number; t: Dictionary["footer"] }) {
+export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"]; lang: Locale }) {
   const SOCIALS = [
     { href: site.social.github, label: t.github },
     { href: site.social.linkedin, label: t.linkedin },
@@ -12,10 +14,10 @@ export function Footer({ year, t }: { year: number; t: Dictionary["footer"] }) {
     <footer className="flex flex-col gap-3 border-t border-border py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
       <span>© {year} Titouan Lebocq</span>
       <nav className="flex gap-4">
-        <Link href="/uses" className="transition-colors hover:text-foreground">
+        <Link href={localizedHref(lang, "/uses")} className="transition-colors hover:text-foreground">
           {t.uses}
         </Link>
-        <Link href="/now" className="transition-colors hover:text-foreground">
+        <Link href={localizedHref(lang, "/now")} className="transition-colors hover:text-foreground">
           {t.now}
         </Link>
       </nav>

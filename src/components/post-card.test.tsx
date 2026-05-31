@@ -29,7 +29,7 @@ describe("PostCard", () => {
     renderPostCard();
     expect(
       screen.getByRole("link", { name: /designing for failure/i }),
-    ).toHaveAttribute("href", "/blog/designing-for-failure");
+    ).toHaveAttribute("href", "/en/blog/designing-for-failure");
   });
 
   it("shows the summary and reading time", () => {

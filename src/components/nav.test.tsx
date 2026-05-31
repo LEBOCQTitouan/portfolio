@@ -24,22 +24,22 @@ describe("Nav", () => {
   it("renders the site name linking home", () => {
     renderNav();
     const home = screen.getByRole("link", { name: /titouan lebocq/i });
-    expect(home).toHaveAttribute("href", "/");
+    expect(home).toHaveAttribute("href", "/en");
   });
 
   it("renders the primary section links", () => {
     renderNav();
     expect(screen.getByRole("link", { name: /work/i })).toHaveAttribute(
       "href",
-      "/work",
+      "/en/work",
     );
     expect(screen.getByRole("link", { name: /writing/i })).toHaveAttribute(
       "href",
-      "/blog",
+      "/en/blog",
     );
     expect(screen.getByRole("link", { name: /about/i })).toHaveAttribute(
       "href",
-      "/about",
+      "/en/about",
     );
   });
 

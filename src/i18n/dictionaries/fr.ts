@@ -59,6 +59,7 @@ export const fr: Dictionary = {
     searchLabel: "Rechercher des articles",
     noMatch: "Aucun article ne correspond.",
     tag: "Tag",
+    taggedPrefix: "Articles tagués",
   },
   work: {
     title: "Projets",

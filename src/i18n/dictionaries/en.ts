@@ -57,6 +57,7 @@ export const en = {
     searchLabel: "Search posts",
     noMatch: "No posts match.",
     tag: "Tag",
+    taggedPrefix: "Posts tagged",
   },
   work: {
     title: "Work",
