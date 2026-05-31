@@ -179,3 +179,13 @@ body {
       transform 0.3s ease;
   }
 }
+
+/* ── Landing hero ──────────────────────────────────────────── */
+/* The orb (rendered by the companion) animates a gentle breathe while it is the
+   hero aura. Motion only when the user allows it. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes orb-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+}
