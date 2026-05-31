@@ -4,6 +4,9 @@ import { vi, describe, it, expect } from "vitest";
 vi.mock("next-themes", () => ({
   useTheme: () => ({ resolvedTheme: "light", setTheme: vi.fn() }),
 }));
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/en",
+}));
 
 import { Nav } from "@/components/nav";
 import { TranslationProvider } from "@/i18n/translation-provider";

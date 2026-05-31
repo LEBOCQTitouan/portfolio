@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Logo } from "@/components/logo";
 import { useT } from "@/i18n/use-t";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export function Nav() {
   const { t } = useT();
@@ -32,6 +33,7 @@ export function Nav() {
             {link.label}
           </Link>
         ))}
+        <LanguageSwitcher />
         <ThemeToggle />
       </nav>
     </header>
