@@ -16,6 +16,7 @@ const eslintConfig = defineConfig([
   },
   {
     files: ["src/core/**/*.{ts,tsx}"],
+    ignores: ["src/core/**/*.test.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
         "error",
