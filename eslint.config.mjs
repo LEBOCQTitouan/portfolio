@@ -21,7 +21,7 @@ const eslintConfig = defineConfig([
           ],
           patterns: [
             { group: ["next", "next/*"], message: "core must not depend on Next.js." },
-            { group: ["@/adapters/*", "@/composition/*"], message: "core must not depend on adapters/composition (dependency rule)." },
+            { group: ["@/adapters/*", "@/composition/*", "@/lib/*"], message: "core must not depend on adapters/composition/lib (dependency rule)." },
           ],
         },
       ],

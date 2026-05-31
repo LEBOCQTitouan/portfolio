@@ -63,11 +63,10 @@ export function filterDrafts(posts: Post[], includeDrafts: boolean): Post[] {
 
 export function toPostMeta(post: Post): PostMeta {
   const { content: _content, ...meta } = post;
-  void _content;
   return meta;
 }
 
-export function uniqueSortedTags(posts: Post[]): string[] {
+export function uniqueSortedTags(posts: { tags: string[] }[]): string[] {
   const tags = new Set<string>();
   for (const post of posts) post.tags.forEach((t) => tags.add(t));
   return [...tags].sort();

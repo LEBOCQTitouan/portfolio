@@ -25,4 +25,8 @@ describe("sortProjects", () => {
     ]);
     expect(out.map((p) => p.slug)).toEqual(["feat", "a", "b"]);
   });
+  it("breaks ties on title via localeCompare", () => {
+    const out = sortProjects([make({ slug: "b", order: 0, title: "B" }), make({ slug: "a", order: 0, title: "A" })]);
+    expect(out.map((p) => p.slug)).toEqual(["a", "b"]);
+  });
 });
