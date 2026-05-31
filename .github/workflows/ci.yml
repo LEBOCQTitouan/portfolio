@@ -53,6 +53,10 @@ jobs:
       - run: npm ci
       - name: Build (OpenNext → Cloudflare)
         run: npx opennextjs-cloudflare build
+        # NEXT_PUBLIC_* vars are inlined at build time, so the beacon token must
+        # be present here (set repo variable NEXT_PUBLIC_CF_BEACON_TOKEN).
+        env:
+          NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ vars.NEXT_PUBLIC_CF_BEACON_TOKEN }}
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:

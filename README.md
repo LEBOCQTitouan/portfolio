@@ -30,4 +30,4 @@ Copy `.env.example` to `.env.local` and fill in what you have. Everything degrad
 
 - `BUTTONDOWN_API_KEY` — newsletter (server-only). In production set it as a Cloudflare secret: `npx wrangler secret put BUTTONDOWN_API_KEY`.
 - `NEXT_PUBLIC_GISCUS_*` — comments config from https://giscus.app (enable GitHub Discussions on the repo first).
-- `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — your domain for Plausible analytics.
+- `NEXT_PUBLIC_CF_BEACON_TOKEN` — Cloudflare Web Analytics beacon token (Cloudflare dashboard → Web Analytics → your site → JS snippet).
