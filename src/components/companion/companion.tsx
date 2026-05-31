@@ -65,7 +65,8 @@ export function Companion() {
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        setProgress(scrollProgress(window.scrollY, home.offsetHeight));
+        const p = scrollProgress(window.scrollY, home.offsetHeight);
+        setProgress((prev) => (prev === p ? prev : p));
       });
     };
     onScroll();
