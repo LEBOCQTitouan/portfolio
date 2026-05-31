@@ -92,4 +92,12 @@ export const en = {
   },
 } as const;
 
-export type Dictionary = typeof en;
+/** Recursive mapped type that widens literal string leaves to `string`.
+ *  This lets translated dictionaries (fr, …) satisfy the type while the
+ *  compiler still enforces that every key is present.
+ */
+type Widen<T> = T extends string
+  ? string
+  : { [K in keyof T]: Widen<T[K]> };
+
+export type Dictionary = Widen<typeof en>;
