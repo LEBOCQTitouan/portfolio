@@ -19,4 +19,18 @@ describe("useTypewriter", () => {
     act(() => { vi.advanceTimersByTime(10); });
     expect(result.current).toBe("hi");
   });
+
+  it("resets to empty when the text changes mid-animation", () => {
+    vi.useFakeTimers();
+    const { result, rerender } = renderHook(
+      ({ text }) => useTypewriter(text, true, 10),
+      { initialProps: { text: "hello" } },
+    );
+    act(() => { vi.advanceTimersByTime(20); }); // "he"
+    expect(result.current).toBe("he");
+    rerender({ text: "world" });
+    expect(result.current).toBe(""); // immediately reset, no stale "he"
+    act(() => { vi.advanceTimersByTime(10); });
+    expect(result.current).toBe("w");
+  });
 });
