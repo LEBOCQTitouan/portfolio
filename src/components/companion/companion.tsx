@@ -90,11 +90,17 @@ export function Companion() {
   const geo = heroPhase ? interpolateOrb(progress, travelAnchor) : null;
 
   const dockStyle: CSSProperties = geo
-    ? { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : 5 }
+    ? { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : -1 }
     : { left: `${travelAnchor.x}%`, top: `${travelAnchor.y}%` };
 
   const orbStyle: CSSProperties | undefined = geo
-    ? { width: geo.size, height: geo.size, filter: `blur(${geo.blur}px)`, opacity: geo.opacity }
+    ? {
+        width: geo.size,
+        height: geo.size,
+        filter: `blur(${geo.blur}px)`,
+        opacity: geo.opacity,
+        ...(geo.front ? null : { animation: "orb-breathe 6s ease-in-out infinite" }),
+      }
     : undefined;
 
   const showBubble = !muted && (geo ? geo.bubble : true);

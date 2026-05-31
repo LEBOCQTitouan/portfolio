@@ -16,8 +16,8 @@ export default function HomePage() {
     <div>
       <Hero />
 
-      <section className="py-8" aria-label="What I do" data-narrate="pillars">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted">What I do</p>
+      <section className="py-8" data-narrate="pillars">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">What I do</h2>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <PillarCard label="Systems" description="Distributed, fast, reliable backends." href="/work" />
           <PillarCard label="Interfaces" description="Polished, accessible, delightful UI." href="/work" />
@@ -27,7 +27,7 @@ export default function HomePage() {
       {projects.length > 0 && (
         <section className="py-8" data-narrate="work">
           <div className="flex items-baseline justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">Selected work</p>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Selected work</h2>
             <Link href="/work" className="text-sm text-accent hover:underline">View all →</Link>
           </div>
           <div className="mt-2">
@@ -41,7 +41,7 @@ export default function HomePage() {
       {posts.length > 0 && (
         <section className="py-8" data-narrate="writing">
           <div className="flex items-baseline justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">Latest writing</p>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">Latest writing</h2>
             <Link href="/blog" className="text-sm text-accent hover:underline">Read all →</Link>
           </div>
           <div className="mt-2">
