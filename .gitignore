@@ -48,3 +48,7 @@ next-env.d.ts
 # OpenNext / Cloudflare build output
 .open-next/
 .wrangler/
+
+# Storybook
+storybook-static/
+*storybook.log
