@@ -49,4 +49,24 @@ describe("Companion", () => {
     expect(window.localStorage.getItem("companion-muted")).toBe("true");
     expect(screen.getByRole("button", { name: /unmute site companion/i })).toBeInTheDocument();
   });
+
+  it("does not enter hero phase when there is no orb-home element (other routes)", () => {
+    renderWithSections(["hero", "pillars"]); // no [data-orb-home]
+    const orb = document.querySelector(".companion-orb") as HTMLElement;
+    // V0: small companion (no inline width from hero geometry)
+    expect(orb).toBeInTheDocument();
+    expect(orb.style.width).toBe("");
+  });
+
+  it("enters hero phase (large aura) when an orb-home element is present and at top of page", () => {
+    // Allow motion so hero phase is not gated off by reduced-motion.
+    setMatchMedia("(prefers-reduced-motion: reduce)", false);
+    document.body.innerHTML =
+      `<section data-orb-home style="height:800px"></section>` +
+      ["hero", "pillars"].map((id) => `<div data-narrate="${id}" style="height:300px"></div>`).join("");
+    render(<Companion />);
+    const orb = document.querySelector(".companion-orb") as HTMLElement;
+    // at scrollY 0 the orb is the large aura → inline width is set and large
+    expect(parseInt(orb.style.width || "0", 10)).toBeGreaterThan(150);
+  });
 });

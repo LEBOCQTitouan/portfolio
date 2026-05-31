@@ -1,12 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { getNarration } from "@/lib/narration/resolver";
 import type { Anchor } from "@/lib/narration/types";
 import { pickActiveSection } from "./active-section";
 import { getMuted, setMuted, subscribeMuted } from "./mute-storage";
 import { useReducedMotion } from "./use-reduced-motion";
+import { scrollProgress, interpolateOrb } from "./hero-phase";
 import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
 
@@ -18,16 +19,13 @@ export function Companion() {
   const lines = getNarration(pathname);
   const reducedMotion = useReducedMotion();
 
-  const muted = useSyncExternalStore(
-    subscribeMuted,
-    getMuted,      // client snapshot
-    () => false,   // server snapshot — matches SSR, avoids hydration mismatch
-  );
+  const muted = useSyncExternalStore(subscribeMuted, getMuted, () => false);
   const [active, setActive] = useState<{ route: string; id: string } | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
+  const [progress, setProgress] = useState(0); // hero-phase scroll progress (0..1)
+  const [heroPresent, setHeroPresent] = useState(false);
   const ratios = useRef<Record<string, number>>({});
 
-  // desktop vs mobile (mobile docks in the corner, no travel)
   useEffect(() => {
     const mq = window.matchMedia(DESKTOP_QUERY);
     const update = () => setIsDesktop(mq.matches);
@@ -36,7 +34,6 @@ export function Companion() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // observe narrated sections
   useEffect(() => {
     if (lines.length === 0) return;
     ratios.current = {};
@@ -57,23 +54,61 @@ export function Companion() {
     return () => io.disconnect();
   }, [pathname, lines.length]);
 
+  // Hero phase: track scroll progress over the [data-orb-home] hero.
+  useEffect(() => {
+    const home = document.querySelector<HTMLElement>("[data-orb-home]");
+    // Sync with DOM presence — legitimate external-system synchronization.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHeroPresent(!!home);
+    if (!home) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        setProgress(scrollProgress(window.scrollY, home.offsetHeight));
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [pathname]);
+
   if (lines.length === 0) return null;
 
   const activeId = active?.route === pathname ? active.id : null;
   const activeLine = lines.find((l) => l.id === activeId) ?? lines[0];
-  const anchor = !isDesktop || muted ? CORNER_ANCHOR : activeLine.anchor;
+
+  // Hero phase is active only on a route with an orb-home, on desktop, not muted,
+  // and not under reduced motion (then we fall back to the plain V0 companion).
+  const heroPhase = heroPresent && isDesktop && !muted && !reducedMotion;
+
+  const travelAnchor = !isDesktop || muted ? CORNER_ANCHOR : activeLine.anchor;
+  const geo = heroPhase ? interpolateOrb(progress, travelAnchor) : null;
+
+  const dockStyle: CSSProperties = geo
+    ? { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : 5 }
+    : { left: `${travelAnchor.x}%`, top: `${travelAnchor.y}%` };
+
+  const orbStyle: CSSProperties | undefined = geo
+    ? { width: geo.size, height: geo.size, filter: `blur(${geo.blur}px)`, opacity: geo.opacity }
+    : undefined;
+
+  const showBubble = !muted && (geo ? geo.bubble : true);
 
   const toggleMute = () => setMuted(!muted);
 
   return (
     <>
       <div
-        className={`companion-dock side-${anchor.side}`}
-        style={{ left: `${anchor.x}%`, top: `${anchor.y}%` }}
+        className={`companion-dock side-${travelAnchor.side}`}
+        style={dockStyle}
         aria-hidden="true"
       >
-        {!muted && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
-        <Orb mood={activeLine.mood} muted={muted} />
+        {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
+        <Orb mood={activeLine.mood} muted={muted} style={orbStyle} />
       </div>
       <button
         type="button"
