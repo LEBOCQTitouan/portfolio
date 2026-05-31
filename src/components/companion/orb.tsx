@@ -1,7 +1,16 @@
+import type { CSSProperties } from "react";
 import type { Mood } from "@/lib/narration/types";
 import { moodStyle } from "./moods";
 
-export function Orb({ mood, muted }: { mood: Mood; muted: boolean }) {
+export function Orb({
+  mood,
+  muted,
+  style,
+}: {
+  mood: Mood;
+  muted: boolean;
+  style?: CSSProperties;
+}) {
   return (
     <div
       className="companion-orb"
@@ -10,6 +19,7 @@ export function Orb({ mood, muted }: { mood: Mood; muted: boolean }) {
       style={{
         ...moodStyle(mood),
         ...(muted ? { transform: "scale(0.6)", filter: "saturate(.7) opacity(.8)" } : null),
+        ...style,
       }}
     />
   );

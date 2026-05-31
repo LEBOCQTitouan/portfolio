@@ -15,4 +15,14 @@ describe("Orb", () => {
     const { container } = render(<Orb mood="calm" muted={false} />);
     expect(container.querySelector(".companion-orb")).toHaveAttribute("aria-hidden", "true");
   });
+
+  it("applies a caller style override (size/filter) on top of the mood style", () => {
+    const { container } = render(
+      <Orb mood="calm" muted={false} style={{ width: 200, height: 200, filter: "blur(3px)" }} />,
+    );
+    const orb = container.querySelector(".companion-orb") as HTMLElement;
+    expect(orb.style.width).toBe("200px");
+    expect(orb.style.filter).toBe("blur(3px)");
+    expect(orb.style.background).toContain("radial-gradient"); // mood style still applied
+  });
 });
