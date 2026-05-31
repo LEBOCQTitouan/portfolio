@@ -5,6 +5,28 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    files: ["src/core/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            { name: "fs", message: "core must stay pure — use an adapter." },
+            { name: "node:fs", message: "core must stay pure — use an adapter." },
+            { name: "path", message: "core must stay pure — use an adapter." },
+            { name: "node:path", message: "core must stay pure — use an adapter." },
+            { name: "gray-matter", message: "Filesystem parsing belongs in an adapter." },
+            { name: "reading-time", message: "Move into an adapter or pass the value in." },
+          ],
+          patterns: [
+            { group: ["next", "next/*"], message: "core must not depend on Next.js." },
+            { group: ["@/adapters/*", "@/composition/*"], message: "core must not depend on adapters/composition (dependency rule)." },
+          ],
+        },
+      ],
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
