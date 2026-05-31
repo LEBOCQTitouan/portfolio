@@ -42,7 +42,7 @@ export default async function ProjectPage({
 
   return (
     <article className="py-8">
-      <header className="mb-8">
+      <header className="mb-8" data-narrate="project-header">
         <div className="flex items-center gap-3">
           <CategoryBadge category={project.category} />
           <span className="text-sm text-muted">{project.role}</span>
@@ -88,7 +88,9 @@ export default async function ProjectPage({
           </div>
         )}
       </header>
-      <Mdx source={project.content} />
+      <div data-narrate="project-body">
+        <Mdx source={project.content} />
+      </div>
     </article>
   );
 }

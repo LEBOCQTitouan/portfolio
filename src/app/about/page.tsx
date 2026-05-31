@@ -33,7 +33,7 @@ export default function AboutPage() {
   return (
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">About</h1>
-      <div className="prose-content mt-6 max-w-2xl">
+      <div className="prose-content mt-6 max-w-2xl" data-narrate="intro">
         <p>
           I&apos;m Titouan — a software engineer who believes great engineering
           and great design are the same discipline aimed at different layers. I
@@ -47,7 +47,7 @@ export default function AboutPage() {
       </div>
 
       <h2 className="mt-12 text-xl font-semibold tracking-tight">Experience</h2>
-      <ol className="mt-4 space-y-6 border-l border-border pl-6">
+      <ol className="mt-4 space-y-6 border-l border-border pl-6" data-narrate="experience">
         {experience.map((job) => (
           <li key={`${job.org}-${job.period}`} className="relative">
             <span
@@ -66,7 +66,7 @@ export default function AboutPage() {
       </ol>
 
       <h2 className="mt-12 text-xl font-semibold tracking-tight">Skills</h2>
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid gap-4 sm:grid-cols-2" data-narrate="skills">
         {skills.map((s) => (
           <div key={s.group}>
             <p className="text-sm font-semibold">{s.group}</p>

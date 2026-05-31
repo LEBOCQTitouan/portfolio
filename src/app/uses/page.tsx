@@ -28,10 +28,10 @@ export default function UsesPage() {
   return (
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">Uses</h1>
-      <p className="mt-2 text-muted">
+      <p className="mt-2 text-muted" data-narrate="intro">
         The tools I reach for day to day. (Edit this list.)
       </p>
-      <div className="mt-8 space-y-8">
+      <div className="mt-8 space-y-8" data-narrate="tools">
         {categories.map((cat) => (
           <div key={cat.title}>
             <h2 className="text-lg font-semibold tracking-tight">

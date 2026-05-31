@@ -19,10 +19,10 @@ export default function NowPage() {
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">Now</h1>
       <p className="mt-2 text-sm text-muted">Last updated {lastUpdated}</p>
-      <p className="mt-6 max-w-2xl text-muted">
+      <p className="mt-6 max-w-2xl text-muted" data-narrate="intro">
         What I&apos;m focused on at the moment:
       </p>
-      <ul className="mt-4 list-disc space-y-2 pl-5 text-muted">
+      <ul className="mt-4 list-disc space-y-2 pl-5 text-muted" data-narrate="focus">
         {focus.map((item) => (
           <li key={item}>{item}</li>
         ))}
