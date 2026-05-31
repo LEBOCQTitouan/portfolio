@@ -2,6 +2,7 @@
 export function pickActiveSection(ratios: Record<string, number>): string | null {
   let best: string | null = null;
   let max = 0;
+  // On a tie, the first-encountered id wins (strict >).
   for (const [id, ratio] of Object.entries(ratios)) {
     if (ratio > max) {
       max = ratio;

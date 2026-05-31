@@ -13,4 +13,8 @@ describe("pickActiveSection", () => {
   it("returns null for an empty map", () => {
     expect(pickActiveSection({})).toBeNull();
   });
+
+  it("returns the first-encountered id when two sections tie", () => {
+    expect(pickActiveSection({ a: 0.5, b: 0.5 })).toBe("a");
+  });
 });
