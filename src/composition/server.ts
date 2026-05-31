@@ -14,3 +14,8 @@ export const getPostsByTag = content.postsByTag;
 export const getAllProjects = content.listProjects;
 export const getProjectBySlug = content.getProject;
 export const getFeaturedProjects = content.featuredProjects;
+
+import { ButtondownGateway } from "@/adapters/newsletter/buttondown-gateway";
+import { makeSubscribe } from "@/core/application/subscribe";
+
+export const subscribe = makeSubscribe(new ButtondownGateway());
