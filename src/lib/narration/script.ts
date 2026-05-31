@@ -6,6 +6,7 @@ export const script: NarrationMap = {
     { id: "pillars", mood: "focused", text: "I live where systems thinking meets interface craft.", anchor: { x: 30, y: 50, side: "right" } },
     { id: "work", mood: "calm", text: "A few things I'm genuinely proud of.", anchor: { x: 74, y: 46, side: "left" } },
     { id: "writing", mood: "focused", text: "And I write about how it all fits together.", anchor: { x: 30, y: 58, side: "right" } },
+    { id: "contact", mood: "warm", text: "Like what you see? Let's talk.", anchor: { x: 30, y: 64, side: "right" } },
   ],
   "/about": [
     { id: "intro", mood: "warm", text: "A bit about how I think about this craft.", anchor: { x: 72, y: 30, side: "left" } },
