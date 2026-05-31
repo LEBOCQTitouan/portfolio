@@ -4,8 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { site } from "@/lib/site";
-import { Analytics } from "@/components/analytics";
+import { site } from "@/core/domain/site";
+import { analytics } from "@/composition/client";
 import { Companion } from "@/components/companion/companion";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className="min-h-screen bg-background text-foreground font-sans antialiased">
-        <Analytics />
+        <analytics.Beacon />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

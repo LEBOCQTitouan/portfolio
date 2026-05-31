@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/composition/server";
 import { Mdx } from "@/components/mdx";
-import { Comments } from "@/components/comments";
+import { comments } from "@/composition/client";
 import { TagPill } from "@/components/tag-pill";
-import { site } from "@/lib/site";
-import { articleJsonLd } from "@/lib/seo";
+import { site } from "@/core/domain/site";
+import { articleJsonLd } from "@/core/domain/seo";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -78,7 +78,7 @@ export default async function PostPage({
         )}
       </header>
       <Mdx source={post.content} />
-      <Comments />
+      <comments.Comments />
     </article>
   );
 }

@@ -1,10 +1,10 @@
 import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Analytics } from "@/components/analytics";
+import { CloudflareTracker } from "@/adapters/analytics/cloudflare-tracker";
 
-describe("Analytics", () => {
+describe("CloudflareTracker", () => {
   it("renders nothing when no Cloudflare beacon token is configured", () => {
-    const { container } = render(<Analytics />);
+    const { container } = render(<>{CloudflareTracker.Beacon()}</>);
     expect(container).toBeEmptyDOMElement();
   });
 });

@@ -8,11 +8,11 @@ vi.mock("@giscus/react", () => ({
   default: () => <div data-testid="giscus" />,
 }));
 
-import { Comments } from "@/components/comments";
+import { GiscusRenderer } from "@/adapters/comments/giscus-renderer";
 
-describe("Comments", () => {
+describe("GiscusRenderer", () => {
   it("renders nothing when giscus env is not configured", () => {
-    const { container } = render(<Comments />);
+    const { container } = render(<>{GiscusRenderer.Comments()}</>);
     expect(container).toBeEmptyDOMElement();
   });
 });

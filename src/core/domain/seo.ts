@@ -1,4 +1,4 @@
-import { site } from "@/lib/site";
+import { site } from "@/core/domain/site";
 import type { Post } from "@/core/domain/post";
 
 export function articleJsonLd(post: Post) {

@@ -1,4 +1,4 @@
-import { site } from "@/lib/site";
+import { site } from "@/core/domain/site";
 
 const SOCIALS = [
   { href: site.social.github, label: "GitHub" },

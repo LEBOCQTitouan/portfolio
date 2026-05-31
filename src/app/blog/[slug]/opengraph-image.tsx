@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getAllPosts, getPostBySlug } from "@/composition/server";
-import { site } from "@/lib/site";
+import { site } from "@/core/domain/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

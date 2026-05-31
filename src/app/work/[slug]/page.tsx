@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllProjects, getProjectBySlug } from "@/composition/server";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
-import { site } from "@/lib/site";
+import { site } from "@/core/domain/site";
 
 export function generateStaticParams() {
   return getAllProjects().map((project) => ({ slug: project.slug }));
