@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { isLocale } from "@/i18n/config";
 
 export const metadata: Metadata = {
   title: "Now",
@@ -14,7 +16,10 @@ const focus = [
   "Exploring the edges of polished, accessible web UI.",
 ];
 
-export default function NowPage() {
+export default async function NowPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
   return (
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">Now</h1>

@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getAllProjects } from "@/composition/server";
 import { ProjectCard } from "@/components/project-card";
+import { isLocale } from "@/i18n/config";
 
 export const metadata: Metadata = {
   title: "Work",
   description: "Selected projects across backend systems and interfaces.",
 };
 
-export default function WorkPage() {
+export default async function WorkPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
   const projects = getAllProjects();
   return (
     <section className="py-8">

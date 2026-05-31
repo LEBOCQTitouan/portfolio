@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getAllPostMeta, getAllTags } from "@/composition/server";
 import { BlogExplorer } from "@/components/blog-explorer";
 import { Newsletter } from "@/components/newsletter";
+import { isLocale } from "@/i18n/config";
 
 export const metadata: Metadata = {
   title: "Writing",
   description: "Essays and notes on software, systems, and design craft.",
 };
 
-export default function BlogIndexPage() {
+export default async function BlogIndexPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
   const posts = getAllPostMeta();
   const tags = getAllTags();
   return (

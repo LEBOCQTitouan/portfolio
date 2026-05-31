@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllTags, getPostsByTag } from "@/composition/server";
 import { PostCard } from "@/components/post-card";
+import { isLocale } from "@/i18n/config";
 
 export function generateStaticParams() {
   return getAllTags().map((tag) => ({ tag }));
@@ -10,7 +11,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ tag: string }>;
+  params: Promise<{ lang: string; tag: string }>;
 }): Promise<Metadata> {
   const { tag } = await params;
   return {
@@ -22,9 +23,10 @@ export async function generateMetadata({
 export default async function TagPage({
   params,
 }: {
-  params: Promise<{ tag: string }>;
+  params: Promise<{ lang: string; tag: string }>;
 }) {
-  const { tag } = await params;
+  const { lang, tag } = await params;
+  if (!isLocale(lang)) notFound();
   const posts = getPostsByTag(tag);
   if (posts.length === 0) notFound();
 

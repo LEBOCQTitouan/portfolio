@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Hero } from "@/components/landing/hero";
 import { PillarCard } from "@/components/landing/pillar-card";
@@ -6,8 +7,12 @@ import { PostCard } from "@/components/post-card";
 import { ContactCta } from "@/components/landing/contact-cta";
 import { getFeaturedProjects, getAllProjects } from "@/composition/server";
 import { getAllPosts } from "@/composition/server";
+import { isLocale } from "@/i18n/config";
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
   const featured = getFeaturedProjects();
   const projects = (featured.length > 0 ? featured : getAllProjects()).slice(0, 2);
   const posts = getAllPosts().slice(0, 3);

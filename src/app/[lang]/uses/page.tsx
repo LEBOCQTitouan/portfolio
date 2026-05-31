@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { isLocale } from "@/i18n/config";
 
 export const metadata: Metadata = {
   title: "Uses",
@@ -24,7 +26,10 @@ const categories = [
   },
 ];
 
-export default function UsesPage() {
+export default async function UsesPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
   return (
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">Uses</h1>

@@ -4,6 +4,7 @@ import { getAllProjects, getProjectBySlug } from "@/composition/server";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
+import { isLocale } from "@/i18n/config";
 
 export function generateStaticParams() {
   return getAllProjects().map((project) => ({ slug: project.slug }));
@@ -12,7 +13,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
@@ -34,9 +35,10 @@ export async function generateMetadata({
 export default async function ProjectPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { lang, slug } = await params;
+  if (!isLocale(lang)) notFound();
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 

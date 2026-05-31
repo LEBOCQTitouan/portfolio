@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import { notFound } from "next/navigation";
+import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { site } from "@/core/domain/site";
 import { analytics } from "@/composition/client";
 import { Companion } from "@/components/companion/companion";
+import { isLocale, locales } from "@/i18n/config";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+export function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -24,13 +30,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ lang: string }>;
 }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang={lang} suppressHydrationWarning className={inter.variable}>
       <body className="min-h-screen bg-background text-foreground font-sans antialiased">
         <analytics.Beacon />
         <ThemeProvider

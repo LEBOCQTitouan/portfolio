@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export default async function OgImage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
