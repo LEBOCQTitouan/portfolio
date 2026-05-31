@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { getMuted, setMuted } from "./mute-storage";
+import { getMuted, setMuted, subscribeMuted } from "./mute-storage";
 
 describe("mute-storage", () => {
   beforeEach(() => window.localStorage.clear());
@@ -13,5 +13,15 @@ describe("mute-storage", () => {
     expect(getMuted()).toBe(true);
     setMuted(false);
     expect(getMuted()).toBe(false);
+  });
+
+  it("notifies subscribers when the mute value changes", () => {
+    let calls = 0;
+    const unsub = subscribeMuted(() => { calls += 1; });
+    setMuted(true);
+    expect(calls).toBe(1);
+    unsub();
+    setMuted(false);
+    expect(calls).toBe(1); // no longer notified after unsubscribe
   });
 });

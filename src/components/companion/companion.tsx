@@ -1,11 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { getNarration } from "@/lib/narration/resolver";
 import type { Anchor } from "@/lib/narration/types";
 import { pickActiveSection } from "./active-section";
-import { getMuted, setMuted as persistMuted } from "./mute-storage";
+import { getMuted, setMuted, subscribeMuted } from "./mute-storage";
 import { useReducedMotion } from "./use-reduced-motion";
 import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
@@ -18,7 +18,11 @@ export function Companion() {
   const lines = getNarration(pathname);
   const reducedMotion = useReducedMotion();
 
-  const [muted, setMutedState] = useState<boolean>(() => getMuted());
+  const muted = useSyncExternalStore(
+    subscribeMuted,
+    getMuted,      // client snapshot
+    () => false,   // server snapshot — matches SSR, avoids hydration mismatch
+  );
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
   const ratios = useRef<Record<string, number>>({});
@@ -58,13 +62,7 @@ export function Companion() {
   const active = lines.find((l) => l.id === activeId) ?? lines[0];
   const anchor = !isDesktop || muted ? CORNER_ANCHOR : active.anchor;
 
-  const toggleMute = () => {
-    setMutedState((m) => {
-      const next = !m;
-      persistMuted(next);
-      return next;
-    });
-  };
+  const toggleMute = () => setMuted(!muted);
 
   return (
     <>

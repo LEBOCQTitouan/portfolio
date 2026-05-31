@@ -1,4 +1,5 @@
 const KEY = "companion-muted";
+const listeners = new Set<() => void>();
 
 export function getMuted(): boolean {
   if (typeof window === "undefined") return false;
@@ -16,4 +17,11 @@ export function setMuted(value: boolean): void {
   } catch {
     /* ignore storage failures (private mode, etc.) */
   }
+  listeners.forEach((listener) => listener());
+}
+
+/** Subscribe to mute changes (same-tab). Returns an unsubscribe function. */
+export function subscribeMuted(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
 }
