@@ -1,14 +1,16 @@
 import Script from "next/script";
 
-const domain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+// Cloudflare Web Analytics — privacy-friendly, cookieless. The token comes from
+// the Cloudflare dashboard (Web Analytics → your site → JS snippet).
+const token = process.env.NEXT_PUBLIC_CF_BEACON_TOKEN;
 
 export function Analytics() {
-  if (!domain) return null;
+  if (!token) return null;
   return (
     <Script
       defer
-      data-domain={domain}
-      src="https://plausible.io/js/script.js"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={JSON.stringify({ token })}
       strategy="afterInteractive"
     />
   );

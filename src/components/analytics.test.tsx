@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import { Analytics } from "@/components/analytics";
 
 describe("Analytics", () => {
-  it("renders nothing when no Plausible domain is configured", () => {
+  it("renders nothing when no Cloudflare beacon token is configured", () => {
     const { container } = render(<Analytics />);
     expect(container).toBeEmptyDOMElement();
   });
