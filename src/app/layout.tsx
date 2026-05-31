@@ -6,6 +6,7 @@ import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { site } from "@/lib/site";
 import { Analytics } from "@/components/analytics";
+import { Companion } from "@/components/companion/companion";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -51,6 +52,7 @@ export default function RootLayout({
             </main>
             <Footer year={new Date().getFullYear()} />
           </div>
+          <Companion />
         </ThemeProvider>
       </body>
     </html>

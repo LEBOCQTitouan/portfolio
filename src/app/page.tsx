@@ -16,9 +16,11 @@ export default function HomePage() {
 
   return (
     <div>
-      <Hero />
+      <div data-narrate="hero">
+          <Hero />
+        </div>
 
-      <section className="py-8" aria-label="What I do">
+      <section className="py-8" aria-label="What I do" data-narrate="pillars">
         <div className="grid gap-4 sm:grid-cols-2">
           <PillarCard
             label="Systems"
@@ -34,7 +36,7 @@ export default function HomePage() {
       </section>
 
       {projects.length > 0 && (
-        <section className="py-8">
+        <section className="py-8" data-narrate="work">
           <div className="flex items-baseline justify-between">
             <h2 className="text-2xl font-bold tracking-tight">Selected work</h2>
             <Link href="/work" className="text-sm text-accent hover:underline">
@@ -50,7 +52,7 @@ export default function HomePage() {
       )}
 
       {posts.length > 0 && (
-        <section className="py-8">
+        <section className="py-8" data-narrate="writing">
           <div className="flex items-baseline justify-between">
             <h2 className="text-2xl font-bold tracking-tight">
               Latest writing
