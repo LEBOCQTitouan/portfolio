@@ -15,7 +15,7 @@ export default async function WorkPage({ params }: { params: Promise<{ lang: str
   if (!isLocale(lang)) notFound();
 
   const dict = await getDictionary(lang);
-  const projects = getAllProjects();
+  const projects = getAllProjects(lang);
   return (
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">{dict.work.title}</h1>

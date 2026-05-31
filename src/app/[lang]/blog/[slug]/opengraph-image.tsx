@@ -1,12 +1,13 @@
 import { ImageResponse } from "next/og";
 import { getAllPosts, getPostBySlug } from "@/composition/server";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { site } from "@/core/domain/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export function generateStaticParams() {
-  return getAllPosts().map((post) => ({ slug: post.slug }));
+  return getAllPosts("en").map((post) => ({ slug: post.slug }));
 }
 
 export default async function OgImage({
@@ -14,8 +15,9 @@ export default async function OgImage({
 }: {
   params: Promise<{ lang: string; slug: string }>;
 }) {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const { lang, slug } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const post = getPostBySlug(locale, slug);
   const title = post?.title ?? site.title;
 
   return new ImageResponse(

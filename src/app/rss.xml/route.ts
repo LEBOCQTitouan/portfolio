@@ -1,6 +1,7 @@
 import { Feed } from "feed";
 import { getAllPosts } from "@/composition/server";
 import { site } from "@/core/domain/site";
+import { defaultLocale } from "@/i18n/config";
 
 export const dynamic = "force-static";
 
@@ -16,7 +17,8 @@ export function GET() {
     author: { name: site.author, link: site.url },
   });
 
-  for (const post of getAllPosts()) {
+  // i18n: iterate locales in Task 7
+  for (const post of getAllPosts(defaultLocale)) {
     const url = `${site.url}/blog/${post.slug}`;
     feed.addItem({
       title: post.title,

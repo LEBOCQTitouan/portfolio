@@ -6,11 +6,11 @@ import { comments } from "@/composition/client";
 import { TagPill } from "@/components/tag-pill";
 import { site } from "@/core/domain/site";
 import { articleJsonLd } from "@/core/domain/seo";
-import { isLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
-  return getAllPosts().map((post) => ({ slug: post.slug }));
+  return getAllPosts("en").map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({
@@ -18,8 +18,9 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const { lang, slug } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const post = getPostBySlug(locale, slug);
   if (!post) return {};
   const url = `${site.url}/blog/${post.slug}`;
   return {
@@ -49,7 +50,7 @@ export default async function PostPage({
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
   const dict = await getDictionary(lang);
-  const post = getPostBySlug(slug);
+  const post = getPostBySlug(lang, slug);
   if (!post) notFound();
 
   return (

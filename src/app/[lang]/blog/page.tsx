@@ -16,8 +16,8 @@ export default async function BlogIndexPage({ params }: { params: Promise<{ lang
   if (!isLocale(lang)) notFound();
 
   const dict = await getDictionary(lang);
-  const posts = getAllPostMeta();
-  const tags = getAllTags();
+  const posts = getAllPostMeta(lang);
+  const tags = getAllTags(lang);
   return (
     <section className="py-8">
       <h1 className="text-3xl font-bold tracking-tight">{dict.blog.title}</h1>

@@ -6,7 +6,7 @@ import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
-  return getAllTags().map((tag) => ({ tag }));
+  return getAllTags("en").map((tag) => ({ tag }));
 }
 
 export async function generateMetadata({
@@ -29,7 +29,7 @@ export default async function TagPage({
   const { lang, tag } = await params;
   if (!isLocale(lang)) notFound();
   const dict = await getDictionary(lang);
-  const posts = getPostsByTag(tag);
+  const posts = getPostsByTag(lang, tag);
   if (posts.length === 0) notFound();
 
   return (

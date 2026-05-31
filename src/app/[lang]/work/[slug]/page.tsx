@@ -4,11 +4,11 @@ import { getAllProjects, getProjectBySlug } from "@/composition/server";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
-import { isLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
-  return getAllProjects().map((project) => ({ slug: project.slug }));
+  return getAllProjects("en").map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({
@@ -16,8 +16,9 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const { lang, slug } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const project = getProjectBySlug(locale, slug);
   if (!project) return {};
   const url = `${site.url}/work/${project.slug}`;
   return {
@@ -41,7 +42,7 @@ export default async function ProjectPage({
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
   const dict = await getDictionary(lang);
-  const project = getProjectBySlug(slug);
+  const project = getProjectBySlug(lang, slug);
   if (!project) notFound();
 
   return (

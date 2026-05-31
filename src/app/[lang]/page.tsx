@@ -15,9 +15,9 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   if (!isLocale(lang)) notFound();
 
   const dict = await getDictionary(lang);
-  const featured = getFeaturedProjects();
-  const projects = (featured.length > 0 ? featured : getAllProjects()).slice(0, 2);
-  const posts = getAllPosts().slice(0, 3);
+  const featured = getFeaturedProjects(lang);
+  const projects = (featured.length > 0 ? featured : getAllProjects(lang)).slice(0, 2);
+  const posts = getAllPosts(lang).slice(0, 3);
 
   return (
     <div>
