@@ -8,19 +8,29 @@ vi.mock("next-themes", () => ({
 }));
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { TranslationProvider } from "@/i18n/translation-provider";
+import { en } from "@/i18n/dictionaries/en";
+
+function renderToggle() {
+  return render(
+    <TranslationProvider dictionary={en} lang="en">
+      <ThemeToggle />
+    </TranslationProvider>,
+  );
+}
 
 describe("ThemeToggle", () => {
   beforeEach(() => setTheme.mockClear());
 
   it("renders an accessible toggle button", () => {
-    render(<ThemeToggle />);
+    renderToggle();
     expect(
       screen.getByRole("button", { name: /toggle theme/i }),
     ).toBeInTheDocument();
   });
 
   it("switches to dark when the current theme is light", async () => {
-    render(<ThemeToggle />);
+    renderToggle();
     await userEvent.click(
       screen.getByRole("button", { name: /toggle theme/i }),
     );

@@ -1,14 +1,18 @@
+"use client";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Logo } from "@/components/logo";
-
-const LINKS = [
-  { href: "/work", label: "Work" },
-  { href: "/blog", label: "Writing" },
-  { href: "/about", label: "About" },
-];
+import { useT } from "@/i18n/use-t";
 
 export function Nav() {
+  const { t } = useT();
+
+  const LINKS = [
+    { href: "/work", label: t.nav.work },
+    { href: "/blog", label: t.nav.writing },
+    { href: "/about", label: t.nav.about },
+  ];
+
   return (
     <header className="flex items-center justify-between py-6">
       <Link

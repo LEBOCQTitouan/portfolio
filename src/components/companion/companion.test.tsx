@@ -3,6 +3,8 @@ import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Companion } from "./companion";
 import { MockIntersectionObserver, setMatchMedia } from "../../../vitest.setup";
+import { TranslationProvider } from "@/i18n/translation-provider";
+import { en } from "@/i18n/dictionaries/en";
 
 let pathname = "/";
 vi.mock("next/navigation", () => ({ usePathname: () => pathname }));
@@ -15,18 +17,26 @@ beforeEach(() => {
   setMatchMedia("(prefers-reduced-motion: reduce)", true);
 });
 
+function withProvider(ui: React.ReactElement) {
+  return (
+    <TranslationProvider dictionary={en} lang="en">
+      {ui}
+    </TranslationProvider>
+  );
+}
+
 /** Render the companion alongside DOM sections it can observe. */
 function renderWithSections(ids: string[]) {
   document.body.innerHTML = ids
     .map((id) => `<div data-narrate="${id}" style="height:200px"></div>`)
     .join("");
-  return render(<Companion />);
+  return render(withProvider(<Companion />));
 }
 
 describe("Companion", () => {
   it("renders nothing on blog routes", () => {
     pathname = "/blog/designing-for-failure";
-    const { container } = render(<Companion />);
+    const { container } = render(withProvider(<Companion />));
     expect(container.querySelector(".companion-orb")).toBeNull();
   });
 
@@ -64,7 +74,7 @@ describe("Companion", () => {
     document.body.innerHTML =
       `<section data-orb-home style="height:800px"></section>` +
       ["hero", "pillars"].map((id) => `<div data-narrate="${id}" style="height:300px"></div>`).join("");
-    render(<Companion />);
+    render(withProvider(<Companion />));
     const orb = document.querySelector(".companion-orb") as HTMLElement;
     // at scrollY 0 the orb is the large aura → inline width is set and large
     expect(parseInt(orb.style.width || "0", 10)).toBeGreaterThan(150);

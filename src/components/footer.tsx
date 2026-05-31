@@ -1,21 +1,25 @@
+"use client";
 import Link from "next/link";
 import { site } from "@/core/domain/site";
-
-const SOCIALS = [
-  { href: site.social.github, label: "GitHub" },
-  { href: site.social.linkedin, label: "LinkedIn" },
-];
+import { useT } from "@/i18n/use-t";
 
 export function Footer({ year }: { year: number }) {
+  const { t } = useT();
+
+  const SOCIALS = [
+    { href: site.social.github, label: t.footer.github },
+    { href: site.social.linkedin, label: t.footer.linkedin },
+  ];
+
   return (
     <footer className="flex flex-col gap-3 border-t border-border py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
       <span>© {year} Titouan Lebocq</span>
       <nav className="flex gap-4">
         <Link href="/uses" className="transition-colors hover:text-foreground">
-          Uses
+          {t.footer.uses}
         </Link>
         <Link href="/now" className="transition-colors hover:text-foreground">
-          Now
+          {t.footer.now}
         </Link>
       </nav>
       <nav className="flex gap-4">

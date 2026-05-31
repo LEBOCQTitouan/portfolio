@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "About",
@@ -34,10 +35,11 @@ const skills = [
 export default async function AboutPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
 
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">About</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{dict.about.title}</h1>
       <div className="prose-content mt-6 max-w-2xl" data-narrate="intro">
         <p>
           I&apos;m Titouan — a software engineer who believes great engineering
@@ -51,7 +53,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         </p>
       </div>
 
-      <h2 className="mt-12 text-xl font-semibold tracking-tight">Experience</h2>
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">{dict.about.experience}</h2>
       <ol className="mt-4 space-y-6 border-l border-border pl-6" data-narrate="experience">
         {experience.map((job) => (
           <li key={`${job.org}-${job.period}`} className="relative">
@@ -70,7 +72,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         ))}
       </ol>
 
-      <h2 className="mt-12 text-xl font-semibold tracking-tight">Skills</h2>
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">{dict.about.skills}</h2>
       <div className="mt-4 grid gap-4 sm:grid-cols-2" data-narrate="skills">
         {skills.map((s) => (
           <div key={s.group}>

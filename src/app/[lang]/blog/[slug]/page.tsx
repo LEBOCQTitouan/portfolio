@@ -7,6 +7,7 @@ import { TagPill } from "@/components/tag-pill";
 import { site } from "@/core/domain/site";
 import { articleJsonLd } from "@/core/domain/seo";
 import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -47,6 +48,7 @@ export default async function PostPage({
 }) {
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
@@ -68,7 +70,7 @@ export default async function PostPage({
               timeZone: "UTC",
             })}
           </time>
-          <span>{post.readingTimeMinutes} min read</span>
+          <span>{post.readingTimeMinutes} {dict.common.minRead}</span>
         </div>
         <h1 className="mt-2 text-4xl font-bold tracking-tight">{post.title}</h1>
         {post.tags.length > 0 && (

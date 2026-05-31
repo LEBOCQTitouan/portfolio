@@ -1,8 +1,12 @@
+"use client";
 import Link from "next/link";
 import type { PostMeta } from "@/core/domain/post";
 import { TagPill } from "@/components/tag-pill";
+import { useT } from "@/i18n/use-t";
 
 export function PostCard({ post }: { post: PostMeta }) {
+  const { t } = useT();
+
   return (
     <article className="border-b border-border py-6">
       <div className="flex items-baseline justify-between gap-4 text-sm text-muted">
@@ -14,7 +18,7 @@ export function PostCard({ post }: { post: PostMeta }) {
             timeZone: "UTC",
           })}
         </time>
-        <span>{post.readingTimeMinutes} min read</span>
+        <span>{post.readingTimeMinutes} {t.common.minRead}</span>
       </div>
       <h2 className="mt-1 text-xl font-semibold tracking-tight">
         <Link href={`/blog/${post.slug}`} className="hover:text-accent">

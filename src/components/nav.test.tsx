@@ -6,16 +6,26 @@ vi.mock("next-themes", () => ({
 }));
 
 import { Nav } from "@/components/nav";
+import { TranslationProvider } from "@/i18n/translation-provider";
+import { en } from "@/i18n/dictionaries/en";
+
+function renderNav() {
+  return render(
+    <TranslationProvider dictionary={en} lang="en">
+      <Nav />
+    </TranslationProvider>,
+  );
+}
 
 describe("Nav", () => {
   it("renders the site name linking home", () => {
-    render(<Nav />);
+    renderNav();
     const home = screen.getByRole("link", { name: /titouan lebocq/i });
     expect(home).toHaveAttribute("href", "/");
   });
 
   it("renders the primary section links", () => {
-    render(<Nav />);
+    renderNav();
     expect(screen.getByRole("link", { name: /work/i })).toHaveAttribute(
       "href",
       "/work",
@@ -31,7 +41,7 @@ describe("Nav", () => {
   });
 
   it("includes the theme toggle", () => {
-    render(<Nav />);
+    renderNav();
     expect(
       screen.getByRole("button", { name: /toggle theme/i }),
     ).toBeInTheDocument();

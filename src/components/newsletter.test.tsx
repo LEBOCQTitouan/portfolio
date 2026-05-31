@@ -2,6 +2,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Newsletter } from "@/components/newsletter";
+import { TranslationProvider } from "@/i18n/translation-provider";
+import { en } from "@/i18n/dictionaries/en";
+
+function renderNewsletter() {
+  return render(
+    <TranslationProvider dictionary={en} lang="en">
+      <Newsletter />
+    </TranslationProvider>,
+  );
+}
 
 describe("Newsletter", () => {
   beforeEach(() => {
@@ -12,7 +22,7 @@ describe("Newsletter", () => {
   });
 
   it("renders an email input and subscribe button", () => {
-    render(<Newsletter />);
+    renderNewsletter();
     expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /subscribe/i })).toBeInTheDocument();
   });
@@ -22,7 +32,7 @@ describe("Newsletter", () => {
       ok: true,
       json: async () => ({ ok: true }),
     });
-    render(<Newsletter />);
+    renderNewsletter();
     await userEvent.type(screen.getByRole("textbox", { name: /email/i }), "me@example.com");
     await userEvent.click(screen.getByRole("button", { name: /subscribe/i }));
     expect(await screen.findByText(/thanks|subscribed/i)).toBeInTheDocument();
@@ -33,7 +43,7 @@ describe("Newsletter", () => {
       ok: false,
       json: async () => ({ error: "Newsletter is not configured yet." }),
     });
-    render(<Newsletter />);
+    renderNewsletter();
     await userEvent.type(screen.getByRole("textbox", { name: /email/i }), "me@example.com");
     await userEvent.click(screen.getByRole("button", { name: /subscribe/i }));
     expect(await screen.findByText(/not configured|try again/i)).toBeInTheDocument();

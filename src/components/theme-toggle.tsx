@@ -1,14 +1,16 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { useT } from "@/i18n/use-t";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const { t } = useT();
 
   return (
     <button
       type="button"
-      aria-label="Toggle theme"
+      aria-label={t.nav.toggleTheme}
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className="rounded-md border border-border px-2 py-1 text-sm text-muted transition-colors hover:text-foreground"
     >

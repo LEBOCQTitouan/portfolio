@@ -5,6 +5,7 @@ import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
 import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
   return getAllProjects().map((project) => ({ slug: project.slug }));
@@ -39,6 +40,7 @@ export default async function ProjectPage({
 }) {
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
@@ -74,7 +76,7 @@ export default async function ProjectPage({
                 rel="noreferrer"
                 className="text-accent hover:underline"
               >
-                Source →
+                {dict.work.source}
               </a>
             )}
             {project.links.demo && (
@@ -84,7 +86,7 @@ export default async function ProjectPage({
                 rel="noreferrer"
                 className="text-accent hover:underline"
               >
-                Live demo →
+                {dict.work.liveDemo}
               </a>
             )}
           </div>

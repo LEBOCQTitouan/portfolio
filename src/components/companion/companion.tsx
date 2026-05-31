@@ -10,6 +10,7 @@ import { useReducedMotion } from "./use-reduced-motion";
 import { scrollProgress, interpolateOrb } from "./hero-phase";
 import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
+import { useT } from "@/i18n/use-t";
 
 const DESKTOP_QUERY = "(min-width: 640px)";
 const CORNER_ANCHOR: Anchor = { x: 88, y: 86, side: "left" };
@@ -17,6 +18,7 @@ const CORNER_ANCHOR: Anchor = { x: 88, y: 86, side: "left" };
 export function Companion() {
   const pathname = usePathname();
   const lines = getNarration(pathname);
+  const { t } = useT();
   const reducedMotion = useReducedMotion();
 
   const muted = useSyncExternalStore(subscribeMuted, getMuted, () => false);
@@ -121,7 +123,7 @@ export function Companion() {
         type="button"
         className="companion-mute"
         onClick={toggleMute}
-        aria-label={muted ? "Unmute site companion" : "Mute site companion"}
+        aria-label={muted ? t.companion.unmute : t.companion.mute}
       >
         {muted ? "◌" : "×"}
       </button>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Uses",
@@ -29,10 +30,11 @@ const categories = [
 export default async function UsesPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
 
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">Uses</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{dict.uses.title}</h1>
       <p className="mt-2 text-muted" data-narrate="intro">
         The tools I reach for day to day. (Edit this list.)
       </p>
