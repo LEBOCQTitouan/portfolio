@@ -1,14 +1,11 @@
-"use client";
 import Link from "next/link";
 import { site } from "@/core/domain/site";
-import { useT } from "@/i18n/use-t";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
-export function Footer({ year }: { year: number }) {
-  const { t } = useT();
-
+export function Footer({ year, t }: { year: number; t: Dictionary["footer"] }) {
   const SOCIALS = [
-    { href: site.social.github, label: t.footer.github },
-    { href: site.social.linkedin, label: t.footer.linkedin },
+    { href: site.social.github, label: t.github },
+    { href: site.social.linkedin, label: t.linkedin },
   ];
 
   return (
@@ -16,10 +13,10 @@ export function Footer({ year }: { year: number }) {
       <span>© {year} Titouan Lebocq</span>
       <nav className="flex gap-4">
         <Link href="/uses" className="transition-colors hover:text-foreground">
-          {t.footer.uses}
+          {t.uses}
         </Link>
         <Link href="/now" className="transition-colors hover:text-foreground">
-          {t.footer.now}
+          {t.now}
         </Link>
       </nav>
       <nav className="flex gap-4">

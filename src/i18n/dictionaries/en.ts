@@ -1,8 +1,6 @@
 export const en = {
   common: {
     skipToContent: "Skip to content",
-    viewAll: "View all",
-    readAll: "Read all",
     minRead: "min read",
   },
   nav: {

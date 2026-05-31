@@ -2,15 +2,10 @@ import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 
 import { Footer } from "@/components/footer";
-import { TranslationProvider } from "@/i18n/translation-provider";
 import { en } from "@/i18n/dictionaries/en";
 
 function renderFooter(year = 2026) {
-  return render(
-    <TranslationProvider dictionary={en} lang="en">
-      <Footer year={year} />
-    </TranslationProvider>,
-  );
+  return render(<Footer year={year} t={en.footer} />);
 }
 
 describe("Footer", () => {

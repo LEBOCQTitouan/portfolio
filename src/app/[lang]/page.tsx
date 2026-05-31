@@ -21,7 +21,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
 
   return (
     <div>
-      <Hero />
+      <Hero t={dict.hero} />
 
       <section className="py-8" data-narrate="pillars">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">{dict.home.whatIDo}</h2>
@@ -59,7 +59,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         </section>
       )}
 
-      <ContactCta />
+      <ContactCta t={dict.contact} />
     </div>
   );
 }
