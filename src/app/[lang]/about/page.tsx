@@ -1,12 +1,37 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { site } from "@/core/domain/site";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: "Software engineer focused on backend systems and design craft.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const dict = await getDictionary(locale);
+  const routePath = "/about";
+
+  return {
+    title: dict.about.title,
+    description: dict.about.metaDescription,
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
+    openGraph: {
+      title: dict.about.title,
+      description: dict.about.metaDescription,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
+  };
+}
 
 const experience = [
   {

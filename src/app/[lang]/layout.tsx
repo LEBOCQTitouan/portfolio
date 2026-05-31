@@ -8,7 +8,7 @@ import { Footer } from "@/components/footer";
 import { site } from "@/core/domain/site";
 import { analytics } from "@/composition/client";
 import { Companion } from "@/components/companion/companion";
-import { isLocale, locales } from "@/i18n/config";
+import { isLocale, locales, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { TranslationProvider } from "@/i18n/translation-provider";
 
@@ -18,19 +18,30 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: "Titouan Lebocq",
-    template: "%s · Titouan Lebocq",
-  },
-  description: "Software engineer — engineering with the craft of design.",
-  openGraph: {
-    title: "Titouan Lebocq",
-    description: "Software engineer — engineering with the craft of design.",
-    type: "website",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const dict = await getDictionary(locale);
+
+  return {
+    metadataBase: new URL(site.url),
+    title: {
+      default: dict.meta.siteTitle,
+      template: `%s · ${dict.meta.siteTitle}`,
+    },
+    description: dict.meta.siteDescription,
+    openGraph: {
+      title: dict.meta.siteTitle,
+      description: dict.meta.siteDescription,
+      type: "website",
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
+  };
+}
 
 export default async function RootLayout({
   children,

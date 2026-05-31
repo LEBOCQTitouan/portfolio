@@ -22,17 +22,25 @@ export async function generateMetadata({
   const locale = isLocale(lang) ? lang : defaultLocale;
   const post = getPostBySlug(locale, slug);
   if (!post) return {};
-  const url = `${site.url}/blog/${post.slug}`;
+  const routePath = `/blog/${post.slug}`;
   return {
     title: post.title,
     description: post.summary,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
     openGraph: {
       type: "article",
-      url,
+      url: `${site.url}/${locale}${routePath}`,
       title: post.title,
       description: post.summary,
       publishedTime: post.date,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
     },
     twitter: {
       card: "summary_large_image",
@@ -64,7 +72,7 @@ export default async function PostPage({
       <header className="mb-8">
         <div className="flex items-baseline justify-between gap-4 text-sm text-muted">
           <time dateTime={post.date}>
-            {new Date(post.date).toLocaleDateString("en-US", {
+            {new Date(post.date).toLocaleDateString(lang, {
               year: "numeric",
               month: "long",
               day: "numeric",

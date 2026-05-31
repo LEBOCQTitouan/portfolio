@@ -2,13 +2,38 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllProjects } from "@/composition/server";
 import { ProjectCard } from "@/components/project-card";
-import { isLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { site } from "@/core/domain/site";
 
-export const metadata: Metadata = {
-  title: "Work",
-  description: "Selected projects across backend systems and interfaces.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const dict = await getDictionary(locale);
+  const routePath = "/work";
+
+  return {
+    title: dict.work.title,
+    description: dict.work.description,
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
+    openGraph: {
+      title: dict.work.title,
+      description: dict.work.description,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
+  };
+}
 
 export default async function WorkPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;

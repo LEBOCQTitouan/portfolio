@@ -20,16 +20,24 @@ export async function generateMetadata({
   const locale = isLocale(lang) ? lang : defaultLocale;
   const project = getProjectBySlug(locale, slug);
   if (!project) return {};
-  const url = `${site.url}/work/${project.slug}`;
+  const routePath = `/work/${project.slug}`;
   return {
     title: project.title,
     description: project.summary,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
     openGraph: {
       type: "article",
-      url,
+      url: `${site.url}/${locale}${routePath}`,
       title: project.title,
       description: project.summary,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
     },
   };
 }

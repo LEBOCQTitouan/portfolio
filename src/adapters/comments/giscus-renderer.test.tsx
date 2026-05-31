@@ -7,6 +7,9 @@ vi.mock("next-themes", () => ({
 vi.mock("@giscus/react", () => ({
   default: () => <div data-testid="giscus" />,
 }));
+vi.mock("@/i18n/use-t", () => ({
+  useT: () => ({ t: {}, lang: "en" }),
+}));
 
 import { GiscusRenderer } from "@/adapters/comments/giscus-renderer";
 

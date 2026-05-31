@@ -1,12 +1,37 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { site } from "@/core/domain/site";
 
-export const metadata: Metadata = {
-  title: "Now",
-  description: "What I'm focused on right now.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const dict = await getDictionary(locale);
+  const routePath = "/now";
+
+  return {
+    title: dict.now.title,
+    description: dict.now.metaDescription,
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
+    openGraph: {
+      title: dict.now.title,
+      description: dict.now.metaDescription,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
+  };
+}
 
 // Update this date and list when your focus changes.
 const lastUpdated = "May 2026";

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllTags, getPostsByTag } from "@/composition/server";
 import { PostCard } from "@/components/post-card";
-import { isLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { site } from "@/core/domain/site";
 
 export function generateStaticParams() {
   return getAllTags("en").map((tag) => ({ tag }));
@@ -14,10 +15,23 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string; tag: string }>;
 }): Promise<Metadata> {
-  const { tag } = await params;
+  const { lang, tag } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const routePath = `/blog/tags/${tag}`;
   return {
     title: `#${tag}`,
     description: `Posts tagged "${tag}".`,
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
+    openGraph: {
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
   };
 }
 

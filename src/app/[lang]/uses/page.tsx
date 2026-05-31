@@ -1,12 +1,37 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { site } from "@/core/domain/site";
 
-export const metadata: Metadata = {
-  title: "Uses",
-  description: "The tools, hardware, and software I use day to day.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const dict = await getDictionary(locale);
+  const routePath = "/uses";
+
+  return {
+    title: dict.uses.title,
+    description: dict.uses.metaDescription,
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
+    openGraph: {
+      title: dict.uses.title,
+      description: dict.uses.metaDescription,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
+  };
+}
 
 const categories = [
   {
