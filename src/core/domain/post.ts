@@ -62,7 +62,7 @@ export function filterDrafts(posts: Post[], includeDrafts: boolean): Post[] {
 }
 
 export function toPostMeta(post: Post): PostMeta {
-  const { content: _content, ...meta } = post;
+  const { content, ...meta } = post;
   return meta;
 }
 
