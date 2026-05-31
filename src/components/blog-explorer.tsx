@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { PostMeta } from "@/lib/posts";
+import type { PostMeta } from "@/core/domain/post";
 import { PostCard } from "@/components/post-card";
-import { filterPosts } from "@/lib/search";
+import { filterPosts } from "@/core/domain/search";
 
 export function BlogExplorer({
   posts,

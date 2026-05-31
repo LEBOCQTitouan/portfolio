@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts, getAllTags } from "@/lib/posts";
-import { getAllProjects } from "@/lib/projects";
+import { getAllPosts, getAllTags, getAllProjects } from "@/composition/server";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-static";

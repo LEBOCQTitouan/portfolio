@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAllPostMeta, getAllTags } from "@/lib/posts";
+import { getAllPostMeta, getAllTags } from "@/composition/server";
 import { BlogExplorer } from "@/components/blog-explorer";
 import { Newsletter } from "@/components/newsletter";
 

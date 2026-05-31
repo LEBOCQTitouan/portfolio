@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getAllProjects, getProjectBySlug } from "@/lib/projects";
+import { getAllProjects, getProjectBySlug } from "@/composition/server";
 import { site } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };

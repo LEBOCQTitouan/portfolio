@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect } from "vitest";
 import { BlogExplorer } from "@/components/blog-explorer";
-import type { PostMeta } from "@/lib/posts";
+import type { PostMeta } from "@/core/domain/post";
 
 const posts: PostMeta[] = [
   { slug: "a", title: "Designing for Failure", date: "2026-01-15", summary: "Resilient backends.", tags: ["systems"], draft: false, readingTimeMinutes: 4 },

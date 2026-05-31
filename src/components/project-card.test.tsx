@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { ProjectCard } from "@/components/project-card";
-import type { Project } from "@/lib/projects";
+import type { Project } from "@/core/domain/project";
 
 const project: Project = {
   slug: "ledger-engine",

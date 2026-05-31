@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { PostCard } from "@/components/post-card";
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/core/domain/post";
 
 const post: Post = {
   slug: "designing-for-failure",

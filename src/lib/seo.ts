@@ -1,5 +1,5 @@
 import { site } from "@/lib/site";
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/core/domain/post";
 
 export function articleJsonLd(post: Post) {
   return {

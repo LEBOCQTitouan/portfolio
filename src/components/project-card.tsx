@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Project } from "@/lib/projects";
+import type { Project } from "@/core/domain/project";
 import { CategoryBadge } from "@/components/category-badge";
 
 export function ProjectCard({ project }: { project: Project }) {

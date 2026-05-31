@@ -1,5 +1,5 @@
 import { Feed } from "feed";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts } from "@/composition/server";
 import { site } from "@/lib/site";
 
 export const dynamic = "force-static";

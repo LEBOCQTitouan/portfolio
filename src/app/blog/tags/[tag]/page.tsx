@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllTags, getPostsByTag } from "@/lib/posts";
+import { getAllTags, getPostsByTag } from "@/composition/server";
 import { PostCard } from "@/components/post-card";
 
 export function generateStaticParams() {

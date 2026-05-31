@@ -1,4 +1,4 @@
-import type { ProjectCategory } from "@/lib/projects";
+import type { ProjectCategory } from "@/core/domain/project";
 
 const LABELS: Record<ProjectCategory, string> = {
   systems: "Systems",

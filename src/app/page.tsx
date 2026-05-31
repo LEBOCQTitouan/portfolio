@@ -3,8 +3,7 @@ import { Hero } from "@/components/landing/hero";
 import { PillarCard } from "@/components/landing/pillar-card";
 import { ProjectCard } from "@/components/project-card";
 import { PostCard } from "@/components/post-card";
-import { getFeaturedProjects, getAllProjects } from "@/lib/projects";
-import { getAllPosts } from "@/lib/posts";
+import { getFeaturedProjects, getAllProjects, getAllPosts } from "@/composition/server";
 
 export default function HomePage() {
   const featured = getFeaturedProjects();

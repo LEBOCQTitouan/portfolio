@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { getAllPosts, getPostBySlug } from "@/composition/server";
 import { Mdx } from "@/components/mdx";
 import { Comments } from "@/components/comments";
 import { TagPill } from "@/components/tag-pill";
