@@ -23,7 +23,7 @@ export function Companion() {
     getMuted,      // client snapshot
     () => false,   // server snapshot — matches SSR, avoids hydration mismatch
   );
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [active, setActive] = useState<{ route: string; id: string } | null>(null);
   const [isDesktop, setIsDesktop] = useState(true);
   const ratios = useRef<Record<string, number>>({});
 
@@ -49,7 +49,7 @@ export function Companion() {
           if (id) ratios.current[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
         }
         const next = pickActiveSection(ratios.current);
-        if (next) setActiveId(next);
+        if (next) setActive({ route: pathname, id: next });
       },
       { threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
@@ -59,8 +59,9 @@ export function Companion() {
 
   if (lines.length === 0) return null;
 
-  const active = lines.find((l) => l.id === activeId) ?? lines[0];
-  const anchor = !isDesktop || muted ? CORNER_ANCHOR : active.anchor;
+  const activeId = active?.route === pathname ? active.id : null;
+  const activeLine = lines.find((l) => l.id === activeId) ?? lines[0];
+  const anchor = !isDesktop || muted ? CORNER_ANCHOR : activeLine.anchor;
 
   const toggleMute = () => setMuted(!muted);
 
@@ -71,8 +72,8 @@ export function Companion() {
         style={{ left: `${anchor.x}%`, top: `${anchor.y}%` }}
         aria-hidden="true"
       >
-        {!muted && <SpeechBubble text={active.text} reducedMotion={reducedMotion} />}
-        <Orb mood={active.mood} muted={muted} />
+        {!muted && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
+        <Orb mood={activeLine.mood} muted={muted} />
       </div>
       <button
         type="button"
