@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { getNarration } from "@/lib/narration/resolver";
 import { pickActiveSection } from "./active-section";
 import { getMuted, setMuted, subscribeMuted } from "./mute-storage";
@@ -41,7 +41,7 @@ export function Companion() {
   }, []);
 
   // Recompute the gutter target from the active section's rect (and hero progress).
-  function recompute() {
+  const recompute = useCallback(() => {
     const home = document.querySelector<HTMLElement>("[data-orb-home]");
     if (home) {
       const p = scrollProgress(window.scrollY, home.offsetHeight);
@@ -52,7 +52,7 @@ export function Companion() {
     const rect = el ? el.getBoundingClientRect() : null;
     const next = gutterTargetPercent(window.innerWidth, window.innerHeight, rect);
     setTarget((prev) => (prev.x === next.x && prev.y === next.y ? prev : next));
-  }
+  }, []);
 
   // Observe sections → active id.
   useEffect(() => {
@@ -77,7 +77,7 @@ export function Companion() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [pathname, lines.length]);
+  }, [pathname, lines.length, recompute]);
 
   // Track scroll → hero progress + gutter top.
   useEffect(() => {
@@ -95,7 +95,7 @@ export function Companion() {
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, [pathname]);
+  }, [pathname, recompute]);
 
   // Reserve bottom space in dock mode so the dock never covers content.
   const dockMode = !isWide;
