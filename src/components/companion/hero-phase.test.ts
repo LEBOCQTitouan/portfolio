@@ -47,10 +47,20 @@ describe("gutterTargetPercent", () => {
   it("exports COMPANION_SIZE as a positive number", () => {
     expect(COMPANION_SIZE).toBeGreaterThan(0);
   });
-  it("places x near the right edge (in the gutter)", () => {
+  it("places x in the gutter lane (right of column, left of viewport edge)", () => {
     const { x } = gutterTargetPercent(1280, 800, { top: 100, height: 200 });
-    expect(x).toBeGreaterThan(90); // right gutter
+    expect(x).toBeGreaterThan(80); // right gutter
     expect(x).toBeLessThan(100);
+  });
+  it("keeps the orb+bubble inside the gutter lane (no column overlap, no viewport clip)", () => {
+    const BUBBLE = 220;
+    for (const vw of [1280, 1440, 1920]) {
+      const { x } = gutterTargetPercent(vw, 800, { top: 100, height: 200 });
+      const centerPx = (x / 100) * vw;
+      const columnRight = (vw + 768) / 2;
+      expect(centerPx - BUBBLE / 2).toBeGreaterThanOrEqual(columnRight); // no column overlap
+      expect(centerPx + BUBBLE / 2).toBeLessThanOrEqual(vw); // no off-screen clip
+    }
   });
   it("y tracks the section's vertical center as a viewport %", () => {
     const { y } = gutterTargetPercent(1280, 800, { top: 300, height: 200 }); // center 400 of 800 = 50%

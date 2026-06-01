@@ -33,7 +33,7 @@ export function interpolateOrb(p: number, travel: { x: number; y: number }): Orb
 }
 
 export const COMPANION_SIZE = 92;
-const GUTTER_INSET = 28; // px from the right viewport edge toward the orb centre
+const COLUMN_WIDTH = 768; // max-w-3xl
 const MIN_TOP_PCT = 12;
 const MAX_TOP_PCT = 88;
 
@@ -42,9 +42,11 @@ export function gutterTargetPercent(
   vw: number,
   vh: number,
   sectionRect: { top: number; height: number } | null,
-  orbSize = COMPANION_SIZE,
+  _orbSize = COMPANION_SIZE,
 ): { x: number; y: number } {
-  const x = vw > 0 ? ((vw - GUTTER_INSET - orbSize / 2) / vw) * 100 : 90;
+  const columnRight = (vw + COLUMN_WIDTH) / 2;
+  const laneCenter = (columnRight + vw) / 2; // midpoint of the right gutter
+  const x = vw > 0 ? (laneCenter / vw) * 100 : 90;
   const centre = sectionRect ? sectionRect.top + sectionRect.height / 2 : vh / 2;
   const yRaw = vh > 0 ? (centre / vh) * 100 : 50;
   const y = Math.min(MAX_TOP_PCT, Math.max(MIN_TOP_PCT, yRaw));

@@ -12,7 +12,7 @@ import { SpeechBubble } from "./speech-bubble";
 import { useT } from "@/i18n/use-t";
 import { isLocale, defaultLocale } from "@/i18n/config";
 
-const WIDE_QUERY = "(min-width: 1200px)";
+const WIDE_QUERY = "(min-width: 1280px)";
 const DOCK_HEIGHT = 76; // px reserved at the bottom in dock mode
 
 export function Companion() {

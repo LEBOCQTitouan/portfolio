@@ -71,7 +71,7 @@ describe("Companion", () => {
   it("enters hero phase (large aura) when an orb-home element is present and at top of page", () => {
     // Allow motion so hero phase is not gated off by reduced-motion.
     setMatchMedia("(prefers-reduced-motion: reduce)", false);
-    setMatchMedia("(min-width: 1200px)", true);
+    setMatchMedia("(min-width: 1280px)", true);
     document.body.innerHTML =
       `<section data-orb-home style="height:800px"></section>` +
       ["hero", "pillars"].map((id) => `<div data-narrate="${id}" style="height:300px"></div>`).join("");
@@ -82,13 +82,13 @@ describe("Companion", () => {
   });
 
   it("uses the bottom dock below 1200px", () => {
-    setMatchMedia("(min-width: 1200px)", false);
+    setMatchMedia("(min-width: 1280px)", false);
     renderWithSections(["hero", "pillars"]);
     expect(document.querySelector(".companion-bottom-dock")).toBeInTheDocument();
   });
 
   it("uses the gutter lane at >=1200px", () => {
-    setMatchMedia("(min-width: 1200px)", true);
+    setMatchMedia("(min-width: 1280px)", true);
     setMatchMedia("(prefers-reduced-motion: reduce)", false);
     renderWithSections(["hero", "pillars"]);
     expect(document.querySelector(".companion-gutter")).toBeInTheDocument();
