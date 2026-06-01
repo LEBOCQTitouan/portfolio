@@ -3,7 +3,7 @@ import { locales, negotiateLocale } from "@/i18n/negotiate";
 
 const LOCALE_COOKIE = "NEXT_LOCALE";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const hasLocale = locales.some(
