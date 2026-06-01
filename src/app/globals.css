@@ -112,18 +112,44 @@ body {
 }
 
 /* ── Companion orb ─────────────────────────────────────────── */
-.companion-dock {
+
+/* Companion — gutter lane (wide) */
+.companion-gutter {
   position: fixed;
+  z-index: 40;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column-reverse; /* bubble stacked ABOVE the orb, within the gutter */
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: 16rem; /* keep the bubble inside the gutter, never over the column */
+  pointer-events: none;
+}
+
+/* Companion — reserved bottom dock (narrow) */
+/* Base: positioning only — no chrome when muted (no data-dock-active) */
+.companion-bottom-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 40;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px;
-  transform: translate(-50%, -50%);
-  pointer-events: none; /* decorative; never blocks the page */
+  pointer-events: none;
 }
-.companion-dock.side-left {
-  flex-direction: row-reverse;
+/* Chrome appears only when the dock is actively reserving space */
+.companion-bottom-dock[data-dock-active] {
+  padding: 10px 16px;
+  min-height: var(--companion-dock-h, 76px);
+  background: color-mix(in srgb, var(--background) 86%, transparent);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
 }
+
 .companion-orb {
   width: 92px;
   height: 92px;
@@ -143,12 +169,6 @@ body {
   border: 1px solid var(--border);
   box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
 }
-.companion-dock.side-right .companion-bubble {
-  border-bottom-left-radius: 4px;
-}
-.companion-dock.side-left .companion-bubble {
-  border-bottom-right-radius: 4px;
-}
 .companion-mute {
   position: fixed;
   right: 16px;
@@ -167,10 +187,8 @@ body {
 
 /* Motion only when the user allows it. */
 @media (prefers-reduced-motion: no-preference) {
-  .companion-dock {
-    transition:
-      left 0.9s cubic-bezier(0.6, 0.02, 0.2, 1),
-      top 0.9s cubic-bezier(0.6, 0.02, 0.2, 1);
+  .companion-gutter {
+    transition: left 0.6s cubic-bezier(0.6, 0.02, 0.2, 1), top 0.6s cubic-bezier(0.6, 0.02, 0.2, 1);
   }
   .companion-orb {
     transition:

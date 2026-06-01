@@ -73,7 +73,7 @@ export default async function RootLayout({
                 {dict.common.skipToContent}
               </a>
               <Nav />
-              <main id="main" className="flex-1 py-8 animate-in">
+              <main id="main" className="flex-1 py-8 animate-in" style={{ paddingBottom: "var(--companion-dock-h, 0px)" }}>
                 {children}
               </main>
               <Footer year={new Date().getFullYear()} t={dict.footer} lang={lang} />

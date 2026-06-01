@@ -142,7 +142,12 @@ export function Companion() {
 
   return (
     <>
-      <div className={dockClass} style={dockStyle} aria-hidden="true">
+      <div
+        className={dockClass}
+        style={dockStyle}
+        aria-hidden="true"
+        {...(dockMode ? { "data-dock-active": !muted ? "true" : undefined } : {})}
+      >
         {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
         <Orb mood={activeLine.mood} muted={muted} style={orbStyle} />
       </div>
