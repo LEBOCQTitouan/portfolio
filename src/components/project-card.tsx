@@ -1,13 +1,15 @@
 import Link from "next/link";
 import type { Project } from "@/core/domain/project";
 import { CategoryBadge } from "@/components/category-badge";
+import type { Locale } from "@/i18n/config";
+import { localizedHref } from "@/i18n/localized-href";
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({ project, lang }: { project: Project; lang: Locale }) {
   return (
     <article className="border-b border-border py-6">
       <div className="flex items-start justify-between gap-4">
         <h2 className="text-xl font-semibold tracking-tight">
-          <Link href={`/work/${project.slug}`} className="hover:text-accent">
+          <Link href={localizedHref(lang, `/work/${project.slug}`)} className="hover:text-accent">
             {project.title}
           </Link>
         </h2>

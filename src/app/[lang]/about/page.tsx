@@ -1,9 +1,37 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { isLocale, defaultLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { site } from "@/core/domain/site";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: "Software engineer focused on backend systems and design craft.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const dict = await getDictionary(locale);
+  const routePath = "/about";
+
+  return {
+    title: dict.about.title,
+    description: dict.about.metaDescription,
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
+    openGraph: {
+      title: dict.about.title,
+      description: dict.about.metaDescription,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
+  };
+}
 
 const experience = [
   {
@@ -29,10 +57,14 @@ const skills = [
   { group: "Infra", items: ["Cloudflare", "Docker", "CI/CD", "Observability"] },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
+
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">About</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{dict.about.title}</h1>
       <div className="prose-content mt-6 max-w-2xl" data-narrate="intro">
         <p>
           I&apos;m Titouan — a software engineer who believes great engineering
@@ -46,7 +78,7 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <h2 className="mt-12 text-xl font-semibold tracking-tight">Experience</h2>
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">{dict.about.experience}</h2>
       <ol className="mt-4 space-y-6 border-l border-border pl-6" data-narrate="experience">
         {experience.map((job) => (
           <li key={`${job.org}-${job.period}`} className="relative">
@@ -65,7 +97,7 @@ export default function AboutPage() {
         ))}
       </ol>
 
-      <h2 className="mt-12 text-xl font-semibold tracking-tight">Skills</h2>
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">{dict.about.skills}</h2>
       <div className="mt-4 grid gap-4 sm:grid-cols-2" data-narrate="skills">
         {skills.map((s) => (
           <div key={s.group}>

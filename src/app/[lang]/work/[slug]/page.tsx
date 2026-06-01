@@ -4,29 +4,40 @@ import { getAllProjects, getProjectBySlug } from "@/composition/server";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
+import { isLocale, defaultLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
-  return getAllProjects().map((project) => ({ slug: project.slug }));
+  return getAllProjects("en").map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const { lang, slug } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const project = getProjectBySlug(locale, slug);
   if (!project) return {};
-  const url = `${site.url}/work/${project.slug}`;
+  const routePath = `/work/${project.slug}`;
   return {
     title: project.title,
     description: project.summary,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: `${site.url}/${locale}${routePath}`,
+      languages: {
+        en: `${site.url}/en${routePath}`,
+        fr: `${site.url}/fr${routePath}`,
+        "x-default": `${site.url}/en${routePath}`,
+      },
+    },
     openGraph: {
       type: "article",
-      url,
+      url: `${site.url}/${locale}${routePath}`,
       title: project.title,
       description: project.summary,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
     },
   };
 }
@@ -34,10 +45,12 @@ export async function generateMetadata({
 export default async function ProjectPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }) {
-  const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const { lang, slug } = await params;
+  if (!isLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
+  const project = getProjectBySlug(lang, slug);
   if (!project) notFound();
 
   return (
@@ -72,7 +85,7 @@ export default async function ProjectPage({
                 rel="noreferrer"
                 className="text-accent hover:underline"
               >
-                Source →
+                {dict.work.source}
               </a>
             )}
             {project.links.demo && (
@@ -82,7 +95,7 @@ export default async function ProjectPage({
                 rel="noreferrer"
                 className="text-accent hover:underline"
               >
-                Live demo →
+                {dict.work.liveDemo}
               </a>
             )}
           </div>

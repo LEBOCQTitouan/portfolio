@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { PostMeta } from "@/core/domain/post";
 import { PostCard } from "@/components/post-card";
 import { filterPosts } from "@/core/domain/search";
+import { useT } from "@/i18n/use-t";
 
 export function BlogExplorer({
   posts,
@@ -12,6 +13,7 @@ export function BlogExplorer({
   posts: PostMeta[];
   allTags: string[];
 }) {
+  const { t } = useT();
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const filtered = filterPosts(posts, query, selected);
@@ -30,8 +32,8 @@ export function BlogExplorer({
         type="search"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search posts"
-        aria-label="Search posts"
+        placeholder={t.blog.searchPlaceholder}
+        aria-label={t.blog.searchLabel}
         className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm"
       />
       {allTags.length > 0 && (
@@ -58,7 +60,7 @@ export function BlogExplorer({
       )}
       <div className="mt-6">
         {filtered.length === 0 ? (
-          <p className="text-muted">No posts match.</p>
+          <p className="text-muted">{t.blog.noMatch}</p>
         ) : (
           filtered.map((post) => <PostCard key={post.slug} post={post} />)
         )}

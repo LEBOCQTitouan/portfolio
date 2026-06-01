@@ -3,6 +3,7 @@
 import Giscus from "@giscus/react";
 import { useTheme } from "next-themes";
 import type { CommentsRenderer } from "@/core/ports/comments-renderer";
+import { useT } from "@/i18n/use-t";
 
 const repo = process.env.NEXT_PUBLIC_GISCUS_REPO;
 const repoId = process.env.NEXT_PUBLIC_GISCUS_REPO_ID;
@@ -11,6 +12,7 @@ const categoryId = process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID;
 
 function GiscusComments() {
   const { resolvedTheme } = useTheme();
+  const { lang } = useT();
 
   if (!repo || !repoId || !categoryId) return null;
 
@@ -26,7 +28,7 @@ function GiscusComments() {
         emitMetadata="0"
         inputPosition="top"
         theme={resolvedTheme === "dark" ? "dark" : "light"}
-        lang="en"
+        lang={lang === "fr" ? "fr" : "en"}
         loading="lazy"
       />
     </section>

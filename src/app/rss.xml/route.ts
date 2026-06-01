@@ -16,8 +16,9 @@ export function GET() {
     author: { name: site.author, link: site.url },
   });
 
-  for (const post of getAllPosts()) {
-    const url = `${site.url}/blog/${post.slug}`;
+  // Single EN feed at /rss.xml. A /fr/rss.xml feed is a future addition.
+  for (const post of getAllPosts("en")) {
+    const url = `${site.url}/en/blog/${post.slug}`;
     feed.addItem({
       title: post.title,
       id: url,

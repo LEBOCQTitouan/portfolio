@@ -1,21 +1,25 @@
+import Link from "next/link";
 import { site } from "@/core/domain/site";
+import type { Dictionary } from "@/i18n/dictionaries/en";
+import type { Locale } from "@/i18n/config";
+import { localizedHref } from "@/i18n/localized-href";
 
-const SOCIALS = [
-  { href: site.social.github, label: "GitHub" },
-  { href: site.social.linkedin, label: "LinkedIn" },
-];
+export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"]; lang: Locale }) {
+  const SOCIALS = [
+    { href: site.social.github, label: t.github },
+    { href: site.social.linkedin, label: t.linkedin },
+  ];
 
-export function Footer({ year }: { year: number }) {
   return (
     <footer className="flex flex-col gap-3 border-t border-border py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
       <span>© {year} Titouan Lebocq</span>
       <nav className="flex gap-4">
-        <a href="/uses" className="transition-colors hover:text-foreground">
-          Uses
-        </a>
-        <a href="/now" className="transition-colors hover:text-foreground">
-          Now
-        </a>
+        <Link href={localizedHref(lang, "/uses")} className="transition-colors hover:text-foreground">
+          {t.uses}
+        </Link>
+        <Link href={localizedHref(lang, "/now")} className="transition-colors hover:text-foreground">
+          {t.now}
+        </Link>
       </nav>
       <nav className="flex gap-4">
         {SOCIALS.map((social) => (
