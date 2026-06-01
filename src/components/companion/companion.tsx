@@ -3,18 +3,17 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { getNarration } from "@/lib/narration/resolver";
-import type { Anchor } from "@/lib/narration/types";
 import { pickActiveSection } from "./active-section";
 import { getMuted, setMuted, subscribeMuted } from "./mute-storage";
 import { useReducedMotion } from "./use-reduced-motion";
-import { scrollProgress, interpolateOrb } from "./hero-phase";
+import { scrollProgress, interpolateOrb, gutterTargetPercent } from "./hero-phase";
 import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
 import { useT } from "@/i18n/use-t";
 import { isLocale, defaultLocale } from "@/i18n/config";
 
-const DESKTOP_QUERY = "(min-width: 640px)";
-const CORNER_ANCHOR: Anchor = { x: 88, y: 86, side: "left" };
+const WIDE_QUERY = "(min-width: 1200px)";
+const DOCK_HEIGHT = 76; // px reserved at the bottom in dock mode
 
 export function Companion() {
   const pathname = usePathname();
@@ -26,19 +25,36 @@ export function Companion() {
 
   const muted = useSyncExternalStore(subscribeMuted, getMuted, () => false);
   const [active, setActive] = useState<{ route: string; id: string } | null>(null);
-  const [isDesktop, setIsDesktop] = useState(true);
-  const [progress, setProgress] = useState(0); // hero-phase scroll progress (0..1)
+  const [isWide, setIsWide] = useState(true);
+  const [progress, setProgress] = useState(0);
   const [heroPresent, setHeroPresent] = useState(false);
+  const [target, setTarget] = useState({ x: 90, y: 50 }); // gutter target (viewport %)
   const ratios = useRef<Record<string, number>>({});
+  const activeIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const mq = window.matchMedia(DESKTOP_QUERY);
-    const update = () => setIsDesktop(mq.matches);
+    const mq = window.matchMedia(WIDE_QUERY);
+    const update = () => setIsWide(mq.matches);
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  // Recompute the gutter target from the active section's rect (and hero progress).
+  function recompute() {
+    const home = document.querySelector<HTMLElement>("[data-orb-home]");
+    if (home) {
+      const p = scrollProgress(window.scrollY, home.offsetHeight);
+      setProgress((prev) => (prev === p ? prev : p));
+    }
+    const id = activeIdRef.current;
+    const el = id ? document.querySelector<HTMLElement>(`[data-narrate="${id}"]`) : null;
+    const rect = el ? el.getBoundingClientRect() : null;
+    const next = gutterTargetPercent(window.innerWidth, window.innerHeight, rect);
+    setTarget((prev) => (prev.x === next.x && prev.y === next.y ? prev : next));
+  }
+
+  // Observe sections → active id.
   useEffect(() => {
     if (lines.length === 0) return;
     ratios.current = {};
@@ -51,7 +67,11 @@ export function Companion() {
           if (id) ratios.current[id] = entry.isIntersecting ? entry.intersectionRatio : 0;
         }
         const next = pickActiveSection(ratios.current);
-        if (next) setActive({ route: pathname, id: next });
+        if (next) {
+          activeIdRef.current = next;
+          setActive({ route: pathname, id: next });
+          recompute();
+        }
       },
       { threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
@@ -59,20 +79,15 @@ export function Companion() {
     return () => io.disconnect();
   }, [pathname, lines.length]);
 
-  // Hero phase: track scroll progress over the [data-orb-home] hero.
+  // Track scroll → hero progress + gutter top.
   useEffect(() => {
     const home = document.querySelector<HTMLElement>("[data-orb-home]");
-    // Sync with DOM presence — legitimate external-system synchronization.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHeroPresent(!!home);
-    if (!home) return;
     let raf = 0;
     const onScroll = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const p = scrollProgress(window.scrollY, home.offsetHeight);
-        setProgress((prev) => (prev === p ? prev : p));
-      });
+      raf = requestAnimationFrame(recompute);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -82,43 +97,52 @@ export function Companion() {
     };
   }, [pathname]);
 
+  // Reserve bottom space in dock mode so the dock never covers content.
+  const dockMode = !isWide;
+  useEffect(() => {
+    const px = dockMode && lines.length > 0 && !muted ? `${DOCK_HEIGHT}px` : "0px";
+    document.documentElement.style.setProperty("--companion-dock-h", px);
+    return () => document.documentElement.style.setProperty("--companion-dock-h", "0px");
+  }, [dockMode, lines.length, muted]);
+
   if (lines.length === 0) return null;
 
   const activeId = active?.route === pathname ? active.id : null;
   const activeLine = lines.find((l) => l.id === activeId) ?? lines[0];
 
-  // Hero phase is active only on a route with an orb-home, on desktop, not muted,
-  // and not under reduced motion (then we fall back to the plain V0 companion).
-  const heroPhase = heroPresent && isDesktop && !muted && !reducedMotion;
+  // Hero aura only on the landing, wide, not muted, not reduced-motion.
+  const heroPhase = heroPresent && isWide && !muted && !reducedMotion;
+  const geo = heroPhase ? interpolateOrb(progress, target) : null;
 
-  const travelAnchor = !isDesktop || muted ? CORNER_ANCHOR : activeLine.anchor;
-  const geo = heroPhase ? interpolateOrb(progress, travelAnchor) : null;
-
-  const dockStyle: CSSProperties = geo
-    ? { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : -1 }
-    : { left: `${travelAnchor.x}%`, top: `${travelAnchor.y}%` };
-
-  const orbStyle: CSSProperties | undefined = geo
-    ? {
-        width: geo.size,
-        height: geo.size,
-        filter: `blur(${geo.blur}px)`,
-        opacity: geo.opacity,
-        ...(geo.front ? null : { animation: "orb-breathe 6s ease-in-out infinite" }),
-      }
-    : undefined;
+  let dockClass: string;
+  let dockStyle: CSSProperties;
+  let orbStyle: CSSProperties | undefined;
+  if (dockMode) {
+    dockClass = "companion-bottom-dock";
+    dockStyle = {};
+    orbStyle = undefined;
+  } else if (geo) {
+    dockClass = "companion-gutter";
+    dockStyle = { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : -1 };
+    orbStyle = {
+      width: geo.size,
+      height: geo.size,
+      filter: `blur(${geo.blur}px)`,
+      opacity: geo.opacity,
+      ...(geo.front ? null : { animation: "orb-breathe 6s ease-in-out infinite" }),
+    };
+  } else {
+    dockClass = "companion-gutter";
+    dockStyle = { left: `${target.x}%`, top: `${target.y}%` };
+    orbStyle = undefined;
+  }
 
   const showBubble = !muted && (geo ? geo.bubble : true);
-
   const toggleMute = () => setMuted(!muted);
 
   return (
     <>
-      <div
-        className={`companion-dock side-${travelAnchor.side}`}
-        style={dockStyle}
-        aria-hidden="true"
-      >
+      <div className={dockClass} style={dockStyle} aria-hidden="true">
         {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
         <Orb mood={activeLine.mood} muted={muted} style={orbStyle} />
       </div>
