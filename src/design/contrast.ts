@@ -1,6 +1,6 @@
 /** Parse #rgb / #rrggbb (with or without leading #) into [r,g,b] 0-255. */
 function parseHex(hex: string): [number, number, number] {
-  let h = hex.replace(/^#/, "").trim();
+  let h = hex.trim().replace(/^#/, "");
   if (h.length === 3) h = h.split("").map((c) => c + c).join("");
   if (h.length !== 6) throw new Error(`Invalid hex color: "${hex}"`);
   const n = parseInt(h, 16);
@@ -9,11 +9,12 @@ function parseHex(hex: string): [number, number, number] {
 
 /** WCAG relative luminance (0..1) for an sRGB hex color. */
 export function relativeLuminance(hex: string): number {
-  const lin = parseHex(hex).map((v) => {
+  const lin = (v: number): number => {
     const s = v / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const [r, g, b] = parseHex(hex);
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
 }
 
 /** WCAG contrast ratio (1..21) between two hex colors. */

@@ -18,7 +18,10 @@ describe("contrastRatio", () => {
       5,
     );
   });
-  it("accepts 3- and 6-digit hex with or without #", () => {
-    expect(contrastRatio("000", "fff")).toBeCloseTo(21, 1);
+  it("expands 3-digit hex equivalently to 6-digit", () => {
+    expect(contrastRatio("f00", "#ff0000")).toBeCloseTo(1, 5);
+  });
+  it("throws on malformed hex", () => {
+    expect(() => contrastRatio("nope", "#fff")).toThrow();
   });
 });
