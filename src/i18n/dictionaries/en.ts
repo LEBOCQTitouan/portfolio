@@ -132,6 +132,10 @@ export const en = {
     outcomeTitle: "Outcome",
     outcome:
       "A coherent, accessible, self-theming portfolio: four subjects, contrast gated in CI, reduced-motion-safe, and extensible from one place.",
+    typeTitle: "Type",
+    typeHint: "Two typefaces — a display face for the wordmark, Inter for everything else.",
+    typeDisplay: "Display · Dragonsteel · the wordmark",
+    typeSans: "Sans · Inter · everything else",
   },
   meta: {
     siteTitle: "Titouan Lebocq",

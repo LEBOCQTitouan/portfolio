@@ -8,6 +8,7 @@ import { PAGE_TITLE } from "@/lib/transitions/names";
 import { SubjectSwitcher } from "@/components/design-system-showcase/subject-switcher";
 import { TokenReference } from "@/components/design-system-showcase/token-reference";
 import { CompanionSandbox } from "@/components/design-system-showcase/companion-sandbox";
+import { Typography } from "@/components/design-system-showcase/typography";
 
 export async function generateMetadata({
   params,
@@ -71,6 +72,12 @@ export default async function DesignSystemPage({ params }: { params: Promise<{ l
         <h2 className="text-xl font-semibold tracking-tight">{ds.tokensTitle}</h2>
         <p className="mt-2 text-muted">{ds.tokensHint}</p>
         <div className="mt-6"><TokenReference /></div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xl font-semibold tracking-tight">{ds.typeTitle}</h2>
+        <p className="mt-2 text-muted">{ds.typeHint}</p>
+        <div className="mt-6"><Typography displayLabel={ds.typeDisplay} sansLabel={ds.typeSans} /></div>
       </section>
 
       <section className="mt-12">

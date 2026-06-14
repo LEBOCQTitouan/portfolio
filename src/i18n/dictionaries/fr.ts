@@ -134,6 +134,10 @@ export const fr: Dictionary = {
     outcomeTitle: "Résultat",
     outcome:
       "Un portfolio cohérent, accessible et auto-thématisé : quatre sujets, contrastes vérifiés en CI, respect du reduced-motion, et extensible depuis un seul endroit.",
+    typeTitle: "Typographie",
+    typeHint: `Deux familles — une fonte d'affichage pour le logo, Inter pour tout le reste.`,
+    typeDisplay: "Affichage · Dragonsteel · le logo",
+    typeSans: "Sans · Inter · tout le reste",
   },
   meta: {
     siteTitle: "Titouan Lebocq",
