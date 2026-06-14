@@ -6,7 +6,7 @@ export function TagPill({ tag, lang }: { tag: string; lang: Locale }) {
   return (
     <Link
       href={localizedHref(lang, `/blog/tags/${encodeURIComponent(tag)}`)}
-      className="rounded-full border border-border px-2 py-0.5 text-xs text-muted transition-colors hover:text-foreground"
+      className="rounded-full border border-accent/20 bg-[var(--accent-soft)] px-2 py-0.5 text-xs text-accent transition-colors hover:border-accent/40"
     >
       {tag}
     </Link>
