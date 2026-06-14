@@ -118,6 +118,8 @@ body {
     radial-gradient(120% 90% at 85% -10%, var(--aura-glow), transparent 55%),
     var(--aura-tint);
 }
+/* doubles as the brand-dark fallback: body[data-subject="brand"] is the body
+   itself, not a descendant, so :has() never matches it. */
 .dark .page-aura { --aura-tint: rgba(41,151,255,0.10); --aura-glow: rgba(41,151,255,0.22); }
 
 body:has([data-subject="systems"]) .page-aura { --aura-tint: rgba(11,114,104,0.07); --aura-glow: rgba(11,114,104,0.16); }

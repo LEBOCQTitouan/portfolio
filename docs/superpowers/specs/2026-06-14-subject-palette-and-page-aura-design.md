@@ -60,12 +60,12 @@ Colors chosen with UI/UX best practices applied:
 **Systems (teal)**
 - accent: light `#0b7268`, dark `#20c8b8`
 - accentFill `#0a6b63` · gradientStops `["#0a6b63"]`
-- accentSoft: light `rgba(13,127,118,0.10)`, dark `rgba(32,200,184,0.16)`
+- accentSoft: light `rgba(11,114,104,0.12)`, dark `rgba(32,200,184,0.16)`
 
 **Interface (pink/coral)**
 - accent: light `#c42d63`, dark `#f06595`
 - accentFill `#c42d63` · gradientStops `["#c42d63"]`
-- accentSoft: light `rgba(196,45,99,0.10)`, dark `rgba(240,101,149,0.16)`
+- accentSoft: light `rgba(196,45,99,0.12)`, dark `rgba(240,101,149,0.16)`
 
 **AI (violet→cyan gradient)**
 - accent (solid fallback): light `#6d28d9`, dark `#a78bfa`
@@ -76,7 +76,7 @@ Colors chosen with UI/UX best practices applied:
   `linear-gradient(110deg, #6d28d9, #4f46e5, #0e7490)`
 - **text gradient dark** (bright stops for dark bg):
   `linear-gradient(110deg, #a78bfa, #8ab4ff, #5ad1e0)`
-- accentSoft: light `rgba(124,58,237,0.10)`, dark `rgba(167,139,250,0.18)`
+- accentSoft: light `rgba(124,58,237,0.12)`, dark `rgba(167,139,250,0.18)`
 
 The fill-vs-text gradient split (and its per-mode text stops) already exists from
 Phase 1's contrast fix — only the stop values change.

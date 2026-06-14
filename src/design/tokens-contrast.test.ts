@@ -54,6 +54,10 @@ describe("subject contrast contract (WCAG AA)", () => {
     }
   });
 
+  // Only the flat aura tint is gated here. The radial glow peaks at "85% -10%"
+  // (above the content fold) and fades to near-zero over the reading column, so
+  // it can't lower text contrast in practice. If the glow is ever moved nearer
+  // content or made denser, add a glow-composited assertion alongside this one.
   it("body text stays legible over the aura tint in both modes", () => {
     for (const id of SUBJECTS) {
       const a = TOKENS[id].aura;
