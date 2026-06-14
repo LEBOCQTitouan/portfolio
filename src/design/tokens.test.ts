@@ -17,6 +17,10 @@ describe("tokens", () => {
       expect(t.accentSoft.dark).toMatch(/^rgba\(/);
       expect(Array.isArray(t.gradientStops)).toBe(true);
       expect(t.gradientStops.length).toBeGreaterThanOrEqual(1);
+      expect(t.aura.tint.light).toMatch(/^rgba\(/);
+      expect(t.aura.tint.dark).toMatch(/^rgba\(/);
+      expect(t.aura.glow.light).toMatch(/^rgba\(/);
+      expect(t.aura.glow.dark).toMatch(/^rgba\(/);
     }
   });
 

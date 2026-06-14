@@ -19,6 +19,8 @@ export type SubjectTokens = {
   /** Gradient stops for CLIPPED TEXT, per mode (legible on the page bg).
    *  Only gradient subjects need this; fills use gradientStops. */
   textGradient?: { light: string[]; dark: string[] };
+  /** Page aura: a low-alpha background tint + a soft radial glow (per mode). */
+  aura: { tint: ModeColor; glow: ModeColor };
 };
 
 export const TOKENS: Record<SubjectId, SubjectTokens> = {
@@ -28,30 +30,46 @@ export const TOKENS: Record<SubjectId, SubjectTokens> = {
     gradientStops: ["#0a66c2"],
     onAccent: "#ffffff",
     accentSoft: { light: "rgba(0,113,227,0.10)", dark: "rgba(41,151,255,0.16)" },
+    aura: {
+      tint: { light: "rgba(0,113,227,0.06)", dark: "rgba(41,151,255,0.10)" },
+      glow: { light: "rgba(0,113,227,0.16)", dark: "rgba(41,151,255,0.22)" },
+    },
   },
   systems: {
-    accent: { light: "#3a36cc", dark: "#7c84ff" },
-    accentFill: "#322db5",
-    gradientStops: ["#322db5"],
+    accent: { light: "#0b7268", dark: "#20c8b8" },
+    accentFill: "#0a6b63",
+    gradientStops: ["#0a6b63"],
     onAccent: "#ffffff",
-    accentSoft: { light: "rgba(58,54,204,0.10)", dark: "rgba(124,132,255,0.16)" },
+    accentSoft: { light: "rgba(11,114,104,0.12)", dark: "rgba(32,200,184,0.16)" },
+    aura: {
+      tint: { light: "rgba(11,114,104,0.07)", dark: "rgba(32,200,184,0.10)" },
+      glow: { light: "rgba(11,114,104,0.16)", dark: "rgba(32,200,184,0.20)" },
+    },
   },
   interface: {
-    accent: { light: "#1657d8", dark: "#4f9bff" },
-    accentFill: "#1657d8",
-    gradientStops: ["#1657d8"],
+    accent: { light: "#c42d63", dark: "#f06595" },
+    accentFill: "#c42d63",
+    gradientStops: ["#c42d63"],
     onAccent: "#ffffff",
-    accentSoft: { light: "rgba(22,87,216,0.10)", dark: "rgba(79,155,255,0.16)" },
+    accentSoft: { light: "rgba(196,45,99,0.12)", dark: "rgba(240,101,149,0.16)" },
+    aura: {
+      tint: { light: "rgba(196,45,99,0.07)", dark: "rgba(240,101,149,0.10)" },
+      glow: { light: "rgba(196,45,99,0.16)", dark: "rgba(240,101,149,0.20)" },
+    },
   },
   ai: {
-    accent: { light: "#2747d6", dark: "#6f8cff" },
-    accentFill: "#3a52d8",
-    gradientStops: ["#1b63e8", "#3a52d8", "#4a4fcf"],
+    accent: { light: "#6d28d9", dark: "#a78bfa" },
+    accentFill: "#6d28d9",
+    gradientStops: ["#7c3aed", "#4f63d8", "#0e7d96"],
     onAccent: "#ffffff",
-    accentSoft: { light: "rgba(58,82,216,0.12)", dark: "rgba(111,140,255,0.18)" },
+    accentSoft: { light: "rgba(124,58,237,0.12)", dark: "rgba(167,139,250,0.18)" },
     textGradient: {
-      light: ["#1b63e8", "#3a52d8", "#4a4fcf"],
-      dark: ["#6f8cff", "#8aa0ff", "#9bb0ff"],
+      light: ["#6d28d9", "#4f46e5", "#0e7d90"],
+      dark: ["#a78bfa", "#8ab4ff", "#5ad1e0"],
+    },
+    aura: {
+      tint: { light: "rgba(124,58,237,0.07)", dark: "rgba(167,139,250,0.10)" },
+      glow: { light: "rgba(124,58,237,0.18)", dark: "rgba(167,139,250,0.22)" },
     },
   },
 };
@@ -66,3 +84,6 @@ export function gradientCss(id: SubjectId, angle = "110deg"): string {
 
 /** Page background per mode (mirrors --background in globals.css). */
 export const BACKGROUND: ModeColor = { light: "#fbfbfd", dark: "#0f1115" };
+
+/** Page foreground per mode (mirrors --foreground in globals.css). */
+export const FOREGROUND: ModeColor = { light: "#1d1d1f", dark: "#f5f5f7" };
