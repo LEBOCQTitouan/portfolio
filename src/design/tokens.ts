@@ -54,3 +54,6 @@ export function gradientCss(id: SubjectId, angle = "110deg"): string {
     ? stops[0]
     : `linear-gradient(${angle}, ${stops.join(", ")})`;
 }
+
+/** Page background per mode (mirrors --background in globals.css). */
+export const BACKGROUND: ModeColor = { light: "#fbfbfd", dark: "#0f1115" };
