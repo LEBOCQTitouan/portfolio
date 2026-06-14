@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllProjects, getProjectBySlug } from "@/composition/server";
+import { resolveSubject } from "@/core/domain/subject";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { workTitleName } from "@/lib/transitions/names";
 
 export function generateStaticParams() {
   return getAllProjects("en").map((project) => ({ slug: project.slug }));
@@ -54,15 +57,17 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   return (
-    <article className="py-8">
+    <article className="py-8" data-subject={resolveSubject({ category: project.category })}>
       <header className="mb-8" data-narrate="project-header">
         <div className="flex items-center gap-3">
           <CategoryBadge category={project.category} />
           <span className="text-sm text-muted">{project.role}</span>
         </div>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight">
-          {project.title}
-        </h1>
+        <MorphTitle name={workTitleName(project.slug)}>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight">
+            {project.title}
+          </h1>
+        </MorphTitle>
         <p className="mt-2 text-muted">{project.summary}</p>
         {project.stack.length > 0 && (
           <ul className="mt-4 flex flex-wrap gap-2">

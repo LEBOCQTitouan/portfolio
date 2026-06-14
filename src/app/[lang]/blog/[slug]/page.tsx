@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/composition/server";
+import { resolveSubject } from "@/core/domain/subject";
 import { Mdx } from "@/components/mdx";
 import { comments } from "@/composition/client";
 import { TagPill } from "@/components/tag-pill";
@@ -8,6 +9,8 @@ import { site } from "@/core/domain/site";
 import { articleJsonLd } from "@/core/domain/seo";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export function generateStaticParams() {
   return getAllPosts("en").map((post) => ({ slug: post.slug }));
@@ -62,7 +65,7 @@ export default async function PostPage({
   if (!post) notFound();
 
   return (
-    <article className="py-8">
+    <article className="py-8" data-subject={resolveSubject({ tags: post.tags })}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -81,7 +84,9 @@ export default async function PostPage({
           </time>
           <span>{post.readingTimeMinutes} {dict.common.minRead}</span>
         </div>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight">{post.title}</h1>
+        <MorphTitle name={PAGE_TITLE}>
+          <h1 className="mt-2 text-4xl font-bold tracking-tight">{post.title}</h1>
+        </MorphTitle>
         {post.tags.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
             {post.tags.map((tag) => (

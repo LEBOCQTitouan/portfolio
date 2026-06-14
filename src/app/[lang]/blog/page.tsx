@@ -6,6 +6,8 @@ import { Newsletter } from "@/components/newsletter";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export async function generateMetadata({
   params,
@@ -45,7 +47,9 @@ export default async function BlogIndexPage({ params }: { params: Promise<{ lang
   const tags = getAllTags(lang);
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">{dict.blog.title}</h1>
+      <MorphTitle name={PAGE_TITLE}>
+        <h1 className="text-3xl font-bold tracking-tight">{dict.blog.title}</h1>
+      </MorphTitle>
       <p className="mt-2 text-muted">{dict.blog.description}</p>
       <div className="mt-8">
         {posts.length === 0 ? (

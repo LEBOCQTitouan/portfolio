@@ -12,6 +12,7 @@ import { Companion } from "@/components/companion/companion";
 import { isLocale, locales, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { TranslationProvider } from "@/i18n/translation-provider";
+import { PAGE_AURA } from "@/lib/transitions/names";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -69,7 +70,15 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${dragonsteel.variable}`}
     >
-      <body className="min-h-screen bg-background text-foreground font-sans antialiased">
+      <body
+        className="min-h-screen bg-background text-foreground font-sans antialiased"
+        data-subject="brand"
+      >
+        <div
+          className="page-aura"
+          aria-hidden="true"
+          style={{ viewTransitionName: PAGE_AURA }}
+        />
         <analytics.Beacon />
         <ThemeProvider
           attribute="class"

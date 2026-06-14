@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { Locale } from "@/i18n/config";
 import { localizedHref } from "@/i18n/localized-href";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 // Aura hero: the orb (rendered by <Companion/>) sits behind this headline as a
 // large ambient aura, then shrinks into the traveling companion on scroll.
@@ -13,9 +15,11 @@ export function Hero({ t, lang }: { t: Dictionary["hero"]; lang: Locale }) {
         <p className="text-sm font-semibold uppercase tracking-wide text-accent">
           {t.eyebrow}
         </p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">
-          {t.title}
-        </h1>
+        <MorphTitle name={PAGE_TITLE}>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">
+            {t.title}
+          </h1>
+        </MorphTitle>
         <p className="mt-5 max-w-xl text-lg text-muted">
           {t.subtitle}
         </p>
