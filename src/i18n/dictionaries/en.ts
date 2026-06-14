@@ -12,6 +12,7 @@ export const en = {
   footer: {
     uses: "Uses",
     now: "Now",
+    designSystem: "Design system",
     github: "GitHub",
     linkedin: "LinkedIn",
   },
@@ -82,6 +83,59 @@ export const en = {
     lastUpdated: "Last updated",
     focusedOn: "What I'm focused on at the moment:",
     nowPageLabel: "/now page",
+  },
+  designSystem: {
+    title: "Design system",
+    metaDescription:
+      "The design system behind this site — and the thinking that shaped it.",
+    problemTitle: "The problem",
+    problem1:
+      "A portfolio for an engineer who works where systems thinking meets interface craft has to be both at once — rigorous as a system and expressive as craft. Most sites pick one: chase expression and you get chaos; chase rigor and you get generic.",
+    problem2:
+      `So the goal was never “add color.” It was to make expression an output of rigor — a disciplined token system, with contrast gated in CI, is what lets the site be colorful, alive, and per-subject without ever breaking. The site is the argument: a design-led engineer has to build the proof, not describe it.`,
+    principleTitle: "The principle",
+    principle1:
+      `Everything is a declension of one brand blue. Three layers — primitive values, semantic tokens, per-subject skins — make a "subject" a small, safe override, never a one-off.`,
+    principle2:
+      "The page is the light; the companion is a lens. Each page carries a subtle aura in its subject's colour, and the orb diffracts that light rather than emitting its own.",
+    subjectsTitle: "Subjects, live",
+    subjectsHint:
+      "Pick a subject — the preview and the companion take on its colour. Same system, four declensions.",
+    previewLead: "The page wears",
+    previewAccent: "this colour",
+    primaryAction: "Primary action",
+    tokensTitle: "Colour tokens",
+    tokensHint:
+      "Read straight from the source of truth, so this can never drift from the site.",
+    companionTitle: "The companion",
+    companionBody:
+      "An eyes-only lens that wears the active subject and reacts — it follows your cursor, drifts to sleep, and flares if you poke it.",
+    decisionsTitle: "Decisions & trade-offs",
+    decisions: [
+      {
+        q: "Teal for Systems, not green",
+        a: `Green and red are reserved for success/error, and a green↔red split fails for red-green colour-blindness. Teal reads "infrastructure" without colliding with state.`,
+      },
+      {
+        q: "The page colours the companion",
+        a: "The active subject is lifted to the page with a CSS :has() selector, so a fixed, off-scope orb still inherits the page's colour.",
+      },
+      {
+        q: "Accessibility by construction",
+        a: "A contrast contract runs in CI: every accent, gradient stop, and aura tint is checked against WCAG AA. Motion is gated behind prefers-reduced-motion.",
+      },
+      {
+        q: "A lens, not a mascot",
+        a: "The companion is part of the system — it diffracts the page's light — so personality never becomes decorative noise.",
+      },
+    ],
+    outcomeTitle: "Outcome",
+    outcome:
+      "A coherent, accessible, self-theming portfolio: four subjects, contrast gated in CI, reduced-motion-safe, and extensible from one place.",
+    typeTitle: "Type",
+    typeHint: "Two typefaces — a display face for the wordmark, Inter for everything else.",
+    typeDisplay: "Display · Dragonsteel · the wordmark",
+    typeSans: "Sans · Inter · everything else",
   },
   meta: {
     siteTitle: "Titouan Lebocq",

@@ -29,6 +29,11 @@ export const en: NarrationMap = {
     { id: "project-header", mood: "focused", text: "Here's the shape of this one." },
     { id: "project-body", mood: "calm", text: "And here's how it actually came together." },
   ],
+  "/design-system": [
+    { id: "problem", mood: "focused", text: "The system behind the site — here's how it thinks." },
+    { id: "subjects", mood: "warm", text: "Watch me change colour with the subject." },
+    { id: "decisions", mood: "calm", text: "And here's why each call was made." },
+  ],
 };
 
 export const fr: NarrationMap = {
@@ -59,6 +64,11 @@ export const fr: NarrationMap = {
   "/work/[slug]": [
     { id: "project-header", mood: "focused", text: "Voilà la forme de celui-ci." },
     { id: "project-body", mood: "calm", text: "Et voilà comment ça s'est vraiment construit." },
+  ],
+  "/design-system": [
+    { id: "problem", mood: "focused", text: "Le système derrière le site — voici comment il raisonne." },
+    { id: "subjects", mood: "warm", text: "Regarde-moi changer de couleur selon le sujet." },
+    { id: "decisions", mood: "calm", text: "Et voici pourquoi chaque choix a été fait." },
   ],
 };
 

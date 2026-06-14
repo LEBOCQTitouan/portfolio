@@ -1,26 +1,34 @@
 import type { CSSProperties } from "react";
 import type { Mood } from "@/lib/narration/types";
-import { moodStyle } from "./moods";
+import type { Reaction } from "./reaction-state";
+import { Eyes, type Gaze } from "./eyes";
 
 export function Orb({
   mood,
-  muted,
+  reaction,
+  gaze,
   style,
+  className,
 }: {
   mood: Mood;
-  muted: boolean;
+  reaction: Reaction;
+  gaze: Gaze;
   style?: CSSProperties;
+  className?: string;
 }) {
   return (
     <div
-      className="companion-orb"
+      className={`companion-orb${className ? ` ${className}` : ""}`}
       data-mood={mood}
+      data-reaction={reaction}
       aria-hidden="true"
-      style={{
-        ...moodStyle(mood),
-        ...(muted ? { transform: "scale(0.6)", filter: "saturate(.7) opacity(.8)" } : null),
-        ...style,
-      }}
-    />
+      style={style}
+    >
+      <span className="companion-orb__blob b1" />
+      <span className="companion-orb__blob b2" />
+      <span className="companion-orb__blob b3" />
+      <span className="companion-orb__spec" />
+      <Eyes mood={mood} reaction={reaction} gaze={gaze} />
+    </div>
   );
 }

@@ -3,26 +3,24 @@ import { render } from "@testing-library/react";
 import { Orb } from "./orb";
 
 describe("Orb", () => {
-  it("renders with the mood as a data attribute and a gradient background", () => {
-    const { container } = render(<Orb mood="warm" muted={false} />);
+  it("renders mood + reaction as data attributes and contains eyes", () => {
+    const { container } = render(<Orb mood="warm" reaction="active" gaze={{ x: 0, y: 0 }} />);
     const orb = container.querySelector(".companion-orb") as HTMLElement;
     expect(orb).toBeInTheDocument();
     expect(orb.dataset.mood).toBe("warm");
-    expect(orb.style.background).toContain("radial-gradient");
+    expect(orb.dataset.reaction).toBe("active");
+    expect(container.querySelector(".companion-eyes")).toBeInTheDocument();
   });
 
-  it("is decorative (aria-hidden) so it doesn't reach screen readers", () => {
-    const { container } = render(<Orb mood="calm" muted={false} />);
+  it("is decorative (aria-hidden)", () => {
+    const { container } = render(<Orb mood="calm" reaction="active" gaze={{ x: 0, y: 0 }} />);
     expect(container.querySelector(".companion-orb")).toHaveAttribute("aria-hidden", "true");
   });
 
-  it("applies a caller style override (size/filter) on top of the mood style", () => {
+  it("applies a caller style override (size/position)", () => {
     const { container } = render(
-      <Orb mood="calm" muted={false} style={{ width: 200, height: 200, filter: "blur(3px)" }} />,
+      <Orb mood="calm" reaction="active" gaze={{ x: 0, y: 0 }} style={{ width: 200, height: 200 }} />,
     );
-    const orb = container.querySelector(".companion-orb") as HTMLElement;
-    expect(orb.style.width).toBe("200px");
-    expect(orb.style.filter).toBe("blur(3px)");
-    expect(orb.style.background).toContain("radial-gradient"); // mood style still applied
+    expect((container.querySelector(".companion-orb") as HTMLElement).style.width).toBe("200px");
   });
 });
