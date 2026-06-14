@@ -298,7 +298,13 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   .companion-orb__blob.b3 { animation: orb-flow3 4s ease-in-out infinite; }
   .companion-orb[data-reaction="angry"] { animation-duration: 2.5s, 3s; }
   .companion-orb[data-reaction="sleepy"] .companion-orb__blob,
-  .companion-orb[data-reaction="asleep"] .companion-orb__blob { animation-duration: 12s; opacity: 0.5; }
+  .companion-orb[data-reaction="asleep"] .companion-orb__blob,
+  .companion-orb[data-reaction="sleeping"] .companion-orb__blob { animation-duration: 12s; opacity: 0.5; }
+  .companion-eyes[data-shape="open"] .companion-eye { animation: eye-blink 5.5s infinite; }
+  @keyframes eye-blink {
+    0%, 92%, 100% { transform: translate(var(--gx,0), var(--gy,0)) scaleY(1); }
+    96% { transform: translate(var(--gx,0), var(--gy,0)) scaleY(0.1); }
+  }
   @keyframes orb-breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
   @keyframes orb-wobble { 0%,100%{border-radius:50%} 33%{border-radius:54% 46% 52% 48%} 66%{border-radius:47% 53% 48% 52%} }
   @keyframes orb-flow1 { 0%,100%{transform:translate(-10px,8px) scale(1)} 50%{transform:translate(14px,-9px) scale(1.3)} }

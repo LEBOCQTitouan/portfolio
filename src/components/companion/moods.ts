@@ -5,6 +5,7 @@ import type { Mood } from "@/lib/narration/types";
  *  `warmth` nudges the light's temperature (0 = neutral, + = warmer). */
 export type MoodEye = "open" | "happy" | "squint";
 export type MoodParams = { eye: MoodEye; flowMs: number; warmth: number };
+// NOTE: flowMs/warmth are reserved for Phase 3 (mood-driven flow speed + light temperature); not yet wired.
 
 export const MOOD_PARAMS: Record<Mood, MoodParams> = {
   calm: { eye: "open", flowMs: 6000, warmth: 0 },

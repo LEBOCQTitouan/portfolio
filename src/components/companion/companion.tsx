@@ -33,7 +33,12 @@ export function Companion() {
     if (reaction === "sleepy") nodDur.current = 2.6 + ((Date.now() % 10) / 10) * 1.6; // 2.6–4.2s, varies per entry
   }, [reaction]);
   const [slosh, setSlosh] = useState(false);
-  const onPoke = () => { poke(); setSlosh(true); window.setTimeout(() => setSlosh(false), 600); };
+  const onPoke = () => {
+    poke();
+    if (muted) return;
+    setSlosh(true);
+    window.setTimeout(() => setSlosh(false), 600);
+  };
   const [active, setActive] = useState<{ route: string; id: string } | null>(null);
   const [isWide, setIsWide] = useState(true);
   const [progress, setProgress] = useState(0);
