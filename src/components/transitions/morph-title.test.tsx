@@ -14,12 +14,15 @@ describe("MorphTitle", () => {
 
   it("does not emit a React warning about invalid props on the fallback", () => {
     const err = vi.spyOn(console, "error").mockImplementation(() => {});
-    render(
-      <MorphTitle name="work-title-x">
-        <h1>X</h1>
-      </MorphTitle>,
-    );
-    expect(err).not.toHaveBeenCalled();
-    err.mockRestore();
+    try {
+      render(
+        <MorphTitle name="work-title-x">
+          <h1>X</h1>
+        </MorphTitle>,
+      );
+      expect(err).not.toHaveBeenCalled();
+    } finally {
+      err.mockRestore();
+    }
   });
 });
