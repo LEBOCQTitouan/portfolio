@@ -253,14 +253,65 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   border-top: 1px solid var(--border);
 }
 
+/* ── Companion: liquid-energy lens ─────────────────────────────── */
 .companion-orb {
-  width: 92px;
-  height: 92px;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(2px) saturate(1.3);
-  -webkit-backdrop-filter: blur(2px) saturate(1.3);
+  width: 92px; height: 92px; border-radius: 50%; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.14);
+  box-shadow: inset 7px 9px 20px rgba(255,255,255,0.5),
+              inset -8px -11px 24px rgba(40,55,75,0.20),
+              0 14px 28px rgba(0,0,0,0.15);
 }
+.companion-orb__blob {
+  position: absolute; border-radius: 50%; filter: blur(8px); mix-blend-mode: screen; opacity: 0.9;
+  background: radial-gradient(circle, var(--subject-accent), transparent 70%);
+}
+.companion-orb__blob.b1 { width: 64px; height: 64px; left: 14px; top: 36px; }
+.companion-orb__blob.b2 { width: 56px; height: 56px; left: 42px; top: 10px; }
+.companion-orb__blob.b3 { width: 50px; height: 50px; left: 30px; top: 48px; }
+.companion-orb__spec {
+  position: absolute; left: 24%; top: 15%; width: 24%; height: 18%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95), transparent 70%); filter: blur(1px); z-index: 4;
+}
+.companion-eyes {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; z-index: 5;
+}
+.companion-eye {
+  width: 9px; height: 15px; border-radius: 50%; background: #15202e;
+  transform: translate(var(--gx, 0), var(--gy, 0));
+}
+.companion-eyes[data-shape="squint"] .companion-eye { height: 5px; border-radius: 4px; }
+.companion-eyes[data-shape="happy"] .companion-eye { height: 7px; width: 12px; background: transparent; border-bottom: 3px solid #15202e; border-radius: 0 0 12px 12px; }
+.companion-eyes[data-shape="closed"] .companion-eye { height: 3px; border-radius: 3px; }
+.companion-eyes[data-shape="angry"] .companion-eye { height: 4px; border-radius: 3px; }
+.companion-eyes[data-shape="angry"] .companion-eye:first-child { transform: translate(var(--gx,0), var(--gy,0)) rotate(20deg); }
+.companion-eyes[data-shape="angry"] .companion-eye:last-child { transform: translate(var(--gx,0), var(--gy,0)) rotate(-20deg); }
+
+/* Glassmorphism + motion only when allowed */
+@media (prefers-reduced-motion: no-preference) {
+  .companion-orb {
+    -webkit-backdrop-filter: blur(6px) saturate(1.4); backdrop-filter: blur(6px) saturate(1.4);
+    animation: orb-breathe 5s ease-in-out infinite, orb-wobble 6s ease-in-out infinite;
+  }
+  .companion-orb__blob.b1 { animation: orb-flow1 4.5s ease-in-out infinite; }
+  .companion-orb__blob.b2 { animation: orb-flow2 5.5s ease-in-out infinite; }
+  .companion-orb__blob.b3 { animation: orb-flow3 4s ease-in-out infinite; }
+  .companion-orb[data-reaction="angry"] { animation-duration: 2.5s, 3s; }
+  .companion-orb[data-reaction="sleepy"] .companion-orb__blob,
+  .companion-orb[data-reaction="asleep"] .companion-orb__blob { animation-duration: 12s; opacity: 0.5; }
+  @keyframes orb-breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+  @keyframes orb-wobble { 0%,100%{border-radius:50%} 33%{border-radius:54% 46% 52% 48%} 66%{border-radius:47% 53% 48% 52%} }
+  @keyframes orb-flow1 { 0%,100%{transform:translate(-10px,8px) scale(1)} 50%{transform:translate(14px,-9px) scale(1.3)} }
+  @keyframes orb-flow2 { 0%,100%{transform:translate(9px,-6px) scale(1.1)} 50%{transform:translate(-11px,13px) scale(.8)} }
+  @keyframes orb-flow3 { 0%,100%{transform:translate(6px,8px) scale(.85)} 50%{transform:translate(-9px,-11px) scale(1.25)} }
+}
+/* Reduced motion: static tinted glass, no backdrop animation. */
+@media (prefers-reduced-motion: reduce) {
+  .companion-orb__blob.b2, .companion-orb__blob.b3 { display: none; }
+}
+/* Asleep dream bubble + muted dim handled by the existing speech-bubble slot / muted styles. */
+.companion-orb[data-reaction="sleeping"], .companion-orb[data-reaction="asleep"] { opacity: 0.7; }
+
 .companion-bubble {
   max-width: 220px;
   padding: 10px 13px;
@@ -292,21 +343,5 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 @media (prefers-reduced-motion: no-preference) {
   .companion-gutter {
     transition: left 0.6s cubic-bezier(0.6, 0.02, 0.2, 1), top 0.6s cubic-bezier(0.6, 0.02, 0.2, 1);
-  }
-  .companion-orb {
-    transition:
-      background 0.7s ease,
-      box-shadow 0.7s ease,
-      transform 0.3s ease;
-  }
-}
-
-/* ── Landing hero ──────────────────────────────────────────── */
-/* The orb (rendered by the companion) animates a gentle breathe while it is the
-   hero aura. Motion only when the user allows it. */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes orb-breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.04); }
   }
 }
