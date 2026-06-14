@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export async function generateMetadata({
   params,
@@ -49,7 +51,9 @@ export default async function NowPage({ params }: { params: Promise<{ lang: stri
 
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">{dict.now.title}</h1>
+      <MorphTitle name={PAGE_TITLE}>
+        <h1 className="text-3xl font-bold tracking-tight">{dict.now.title}</h1>
+      </MorphTitle>
       <p className="mt-2 text-sm text-muted">{dict.now.lastUpdated} {lastUpdated}</p>
       <p className="mt-6 max-w-2xl text-muted" data-narrate="intro">
         {dict.now.focusedOn}

@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export async function generateMetadata({
   params,
@@ -64,7 +66,9 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
 
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">{dict.about.title}</h1>
+      <MorphTitle name={PAGE_TITLE}>
+        <h1 className="text-3xl font-bold tracking-tight">{dict.about.title}</h1>
+      </MorphTitle>
       <div className="prose-content mt-6 max-w-2xl" data-narrate="intro">
         <p>
           I&apos;m Titouan — a software engineer who believes great engineering
