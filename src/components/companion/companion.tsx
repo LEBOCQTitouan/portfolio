@@ -28,6 +28,12 @@ export function Companion() {
   const muted = useSyncExternalStore(subscribeMuted, getMuted, () => false);
   const { reaction, poke } = useReaction(muted);
   const [gaze, setGaze] = useState<Gaze>({ x: 0, y: 0 });
+  const nodDur = useRef(3.2);
+  useEffect(() => {
+    if (reaction === "sleepy") nodDur.current = 2.6 + ((Date.now() % 10) / 10) * 1.6; // 2.6–4.2s, varies per entry
+  }, [reaction]);
+  const [slosh, setSlosh] = useState(false);
+  const onPoke = () => { poke(); setSlosh(true); window.setTimeout(() => setSlosh(false), 600); };
   const [active, setActive] = useState<{ route: string; id: string } | null>(null);
   const [isWide, setIsWide] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -130,13 +136,16 @@ export function Companion() {
   const heroPhase = heroPresent && isWide && !muted && !reducedMotion;
   const geo = heroPhase ? interpolateOrb(progress, target) : null;
 
+  // Randomised nod duration: applied only while sleepy so it varies per entry.
+  const nodDurStyle: CSSProperties | null = reaction === "sleepy" ? { animationDuration: `5s, ${nodDur.current}s` } : null;
+
   let dockClass: string;
   let dockStyle: CSSProperties;
   let orbStyle: CSSProperties | undefined;
   if (dockMode) {
     dockClass = "companion-bottom-dock";
     dockStyle = {};
-    orbStyle = undefined;
+    orbStyle = nodDurStyle ?? undefined;
   } else if (geo) {
     dockClass = "companion-gutter";
     dockStyle = { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : -1 };
@@ -146,11 +155,12 @@ export function Companion() {
       filter: `blur(${geo.blur}px)`,
       opacity: geo.opacity,
       ...(geo.front ? null : { animation: "orb-breathe 6s ease-in-out infinite" }),
+      ...nodDurStyle,
     };
   } else {
     dockClass = "companion-gutter";
     dockStyle = { left: `${target.x}%`, top: `${target.y}%` };
-    orbStyle = undefined;
+    orbStyle = nodDurStyle ?? undefined;
   }
 
   const showBubble = !muted && (geo ? geo.bubble : true);
@@ -165,8 +175,11 @@ export function Companion() {
         {...(dockMode ? { "data-dock-active": !muted ? "true" : undefined } : {})}
       >
         {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
-        <span style={{ pointerEvents: "auto", display: "contents" }} onPointerDown={poke}>
-          <Orb mood={activeLine.mood} reaction={reaction} gaze={gaze} style={orbStyle} />
+        <span style={{ pointerEvents: "auto", display: "contents", position: "relative" }} onPointerDown={onPoke}>
+          {reaction === "asleep" && (
+            <div className="companion-dream" aria-hidden="true"><span>z</span><span>z</span></div>
+          )}
+          <Orb mood={activeLine.mood} reaction={reaction} gaze={gaze} style={orbStyle} className={slosh ? "is-sloshing" : undefined} />
         </span>
       </div>
       <button

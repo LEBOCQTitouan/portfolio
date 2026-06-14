@@ -304,6 +304,16 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   @keyframes orb-flow1 { 0%,100%{transform:translate(-10px,8px) scale(1)} 50%{transform:translate(14px,-9px) scale(1.3)} }
   @keyframes orb-flow2 { 0%,100%{transform:translate(9px,-6px) scale(1.1)} 50%{transform:translate(-11px,13px) scale(.8)} }
   @keyframes orb-flow3 { 0%,100%{transform:translate(6px,8px) scale(.85)} 50%{transform:translate(-9px,-11px) scale(1.25)} }
+  /* fighting sleep: a nodding droop that the wrapper applies while sleepy */
+  .companion-orb[data-reaction="sleepy"] { animation: orb-breathe 5s ease-in-out infinite, orb-nod 3.2s ease-in-out infinite; }
+  @keyframes orb-nod { 0%{transform:translateY(0) rotate(0)} 18%{transform:translateY(8px) rotate(3deg)} 22%{transform:translateY(-3px)} 55%{transform:translateY(11px) rotate(4deg)} 60%{transform:translateY(-1px)} 100%{transform:translateY(9px) rotate(3deg)} }
+  /* poke slosh: a one-shot class toggled by JS */
+  .companion-orb.is-sloshing { animation: orb-slosh 0.6s cubic-bezier(.34,1.3,.64,1); }
+  @keyframes orb-slosh { 0%{transform:translateX(0) scale(1)} 18%{transform:translateX(9px) scale(1.06,.94)} 40%{transform:translateX(-4px) scale(.97,1.04)} 70%{transform:translateX(2px)} 100%{transform:translateX(0) scale(1)} }
+  /* Zzz dream */
+  @keyframes zzz-rise { 0%{transform:translateY(6px) scale(.7);opacity:0} 30%{opacity:1} 100%{transform:translateY(-18px) scale(1.1);opacity:0} }
+  .companion-dream span { position:absolute; color: var(--subject-accent); font-weight:700; animation: zzz-rise 2.4s ease-in infinite; }
+  .companion-dream span:nth-child(2){ animation-delay:.8s; font-size:1.1em; }
 }
 /* Reduced motion: static tinted glass, no backdrop animation. */
 @media (prefers-reduced-motion: reduce) {
@@ -311,6 +321,8 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 }
 /* Asleep dream bubble + muted dim handled by the existing speech-bubble slot / muted styles. */
 .companion-orb[data-reaction="sleeping"], .companion-orb[data-reaction="asleep"] { opacity: 0.7; }
+/* Dream marker: static positioning (shows under reduced-motion too; animation gated above). */
+.companion-dream { position:absolute; top:-26px; right:-6px; width:34px; height:24px; }
 
 .companion-bubble {
   max-width: 220px;
