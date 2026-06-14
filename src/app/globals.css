@@ -29,6 +29,7 @@
   --color-border: var(--border);
   --color-card: var(--card);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-dragonsteel), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
