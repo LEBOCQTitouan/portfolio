@@ -49,4 +49,9 @@ describe("Nav", () => {
       screen.getByRole("button", { name: /toggle theme/i }),
     ).toBeInTheDocument();
   });
+
+  it("sets the display font on the wordmark", () => {
+    renderNav();
+    expect(screen.getByText("Titouan Lebocq")).toHaveClass("font-display");
+  });
 });

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -14,6 +15,14 @@ import { TranslationProvider } from "@/i18n/translation-provider";
 import { PAGE_AURA } from "@/lib/transitions/names";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+const dragonsteel = localFont({
+  src: "../fonts/Dragonsteel-Regular.woff2",
+  weight: "400",
+  style: "normal",
+  display: "swap",
+  variable: "--font-dragonsteel",
+});
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -56,7 +65,11 @@ export default async function RootLayout({
   const dict = await getDictionary(lang);
 
   return (
-    <html lang={lang} suppressHydrationWarning className={inter.variable}>
+    <html
+      lang={lang}
+      suppressHydrationWarning
+      className={`${inter.variable} ${dragonsteel.variable}`}
+    >
       <body
         className="min-h-screen bg-background text-foreground font-sans antialiased"
         data-subject="brand"
