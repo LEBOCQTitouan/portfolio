@@ -61,7 +61,7 @@
   --accent-text-gradient: linear-gradient(110deg, #6d28d9, #4f46e5, #0e7490);
   --accent-soft: rgba(124,58,237,0.12); --on-accent: #ffffff;
 }
-.dark [data-subject="ai"] { --accent: #a78bfa; --accent-soft: rgba(167,139,250,0.18); --accent-text-gradient: linear-gradient(110deg, #a78bfa, #8aa0ff, #5ad1e0); }
+.dark [data-subject="ai"] { --accent: #a78bfa; --accent-soft: rgba(167,139,250,0.18); --accent-text-gradient: linear-gradient(110deg, #a78bfa, #8ab4ff, #5ad1e0); }
 
 @theme inline {
   --color-background: var(--background);
