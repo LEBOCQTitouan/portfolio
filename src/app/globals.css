@@ -130,6 +130,15 @@ body:has([data-subject="ai"]) .page-aura { --aura-tint: rgba(124,58,237,0.07); -
 .dark body:has([data-subject="interface"]) .page-aura { --aura-tint: rgba(240,101,149,0.10); --aura-glow: rgba(240,101,149,0.20); }
 .dark body:has([data-subject="ai"]) .page-aura { --aura-tint: rgba(167,139,250,0.10); --aura-glow: rgba(167,139,250,0.22); }
 
+/* ── Subject accent lifted to <body> for off-scope consumers (the companion) ── */
+:root { --subject-accent: var(--accent); --subject-accent-soft: var(--accent-soft); }
+body:has([data-subject="systems"]) { --subject-accent: #0b7268; --subject-accent-soft: rgba(11,114,104,0.16); }
+body:has([data-subject="interface"]) { --subject-accent: #c42d63; --subject-accent-soft: rgba(196,45,99,0.16); }
+body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft: rgba(124,58,237,0.16); }
+.dark body:has([data-subject="systems"]) { --subject-accent: #20c8b8; --subject-accent-soft: rgba(32,200,184,0.20); }
+.dark body:has([data-subject="interface"]) { --subject-accent: #f06595; --subject-accent-soft: rgba(240,101,149,0.20); }
+.dark body:has([data-subject="ai"]) { --subject-accent: #a78bfa; --subject-accent-soft: rgba(167,139,250,0.22); }
+
 /* Long-form post content */
 .prose-content {
   line-height: 1.75;
