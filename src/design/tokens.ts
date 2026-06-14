@@ -64,7 +64,7 @@ export const TOKENS: Record<SubjectId, SubjectTokens> = {
     onAccent: "#ffffff",
     accentSoft: { light: "rgba(124,58,237,0.12)", dark: "rgba(167,139,250,0.18)" },
     textGradient: {
-      light: ["#6d28d9", "#4f46e5", "#0e7d90"],
+      light: ["#6d28d9", "#4f46e5", "#0e7490"],
       dark: ["#a78bfa", "#8ab4ff", "#5ad1e0"],
     },
     aura: {
