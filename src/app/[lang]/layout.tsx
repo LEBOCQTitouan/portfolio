@@ -56,7 +56,10 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} suppressHydrationWarning className={inter.variable}>
-      <body className="min-h-screen bg-background text-foreground font-sans antialiased">
+      <body
+        className="min-h-screen bg-background text-foreground font-sans antialiased"
+        data-subject="brand"
+      >
         <analytics.Beacon />
         <ThemeProvider
           attribute="class"

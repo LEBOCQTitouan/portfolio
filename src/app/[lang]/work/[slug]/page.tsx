@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllProjects, getProjectBySlug } from "@/composition/server";
+import { resolveSubject } from "@/core/domain/subject";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
@@ -54,7 +55,7 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   return (
-    <article className="py-8">
+    <article className="py-8" data-subject={resolveSubject({ category: project.category })}>
       <header className="mb-8" data-narrate="project-header">
         <div className="flex items-center gap-3">
           <CategoryBadge category={project.category} />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/composition/server";
+import { resolveSubject } from "@/core/domain/subject";
 import { Mdx } from "@/components/mdx";
 import { comments } from "@/composition/client";
 import { TagPill } from "@/components/tag-pill";
@@ -62,7 +63,7 @@ export default async function PostPage({
   if (!post) notFound();
 
   return (
-    <article className="py-8">
+    <article className="py-8" data-subject={resolveSubject({ tags: post.tags })}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
