@@ -22,7 +22,7 @@ export function Nav() {
         className="flex items-center gap-2 text-sm font-bold tracking-tight transition-colors hover:text-accent"
       >
         <Logo className="h-6 w-6" />
-        Titouan Lebocq
+        <span className="font-display">Titouan Lebocq</span>
       </Link>
       <nav className="flex items-center gap-5 text-sm text-muted">
         {LINKS.map((link) => (
