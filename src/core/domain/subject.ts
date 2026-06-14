@@ -1,7 +1,9 @@
 import type { ProjectCategory } from "./project";
-import type { SubjectId } from "@/design/tokens";
 
-export type { SubjectId };
+/** The set of subjects. The identity is a domain concept; the colors that
+ *  dress each subject live in the design layer (src/design/tokens.ts). */
+export const SUBJECTS = ["brand", "systems", "interface", "ai"] as const;
+export type SubjectId = (typeof SUBJECTS)[number];
 
 /** Curated tag → subject map. Priority order matters: ai > systems > interface. */
 const TAG_GROUPS: { subject: SubjectId; tags: string[] }[] = [

@@ -1,5 +1,7 @@
-export const SUBJECTS = ["brand", "systems", "interface", "ai"] as const;
-export type SubjectId = (typeof SUBJECTS)[number];
+import { SUBJECTS, type SubjectId } from "@/core/domain/subject";
+
+// Re-export so existing token consumers can keep importing from here.
+export { SUBJECTS, type SubjectId };
 
 type ModeColor = { light: string; dark: string };
 
