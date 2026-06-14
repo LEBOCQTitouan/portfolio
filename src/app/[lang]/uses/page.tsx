@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export async function generateMetadata({
   params,
@@ -59,7 +61,9 @@ export default async function UsesPage({ params }: { params: Promise<{ lang: str
 
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">{dict.uses.title}</h1>
+      <MorphTitle name={PAGE_TITLE}>
+        <h1 className="text-3xl font-bold tracking-tight">{dict.uses.title}</h1>
+      </MorphTitle>
       <p className="mt-2 text-muted" data-narrate="intro">
         The tools I reach for day to day. (Edit this list.)
       </p>

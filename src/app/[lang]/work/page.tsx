@@ -5,6 +5,8 @@ import { ProjectCard } from "@/components/project-card";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export async function generateMetadata({
   params,
@@ -43,7 +45,9 @@ export default async function WorkPage({ params }: { params: Promise<{ lang: str
   const projects = getAllProjects(lang);
   return (
     <section className="py-8">
-      <h1 className="text-3xl font-bold tracking-tight">{dict.work.title}</h1>
+      <MorphTitle name={PAGE_TITLE}>
+        <h1 className="text-3xl font-bold tracking-tight">{dict.work.title}</h1>
+      </MorphTitle>
       <p className="mt-2 text-muted" data-narrate="intro">
         {dict.work.description}
       </p>

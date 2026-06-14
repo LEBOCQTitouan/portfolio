@@ -73,6 +73,7 @@
   --color-surface: var(--surface);
   --color-ring: var(--ring);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-dragonsteel), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
@@ -361,5 +362,39 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 @media (prefers-reduced-motion: no-preference) {
   .companion-gutter {
     transition: left 0.6s cubic-bezier(0.6, 0.02, 0.2, 1), top 0.6s cubic-bezier(0.6, 0.02, 0.2, 1);
+  }
+}
+
+/* ── Page transitions — the recolor as a deliberate gesture ─────── */
+/* The aura's color crossfade is tuned LONGER than content so the ambient
+   field visibly settles into the new subject — the authored beat. */
+::view-transition-group(page-aura) {
+  animation-duration: 550ms;
+}
+::view-transition-old(page-aura),
+::view-transition-new(page-aura) {
+  animation-timing-function: cubic-bezier(0.6, 0.02, 0.2, 1);
+}
+
+/* The heading morph: softened with a brief blur to hide pixel interpolation. */
+::view-transition-group(.morph) {
+  animation-duration: 420ms;
+}
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+@keyframes via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+/* Reduced motion: instant recolor, no movement. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }

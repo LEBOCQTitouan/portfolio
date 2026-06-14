@@ -5,6 +5,8 @@ import { PostCard } from "@/components/post-card";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export function generateStaticParams() {
   return getAllTags("en").map((tag) => ({ tag }));
@@ -50,7 +52,9 @@ export default async function TagPage({
   return (
     <section className="py-8">
       <p className="text-sm uppercase tracking-wide text-accent">{dict.blog.tag}</p>
-      <h1 className="mt-1 text-3xl font-bold tracking-tight">#{tag}</h1>
+      <MorphTitle name={PAGE_TITLE}>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight">#{tag}</h1>
+      </MorphTitle>
       <div className="mt-8">
         {posts.map((post) => (
           <PostCard key={post.slug} post={post} />

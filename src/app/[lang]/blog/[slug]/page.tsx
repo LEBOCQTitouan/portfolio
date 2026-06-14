@@ -9,6 +9,8 @@ import { site } from "@/core/domain/site";
 import { articleJsonLd } from "@/core/domain/seo";
 import { isLocale, defaultLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { MorphTitle } from "@/components/transitions/morph-title";
+import { PAGE_TITLE } from "@/lib/transitions/names";
 
 export function generateStaticParams() {
   return getAllPosts("en").map((post) => ({ slug: post.slug }));
@@ -82,7 +84,9 @@ export default async function PostPage({
           </time>
           <span>{post.readingTimeMinutes} {dict.common.minRead}</span>
         </div>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight">{post.title}</h1>
+        <MorphTitle name={PAGE_TITLE}>
+          <h1 className="mt-2 text-4xl font-bold tracking-tight">{post.title}</h1>
+        </MorphTitle>
         {post.tags.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
