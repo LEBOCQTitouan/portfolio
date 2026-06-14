@@ -3,23 +3,63 @@
 /* Enable class-based dark mode for next-themes (Tailwind v4 syntax) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ── Layer 1+2: neutral primitives → semantic tokens ──────────── */
 :root {
   --background: #fbfbfd;
   --foreground: #1d1d1f;
-  --accent: #0071e3;
   --muted: #515154;
   --border: #e8e8ed;
   --card: #ffffff;
+  --surface: #f2f2f5;
+
+  /* Accent semantics — overridden per subject below. Default = brand. */
+  --accent: #0071e3;           /* text/border accent on background */
+  --accent-fill: #0a66c2;      /* solid fill (white-safe), gradient fallback */
+  --accent-gradient: #0a66c2;  /* fill/accent-text background-image */
+  --accent-soft: rgba(0,113,227,0.10);
+  --on-accent: #ffffff;
+  --ring: var(--accent);
 }
 
 .dark {
   --background: #0f1115;
   --foreground: #f5f5f7;
-  --accent: #2997ff;
   --muted: #a1a1a6;
   --border: #2c2c2e;
   --card: #1a1d23;
+  --surface: #15181e;
+
+  --accent: #2997ff;
+  --accent-soft: rgba(41,151,255,0.16);
+  /* --accent-fill / --accent-gradient / --on-accent are mode-stable */
 }
+
+/* ── Layer 3: subject skins (values mirror src/design/tokens.ts) ── */
+/* Each subject overrides only the accent group. Light first, then dark. */
+[data-subject="brand"] {
+  --accent: #0071e3; --accent-fill: #0a66c2; --accent-gradient: #0a66c2;
+  --accent-soft: rgba(0,113,227,0.10); --on-accent: #ffffff;
+}
+.dark [data-subject="brand"] { --accent: #2997ff; --accent-soft: rgba(41,151,255,0.16); }
+
+[data-subject="systems"] {
+  --accent: #3a36cc; --accent-fill: #322db5; --accent-gradient: #322db5;
+  --accent-soft: rgba(58,54,204,0.10); --on-accent: #ffffff;
+}
+.dark [data-subject="systems"] { --accent: #7c84ff; --accent-soft: rgba(124,132,255,0.16); }
+
+[data-subject="interface"] {
+  --accent: #1657d8; --accent-fill: #1657d8; --accent-gradient: #1657d8;
+  --accent-soft: rgba(22,87,216,0.10); --on-accent: #ffffff;
+}
+.dark [data-subject="interface"] { --accent: #4f9bff; --accent-soft: rgba(79,155,255,0.16); }
+
+[data-subject="ai"] {
+  --accent: #2747d6; --accent-fill: #3a52d8;
+  --accent-gradient: linear-gradient(110deg, #1b63e8, #3a52d8, #4a4fcf);
+  --accent-soft: rgba(58,82,216,0.12); --on-accent: #ffffff;
+}
+.dark [data-subject="ai"] { --accent: #6f8cff; --accent-soft: rgba(111,140,255,0.18); }
 
 @theme inline {
   --color-background: var(--background);
@@ -28,12 +68,37 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-card: var(--card);
+  --color-surface: var(--surface);
+  --color-ring: var(--ring);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* ── Accent usages (resolve per active subject) ───────────────── */
+/* Solid by default; gradient subjects opt into the gradient below. */
+.accent-fill { background: var(--accent-fill); color: var(--on-accent); }
+.accent-text { color: var(--accent); }
+
+[data-subject="ai"] .accent-fill { background: var(--accent-gradient); }
+[data-subject="ai"] .accent-text {
+  background-image: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Animated flow for gradient subjects — motion only when allowed. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes accent-flow { to { background-position: 300% 0; } }
+  [data-subject="ai"] .accent-fill,
+  [data-subject="ai"] .accent-text {
+    background-size: 300% 100%;
+    animation: accent-flow 8s linear infinite;
+  }
 }
 
 /* Long-form post content */
