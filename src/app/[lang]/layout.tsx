@@ -60,6 +60,7 @@ export default async function RootLayout({
         className="min-h-screen bg-background text-foreground font-sans antialiased"
         data-subject="brand"
       >
+        <div className="page-aura" aria-hidden="true" />
         <analytics.Beacon />
         <ThemeProvider
           attribute="class"
