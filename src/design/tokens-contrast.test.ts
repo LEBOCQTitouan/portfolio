@@ -28,4 +28,15 @@ describe("subject contrast contract (WCAG AA)", () => {
       expect(contrastRatio(t.accent.dark, BACKGROUND.dark)).toBeGreaterThanOrEqual(AA_NORMAL);
     }
   });
+
+  it("AI gradient TEXT stops are legible on the page background per mode", () => {
+    const t = TOKENS.ai;
+    if (!t.textGradient) throw new Error("expected ai.textGradient to be defined");
+    for (const stop of t.textGradient.light) {
+      expect(contrastRatio(stop, BACKGROUND.light)).toBeGreaterThanOrEqual(AA_NORMAL);
+    }
+    for (const stop of t.textGradient.dark) {
+      expect(contrastRatio(stop, BACKGROUND.dark)).toBeGreaterThanOrEqual(AA_NORMAL);
+    }
+  });
 });

@@ -16,6 +16,7 @@
   --accent: #0071e3;           /* text/border accent on background */
   --accent-fill: #0a66c2;      /* solid fill (white-safe), gradient fallback */
   --accent-gradient: #0a66c2;  /* fill/accent-text background-image */
+  --accent-text-gradient: var(--accent-gradient);  /* gradient used for clipped TEXT */
   --accent-soft: rgba(0,113,227,0.10);
   --on-accent: #ffffff;
   --ring: var(--accent);
@@ -57,9 +58,10 @@
 [data-subject="ai"] {
   --accent: #2747d6; --accent-fill: #3a52d8;
   --accent-gradient: linear-gradient(110deg, #1b63e8, #3a52d8, #4a4fcf);
+  --accent-text-gradient: linear-gradient(110deg, #1b63e8, #3a52d8, #4a4fcf);
   --accent-soft: rgba(58,82,216,0.12); --on-accent: #ffffff;
 }
-.dark [data-subject="ai"] { --accent: #6f8cff; --accent-soft: rgba(111,140,255,0.18); }
+.dark [data-subject="ai"] { --accent: #6f8cff; --accent-soft: rgba(111,140,255,0.18); --accent-text-gradient: linear-gradient(110deg, #6f8cff, #8aa0ff, #9bb0ff); }
 
 @theme inline {
   --color-background: var(--background);
@@ -85,7 +87,7 @@ body {
 
 [data-subject="ai"] .accent-fill { background: var(--accent-gradient); }
 [data-subject="ai"] .accent-text {
-  background-image: var(--accent-gradient);
+  background-image: var(--accent-text-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

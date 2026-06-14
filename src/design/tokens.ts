@@ -16,6 +16,9 @@ export type SubjectTokens = {
   onAccent: string;
   /** Low-alpha tint for beds/badges/hovers (per mode). */
   accentSoft: ModeColor;
+  /** Gradient stops for CLIPPED TEXT, per mode (legible on the page bg).
+   *  Only gradient subjects need this; fills use gradientStops. */
+  textGradient?: { light: string[]; dark: string[] };
 };
 
 export const TOKENS: Record<SubjectId, SubjectTokens> = {
@@ -46,6 +49,10 @@ export const TOKENS: Record<SubjectId, SubjectTokens> = {
     gradientStops: ["#1b63e8", "#3a52d8", "#4a4fcf"],
     onAccent: "#ffffff",
     accentSoft: { light: "rgba(58,82,216,0.12)", dark: "rgba(111,140,255,0.18)" },
+    textGradient: {
+      light: ["#1b63e8", "#3a52d8", "#4a4fcf"],
+      dark: ["#6f8cff", "#8aa0ff", "#9bb0ff"],
+    },
   },
 };
 

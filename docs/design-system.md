@@ -20,6 +20,7 @@
 | `--accent` | accent **text/borders** on the page background (per mode) |
 | `--accent-fill` | solid accent **fill** — white-safe; gradient fallback |
 | `--accent-gradient` | the fill/text background-image (a gradient for gradient subjects, else a color) |
+| `--accent-text-gradient` | gradient used for clipped **text**; flips per mode so it stays legible on the background |
 | `--accent-soft` | low-alpha tint for beds/badges/hovers |
 | `--on-accent` | foreground guaranteed **WCAG AA** on the fill/gradient |
 | `--ring` | focus ring (= `--accent`) |
@@ -53,7 +54,7 @@ WCAG AA.
 2. In `src/design/tokens.ts`: add the id to `SUBJECTS` and a `TOKENS` entry —
    `accent` (light+dark), `accentFill`, `gradientStops`, `onAccent`,
    `accentSoft` (light+dark). (`SubjectId`/`SUBJECTS` are defined in
-   `src/core/domain/subject.ts` and re-exported from `tokens.ts`.)
+   `src/core/domain/subject.ts` and re-exported from `tokens.ts`.) For a gradient subject whose accent is used as clipped text, also add a `textGradient: { light, dark }` (dark stops read on the light bg; bright stops on the dark bg) and a `--accent-text-gradient` override in both the light and `.dark` skin blocks.
 3. Run `npx vitest run src/design/tokens-contrast.test.ts`. Adjust hexes until
    AA passes — do not weaken thresholds.
 4. Mirror the values into `globals.css` as a `[data-subject="<id>"]` block plus a
