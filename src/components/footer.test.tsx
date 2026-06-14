@@ -21,4 +21,10 @@ describe("Footer", () => {
       "https://github.com/LEBOCQTitouan",
     );
   });
+
+  it("links to the design-system page", () => {
+    renderFooter(2026);
+    const link = screen.getByRole("link", { name: /design system/i });
+    expect(link).toHaveAttribute("href", expect.stringContaining("/design-system"));
+  });
 });
