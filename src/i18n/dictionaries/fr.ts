@@ -14,6 +14,7 @@ export const fr: Dictionary = {
   footer: {
     uses: "Outils",
     now: "Maintenant",
+    designSystem: "Système de design",
     github: "GitHub",
     linkedin: "LinkedIn",
   },
@@ -84,6 +85,52 @@ export const fr: Dictionary = {
     lastUpdated: "Dernière mise à jour",
     focusedOn: "Ce sur quoi je me concentre en ce moment :",
     nowPageLabel: "page /now",
+  },
+  designSystem: {
+    title: "Système de design",
+    metaDescription:
+      "Le système de design derrière ce site — et la réflexion qui l'a façonné.",
+    problemTitle: "Le problème",
+    problem1:
+      "Le portfolio d'un ingénieur qui travaille là où la pensée systèmes rencontre le soin de l'interface doit être les deux à la fois — rigoureux comme un système, expressif comme un travail d'artisan. La plupart des sites choisissent : viser l'expression donne le chaos ; viser la rigueur donne du générique.",
+    problem2:
+      "L'objectif n'a jamais été « ajouter de la couleur ». C'était de faire de l'expression le produit de la rigueur — un système de tokens discipliné, avec les contrastes vérifiés en CI, est ce qui permet au site d'être coloré, vivant et propre à chaque sujet sans jamais casser. Le site est la démonstration : un ingénieur design-led doit construire la preuve, pas la décrire.",
+    principleTitle: "Le principe",
+    principle1:
+      "Tout est une déclinaison d'un seul bleu de marque. Trois couches — valeurs primitives, tokens sémantiques, habillages par sujet — font d'un « sujet » une surcharge petite et sûre, jamais un cas unique.",
+    principle2:
+      "La page est la lumière ; le compagnon est une lentille. Chaque page porte une aura discrète dans la couleur de son sujet, et l'orbe diffracte cette lumière au lieu d'émettre la sienne.",
+    subjectsTitle: "Les sujets, en direct",
+    subjectsHint:
+      "Choisissez un sujet — l'aperçu et le compagnon prennent sa couleur. Même système, quatre déclinaisons.",
+    tokensTitle: "Tokens",
+    tokensHint:
+      "Lus directement depuis la source de vérité, pour ne jamais diverger du site.",
+    companionTitle: "Le compagnon",
+    companionBody:
+      "Une lentille tout en yeux qui porte le sujet actif et réagit — elle suit le curseur, s'endort, et s'agace si on la titille.",
+    decisionsTitle: "Décisions & arbitrages",
+    decisions: [
+      {
+        q: "Turquoise pour Systems, pas vert",
+        a: `Le vert et le rouge sont réservés aux états succès/erreur, et une opposition vert↔rouge échoue pour le daltonisme. Le turquoise évoque "l'infrastructure" sans entrer en conflit avec les états.`,
+      },
+      {
+        q: "La page colore le compagnon",
+        a: "Le sujet actif est remonté à la page via un sélecteur CSS :has(), pour qu'un orbe fixe et hors-portée hérite quand même de la couleur de la page.",
+      },
+      {
+        q: "L'accessibilité par construction",
+        a: "Un contrat de contraste tourne en CI : chaque accent, arrêt de dégradé et teinte d'aura est vérifié contre WCAG AA. Le mouvement est conditionné à prefers-reduced-motion.",
+      },
+      {
+        q: "Une lentille, pas une mascotte",
+        a: "Le compagnon fait partie du système — il diffracte la lumière de la page — pour que la personnalité ne devienne jamais du bruit décoratif.",
+      },
+    ],
+    outcomeTitle: "Résultat",
+    outcome:
+      "Un portfolio cohérent, accessible et auto-thématisé : quatre sujets, contrastes vérifiés en CI, respect du reduced-motion, et extensible depuis un seul endroit.",
   },
   meta: {
     siteTitle: "Titouan Lebocq",
