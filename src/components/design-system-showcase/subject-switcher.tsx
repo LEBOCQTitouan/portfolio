@@ -10,7 +10,7 @@ const LABELS: Record<SubjectId, string> = {
   ai: "AI",
 };
 
-export function SubjectSwitcher() {
+export function SubjectSwitcher({ lead, accent, primaryAction }: { lead: string; accent: string; primaryAction: string }) {
   const [subject, setSubject] = useState<SubjectId>("brand");
 
   return (
@@ -28,7 +28,6 @@ export function SubjectSwitcher() {
                 ? { background: "var(--accent-soft)", color: "var(--accent)", borderColor: "var(--accent)" }
                 : { borderColor: "var(--border)", color: "var(--muted)" }
             }
-            data-subject={id}
           >
             {LABELS[id]}
           </button>
@@ -45,13 +44,13 @@ export function SubjectSwitcher() {
         }}
       >
         <p className="text-xs font-semibold uppercase tracking-widest accent-text">
-          {LABELS[subject]} subject
+          {LABELS[subject]}
         </p>
         <p className="mt-2 text-2xl font-bold tracking-tight">
-          The page wears <span className="accent-text">this colour</span>.
+          {lead} <span className="accent-text">{accent}</span>.
         </p>
         <div className="mt-4 flex items-center gap-3">
-          <span className="accent-fill rounded-lg px-4 py-2 text-sm font-semibold">Primary action</span>
+          <span className="accent-fill rounded-lg px-4 py-2 text-sm font-semibold">{primaryAction}</span>
           <span
             className="rounded-full border px-3 py-1 text-xs font-medium"
             style={{ background: "var(--accent-soft)", color: "var(--accent)", borderColor: "var(--accent)" }}

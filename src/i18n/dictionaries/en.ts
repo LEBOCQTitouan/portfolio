@@ -101,7 +101,10 @@ export const en = {
     subjectsTitle: "Subjects, live",
     subjectsHint:
       "Pick a subject — the preview and the companion take on its colour. Same system, four declensions.",
-    tokensTitle: "Tokens",
+    previewLead: "The page wears",
+    previewAccent: "this colour",
+    primaryAction: "Primary action",
+    tokensTitle: "Colour tokens",
     tokensHint:
       "Read straight from the source of truth, so this can never drift from the site.",
     companionTitle: "The companion",

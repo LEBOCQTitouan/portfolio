@@ -103,7 +103,10 @@ export const fr: Dictionary = {
     subjectsTitle: "Les sujets, en direct",
     subjectsHint:
       "Choisissez un sujet — l'aperçu et le compagnon prennent sa couleur. Même système, quatre déclinaisons.",
-    tokensTitle: "Tokens",
+    previewLead: "La page porte",
+    previewAccent: "cette couleur",
+    primaryAction: "Action principale",
+    tokensTitle: "Tokens de couleur",
     tokensHint:
       "Lus directement depuis la source de vérité, pour ne jamais diverger du site.",
     companionTitle: "Le compagnon",

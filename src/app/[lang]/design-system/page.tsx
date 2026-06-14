@@ -64,7 +64,7 @@ export default async function DesignSystemPage({ params }: { params: Promise<{ l
       <section className="mt-12" data-narrate="subjects">
         <h2 className="text-xl font-semibold tracking-tight">{ds.subjectsTitle}</h2>
         <p className="mt-2 text-muted">{ds.subjectsHint}</p>
-        <div className="mt-6"><SubjectSwitcher /></div>
+        <div className="mt-6"><SubjectSwitcher lead={ds.previewLead} accent={ds.previewAccent} primaryAction={ds.primaryAction} /></div>
       </section>
 
       <section className="mt-12">
@@ -82,8 +82,8 @@ export default async function DesignSystemPage({ params }: { params: Promise<{ l
       <section className="mt-12 max-w-2xl" data-narrate="decisions">
         <h2 className="text-xl font-semibold tracking-tight">{ds.decisionsTitle}</h2>
         <dl className="mt-4 space-y-5">
-          {ds.decisions.map((d) => (
-            <div key={d.q}>
+          {ds.decisions.map((d, i) => (
+            <div key={i}>
               <dt className="font-semibold">{d.q}</dt>
               <dd className="mt-1 text-muted">{d.a}</dd>
             </div>
