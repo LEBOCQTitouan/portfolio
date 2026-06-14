@@ -9,6 +9,8 @@ import { useReducedMotion } from "./use-reduced-motion";
 import { scrollProgress, interpolateOrb, gutterTargetPercent } from "./hero-phase";
 import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
+import { useReaction } from "./use-reaction";
+import type { Gaze } from "./eyes";
 import { useT } from "@/i18n/use-t";
 import { isLocale, defaultLocale } from "@/i18n/config";
 
@@ -24,6 +26,8 @@ export function Companion() {
   const reducedMotion = useReducedMotion();
 
   const muted = useSyncExternalStore(subscribeMuted, getMuted, () => false);
+  const { reaction, poke } = useReaction(muted);
+  const [gaze, setGaze] = useState<Gaze>({ x: 0, y: 0 });
   const [active, setActive] = useState<{ route: string; id: string } | null>(null);
   const [isWide, setIsWide] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -53,6 +57,18 @@ export function Companion() {
     const next = gutterTargetPercent(window.innerWidth, window.innerHeight, rect);
     setTarget((prev) => (prev.x === next.x && prev.y === next.y ? prev : next));
   }, []);
+
+  // Cursor gaze: eyes follow the pointer relative to viewport center.
+  useEffect(() => {
+    if (reducedMotion) return;
+    const onMove = (e: PointerEvent) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      setGaze({ x, y });
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reducedMotion]);
 
   // Observe sections → active id.
   useEffect(() => {
@@ -149,7 +165,9 @@ export function Companion() {
         {...(dockMode ? { "data-dock-active": !muted ? "true" : undefined } : {})}
       >
         {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
-        <Orb mood={activeLine.mood} muted={muted} style={orbStyle} />
+        <span style={{ pointerEvents: "auto", display: "contents" }} onPointerDown={poke}>
+          <Orb mood={activeLine.mood} reaction={reaction} gaze={gaze} style={orbStyle} />
+        </span>
       </div>
       <button
         type="button"
