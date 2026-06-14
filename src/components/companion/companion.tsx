@@ -175,7 +175,7 @@ export function Companion() {
         {...(dockMode ? { "data-dock-active": !muted ? "true" : undefined } : {})}
       >
         {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
-        <span style={{ pointerEvents: "auto", display: "contents", position: "relative" }} onPointerDown={onPoke}>
+        <span style={{ position: "relative", display: "inline-flex", pointerEvents: "auto" }} onPointerDown={onPoke}>
           {reaction === "asleep" && (
             <div className="companion-dream" aria-hidden="true"><span>z</span><span>z</span></div>
           )}
