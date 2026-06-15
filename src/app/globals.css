@@ -57,11 +57,24 @@
 
 [data-subject="ai"] {
   --accent: #6d28d9; --accent-fill: #6d28d9;
-  --accent-gradient: linear-gradient(110deg, #7c3aed, #4f63d8, #0e7d96);
-  --accent-text-gradient: linear-gradient(110deg, #6d28d9, #4f46e5, #0e7490);
+  /* Calm violet→indigo base with a deep-teal shimmer field and a faint sheen.
+     Two palettes: --ai-deep (white-legible — used by fills in both modes, and by
+     clipped text on light backgrounds) and --ai-bright (clipped text on dark
+     backgrounds). Layers top→bottom: sheen · violet field · teal field · base.
+     Both meet WCAG AA (see tokens-contrast.test.ts). */
+  --ai-deep:
+    linear-gradient(100deg, transparent 42%, rgba(255,255,255,0.16) 50%, transparent 58%),
+    linear-gradient(108deg, #6d3bc9 0%, transparent 58%),
+    linear-gradient(288deg, #15748f 0%, transparent 58%),
+    linear-gradient(110deg, #5b3bc4, #3f54c0);
+  --ai-bright:
+    linear-gradient(100deg, transparent 42%, rgba(255,255,255,0.16) 50%, transparent 58%),
+    linear-gradient(108deg, #ad8df7 0%, transparent 58%),
+    linear-gradient(288deg, #63cdd8 0%, transparent 58%),
+    linear-gradient(110deg, #9b94ff, #8ea8ff);
   --accent-soft: rgba(124,58,237,0.12); --on-accent: #ffffff;
 }
-.dark [data-subject="ai"] { --accent: #a78bfa; --accent-soft: rgba(167,139,250,0.18); --accent-text-gradient: linear-gradient(110deg, #a78bfa, #8ab4ff, #5ad1e0); }
+.dark [data-subject="ai"] { --accent: #a78bfa; --accent-soft: rgba(167,139,250,0.18); }
 
 @theme inline {
   --color-background: var(--background);
@@ -86,21 +99,32 @@ body {
 .accent-fill { background: var(--accent-fill); color: var(--on-accent); }
 .accent-text { color: var(--accent); }
 
-[data-subject="ai"] .accent-fill { background: var(--accent-gradient); }
+[data-subject="ai"] .accent-fill,
 [data-subject="ai"] .accent-text {
-  background-image: var(--accent-text-gradient);
+  background-image: var(--ai-deep);
+  background-size: 230% 100%, 230% 100%, 230% 100%, 100% 100%;
+  background-position: 140% 0, 0% 0, 100% 0, 0 0;
+}
+[data-subject="ai"] .accent-text {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
+/* Clipped text on a dark page needs the bright palette to stay legible; fills
+   keep --ai-deep in both modes because white text sits on top of them. */
+.dark [data-subject="ai"] .accent-text { background-image: var(--ai-bright); }
 
-/* Animated flow for gradient subjects — motion only when allowed. */
+/* Animated flow — sheen glides across while the colour fields ease past each
+   other. Eased + alternating, so it breathes rather than scrolls. Motion only
+   when allowed; otherwise the static layered gradient above stands in. */
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes accent-flow { to { background-position: 300% 0; } }
+  @keyframes accent-flow {
+    from { background-position: 140% 0, 0% 0, 100% 0, 0 0; }
+    to   { background-position: -40% 0, 65% 0, 35% 0, 0 0; }
+  }
   [data-subject="ai"] .accent-fill,
   [data-subject="ai"] .accent-text {
-    background-size: 300% 100%;
-    animation: accent-flow 8s linear infinite;
+    animation: accent-flow 15s ease-in-out infinite alternate;
   }
 }
 
