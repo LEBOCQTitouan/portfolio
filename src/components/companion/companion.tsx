@@ -137,16 +137,16 @@ export function Companion() {
   useEffect(() => {
     if (!motionMode) return;
     const gutter = gutterRef.current;
-    const squash = squashRef.current;
-    if (!gutter || !squash) return;
+    const squashEl = squashRef.current;
+    if (!gutter || !squashEl) return;
 
     let raf = 0;
     let prev = 0;
     let inited = false;
     let sx: SpringState = { pos: 0, vel: 0 };
     let sy: SpringState = { pos: 0, vel: 0 };
-    let sq = 0;
-    let ln = 0;
+    let squash = 0;
+    let lean = 0;
 
     const loop = (now: number) => {
       const dt = Math.min(MOTION.dtMax, prev ? (now - prev) / 1000 : 0.016);
@@ -166,12 +166,12 @@ export function Companion() {
       sy = stepSpring(sy, ty, dt);
 
       const hv = hoverOffset(now);
-      const s = stepSquash(sy.vel, sq, ln, dt);
-      sq = s.smoothSquash;
-      ln = s.smoothLean;
+      const s = stepSquash(sy.vel, squash, lean, dt);
+      squash = s.smoothSquash;
+      lean = s.smoothLean;
 
       gutter.style.transform = `translate(${sx.pos + hv.x}px, ${sy.pos + hv.y}px) translate(-50%, -50%)`;
-      squash.style.transform = `scaleX(${s.scaleX}) scaleY(${s.scaleY}) rotate(${s.tilt}deg)`;
+      squashEl.style.transform = `scaleX(${s.scaleX}) scaleY(${s.scaleY}) rotate(${s.tilt}deg)`;
 
       raf = requestAnimationFrame(loop);
     };
@@ -181,7 +181,7 @@ export function Companion() {
       cancelAnimationFrame(raf);
       // Clear inline transforms so a later reduced-motion/dock render starts clean.
       gutter.style.transform = "";
-      squash.style.transform = "";
+      squashEl.style.transform = "";
     };
   }, [motionMode]);
 
@@ -203,6 +203,7 @@ export function Companion() {
   const geo = heroPhase ? interpolateOrb(progress, target) : null;
 
   // Mirror the live position target (viewport %) for the rAF loop to read.
+  // Safe in React 18 (synchronous render): idempotent mirror, no tearing.
   // eslint-disable-next-line react-hooks/refs
   posPctRef.current = geo ? { x: geo.x, y: geo.y } : { x: target.x, y: target.y };
 

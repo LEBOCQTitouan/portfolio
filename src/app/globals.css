@@ -221,6 +221,8 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 .companion-gutter {
   position: fixed;
   z-index: 40;
+  /* Centering anchor: used directly in reduced-motion; the rAF loop overrides
+     this with translate(px,px) translate(-50%,-50%) in motion mode. Keep it. */
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column-reverse; /* bubble stacked ABOVE the orb, within the gutter */
