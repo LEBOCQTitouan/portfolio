@@ -358,12 +358,6 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   cursor: pointer;
 }
 
-/* Motion only when the user allows it. */
-@media (prefers-reduced-motion: no-preference) {
-  .companion-gutter {
-    transition: left 0.6s cubic-bezier(0.6, 0.02, 0.2, 1), top 0.6s cubic-bezier(0.6, 0.02, 0.2, 1);
-  }
-}
 
 /* ── Page transitions — the recolor as a deliberate gesture ─────── */
 /* The aura's color crossfade is tuned LONGER than content so the ambient
