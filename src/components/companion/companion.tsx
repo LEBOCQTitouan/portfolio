@@ -7,6 +7,7 @@ import { pickActiveSection } from "./active-section";
 import { getMuted, setMuted, subscribeMuted } from "./mute-storage";
 import { useReducedMotion } from "./use-reduced-motion";
 import { scrollProgress, interpolateOrb, gutterTargetPercent } from "./hero-phase";
+import { MOTION, stepSpring, hoverOffset, stepSquash, type SpringState } from "./orb-motion";
 import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
 import { useReaction } from "./use-reaction";
@@ -46,6 +47,13 @@ export function Companion() {
   const [target, setTarget] = useState({ x: 90, y: 50 }); // gutter target (viewport %)
   const ratios = useRef<Record<string, number>>({});
   const activeIdRef = useRef<string | null>(null);
+
+  // Motion loop plumbing (imperative; bypasses React re-renders).
+  const gutterRef = useRef<HTMLDivElement | null>(null); // positioned wrapper
+  const squashRef = useRef<HTMLSpanElement | null>(null); // orb wrapper (squash target)
+  const posPctRef = useRef<{ x: number; y: number }>({ x: 90, y: 50 }); // current target (vw/vh %)
+  // Spring motion runs in the gutter (wide) when motion is allowed.
+  const motionMode = isWide && !reducedMotion;
 
   useEffect(() => {
     const mq = window.matchMedia(WIDE_QUERY);
@@ -124,6 +132,59 @@ export function Companion() {
     };
   }, [pathname, recompute]);
 
+  // Spring loop: drive position (gutter wrapper) and squash (orb wrapper) via
+  // transform. Runs only in wide, motion-allowed mode; dock/reduced-motion skip it.
+  useEffect(() => {
+    if (!motionMode) return;
+    const gutter = gutterRef.current;
+    const squash = squashRef.current;
+    if (!gutter || !squash) return;
+
+    let raf = 0;
+    let prev = 0;
+    let inited = false;
+    let sx: SpringState = { pos: 0, vel: 0 };
+    let sy: SpringState = { pos: 0, vel: 0 };
+    let sq = 0;
+    let ln = 0;
+
+    const loop = (now: number) => {
+      const dt = Math.min(MOTION.dtMax, prev ? (now - prev) / 1000 : 0.016);
+      prev = now;
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const tx = (posPctRef.current.x / 100) * vw;
+      const ty = (posPctRef.current.y / 100) * vh;
+
+      if (!inited) {
+        sx = { pos: tx, vel: 0 };
+        sy = { pos: ty, vel: 0 };
+        inited = true;
+      }
+      sx = stepSpring(sx, tx, dt);
+      sy = stepSpring(sy, ty, dt);
+
+      const hv = hoverOffset(now);
+      const s = stepSquash(sy.vel, sq, ln, dt);
+      sq = s.smoothSquash;
+      ln = s.smoothLean;
+
+      gutter.style.transform = `translate(${sx.pos + hv.x}px, ${sy.pos + hv.y}px) translate(-50%, -50%)`;
+      squash.style.transform = `scaleX(${s.scaleX}) scaleY(${s.scaleY}) rotate(${s.tilt}deg)`;
+
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      // Clear inline transforms so a later reduced-motion/dock render starts clean.
+      gutter.style.transform = "";
+      squash.style.transform = "";
+    };
+  }, [motionMode]);
+
   // Reserve bottom space in dock mode so the dock never covers content.
   const dockMode = !isWide;
   useEffect(() => {
@@ -141,6 +202,10 @@ export function Companion() {
   const heroPhase = heroPresent && isWide && !muted && !reducedMotion;
   const geo = heroPhase ? interpolateOrb(progress, target) : null;
 
+  // Mirror the live position target (viewport %) for the rAF loop to read.
+  // eslint-disable-next-line react-hooks/refs
+  posPctRef.current = geo ? { x: geo.x, y: geo.y } : { x: target.x, y: target.y };
+
   // Randomised nod duration: applied only while sleepy so it varies per entry.
   const nodDurStyle: CSSProperties | null = reaction === "sleepy" ? { animationDuration: `5s, ${nodDur.current}s` } : null;
 
@@ -153,7 +218,10 @@ export function Companion() {
     orbStyle = nodDurStyle ?? undefined;
   } else if (geo) {
     dockClass = "companion-gutter";
-    dockStyle = { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : -1 };
+    // Motion mode: loop drives transform from (0,0). Reduced motion: static %.
+    dockStyle = motionMode
+      ? { left: 0, top: 0, zIndex: geo.front ? 40 : -1 }
+      : { left: `${geo.x}%`, top: `${geo.y}%`, zIndex: geo.front ? 40 : -1 };
     orbStyle = {
       width: geo.size,
       height: geo.size,
@@ -164,7 +232,7 @@ export function Companion() {
     };
   } else {
     dockClass = "companion-gutter";
-    dockStyle = { left: `${target.x}%`, top: `${target.y}%` };
+    dockStyle = motionMode ? { left: 0, top: 0 } : { left: `${target.x}%`, top: `${target.y}%` };
     orbStyle = nodDurStyle ?? undefined;
   }
 
@@ -174,13 +242,18 @@ export function Companion() {
   return (
     <>
       <div
+        ref={gutterRef}
         className={dockClass}
         style={dockStyle}
         aria-hidden="true"
         {...(dockMode ? { "data-dock-active": !muted ? "true" : undefined } : {})}
       >
         {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
-        <span style={{ position: "relative", display: "inline-flex", pointerEvents: "auto" }} onPointerDown={onPoke}>
+        <span
+          ref={squashRef}
+          style={{ position: "relative", display: "inline-flex", pointerEvents: "auto" }}
+          onPointerDown={onPoke}
+        >
           {reaction === "asleep" && (
             <div className="companion-dream" aria-hidden="true"><span>z</span><span>z</span></div>
           )}
