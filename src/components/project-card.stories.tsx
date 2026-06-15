@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import type { Project } from "@/lib/projects";
+import type { Project } from "@/core/domain/project";
 import { ProjectCard } from "./project-card";
 
 const sample: Project = {
@@ -19,7 +19,7 @@ const sample: Project = {
 const meta = {
   title: "Content/ProjectCard",
   component: ProjectCard,
-  args: { project: sample },
+  args: { project: sample, lang: "en" },
 } satisfies Meta<typeof ProjectCard>;
 
 export default meta;
