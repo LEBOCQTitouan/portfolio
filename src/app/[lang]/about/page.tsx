@@ -35,56 +35,49 @@ export async function generateMetadata({
   };
 }
 
-const experience = [
-  {
-    role: "Senior Software Engineer",
-    org: "Company",
-    period: "2023 — Present",
-    blurb:
-      "Lead backend systems work and design-minded product engineering. (Edit me.)",
-  },
-  {
-    role: "Software Engineer",
-    org: "Company",
-    period: "2021 — 2023",
-    blurb:
-      "Built and scaled services and the interfaces on top of them. (Edit me.)",
-  },
-];
+// Shared name/note rows — used by both the focus block and the AI block.
+function NoteList({ entries }: { entries: readonly { name: string; note: string }[] }) {
+  return (
+    <dl className="space-y-3">
+      {entries.map((e) => (
+        <div key={e.name}>
+          <dt className="font-medium">{e.name}</dt>
+          <dd className="mt-0.5 text-sm text-muted">{e.note}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
 
-const skills = [
-  { group: "Languages", items: ["TypeScript", "Go", "Rust", "Python"] },
-  { group: "Backend", items: ["Postgres", "Kafka", "gRPC", "Distributed systems"] },
-  { group: "Frontend", items: ["React", "Next.js", "Tailwind", "Accessibility"] },
-  { group: "Infra", items: ["Cloudflare", "Docker", "CI/CD", "Observability"] },
-];
+// Plain, uniform pill — no fills.
+function Pill({ label }: { label: string }) {
+  return (
+    <li className="rounded-full border border-border px-2.5 py-0.5 text-xs text-muted">
+      {label}
+    </li>
+  );
+}
 
 export default async function AboutPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dict = await getDictionary(lang);
+  const about = dict.about;
 
   return (
     <section className="py-8">
       <MorphTitle name={PAGE_TITLE}>
-        <h1 className="text-3xl font-bold tracking-tight">{dict.about.title}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{about.title}</h1>
       </MorphTitle>
       <div className="prose-content mt-6 max-w-2xl" data-narrate="intro">
-        <p>
-          I&apos;m Titouan — a software engineer who believes great engineering
-          and great design are the same discipline aimed at different layers. I
-          build robust backend systems and the interfaces that make them usable.
-          (Edit this bio.)
-        </p>
-        <p>
-          I care about clarity: clear systems, clear interfaces, and clear
-          writing about both.
-        </p>
+        {about.intro.map((para) => (
+          <p key={para.slice(0, 24)}>{para}</p>
+        ))}
       </div>
 
-      <h2 className="mt-12 text-xl font-semibold tracking-tight">{dict.about.experience}</h2>
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">{about.experience}</h2>
       <ol className="mt-4 space-y-6 border-l border-border pl-6" data-narrate="experience">
-        {experience.map((job) => (
+        {about.experienceItems.map((job) => (
           <li key={`${job.org}-${job.period}`} className="relative">
             <span
               aria-hidden="true"
@@ -101,23 +94,42 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         ))}
       </ol>
 
-      <h2 className="mt-12 text-xl font-semibold tracking-tight">{dict.about.skills}</h2>
-      <div className="mt-4 grid gap-4 sm:grid-cols-2" data-narrate="skills">
-        {skills.map((s) => (
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">{about.skills}</h2>
+
+      <div
+        className="mt-4 max-w-2xl border-l-2 border-accent pl-4"
+        data-narrate="focus"
+      >
+        <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+          {about.focusEyebrow}
+        </p>
+        <div className="mt-3">
+          <NoteList entries={about.focusItems} />
+        </div>
+      </div>
+
+      <div className="mt-8 grid max-w-2xl gap-x-8 gap-y-6 sm:grid-cols-2" data-narrate="skills">
+        {about.skillGroups.map((s) => (
           <div key={s.group}>
             <p className="text-sm font-semibold">{s.group}</p>
-            <ul className="mt-1 flex flex-wrap gap-2">
+            <p className="mt-0.5 text-xs text-muted">{s.caption}</p>
+            <ul className="mt-2 flex flex-wrap gap-2">
               {s.items.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-full border border-border px-2 py-0.5 text-xs text-muted"
-                >
-                  {item}
-                </li>
+                <Pill key={item} label={item} />
               ))}
             </ul>
           </div>
         ))}
+      </div>
+
+      <h2 className="mt-12 text-xl font-semibold tracking-tight">{about.aiHeading}</h2>
+      <div className="mt-4 max-w-2xl" data-narrate="ai">
+        <NoteList entries={about.aiThreads} />
+        <ul className="mt-5 flex flex-wrap gap-2">
+          {about.aiItems.map((item) => (
+            <Pill key={item} label={item} />
+          ))}
+        </ul>
       </div>
     </section>
   );

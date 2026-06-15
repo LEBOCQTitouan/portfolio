@@ -70,9 +70,96 @@ export const fr: Dictionary = {
   },
   about: {
     title: "À propos",
-    metaDescription: "Ingénieur logiciel spécialisé en systèmes backend et design.",
+    metaDescription:
+      "Lead Tech à la FARNUM d’EDF — je conçois et exploite la plateforme qui rend possible un développement moderne et rapide dans un environnement très réglementé et axé sécurité.",
     experience: "Expérience",
     skills: "Compétences",
+    aiHeading: "Travailler avec l’IA",
+    focusEyebrow: "Ce que j’approfondis en ce moment",
+    intro: [
+      "Je suis Titouan — je rends possible un développement moderne et rapide dans l’un des environnements les plus réglementés qui soient. En tant que Lead Tech à la FARNUM (Force d’Action Rapide du Numérique) d’EDF, je conçois et j’exploite une plateforme qui permet aux équipes locales de concevoir et de livrer leurs propres innovations, tout en respectant les règles de l’entreprise et des exigences strictes de cybersécurité.",
+      "J’ai passé ma carrière des deux côtés de cette tension : à écrire le code — React, Symfony, IoT, authentification sécurisée — et à vivre les contraintes, au sein de la division production nucléaire d’EDF où « aller vite » et « avoir une fiabilité prouvée » doivent coexister. Je suis convaincu que les deux ne s’opposent pas ; l’ingénierie intéressante consiste à réduire l’écart entre elles.",
+    ],
+    experienceItems: [
+      {
+        role: "Lead Tech",
+        org: "EDF — FARNUM (Force d’Action Rapide du Numérique)",
+        period: "Déc. 2025 — Présent",
+        blurb:
+          "Je conçois et exploite une plateforme qui permet et accélère le développement et l’innovation en local, tout en la maintenant conforme aux règles de l’entreprise, à la gouvernance et aux exigences de cybersécurité.",
+      },
+      {
+        role: "Appui aux projets informatiques",
+        org: "EDF — Division Production Nucléaire",
+        period: "2021 — 2024",
+        blurb:
+          "Appui aux projets informatiques en environnement nucléaire. Pilotage de la conduite du changement IT — digitalisation des processus de maintenance et d’exploitation nucléaires et déploiement d’IoT pour surveiller les zones à risque — et maintien des installations informatiques, gestion de l’infrastructure des applications web et administration applicative.",
+      },
+      {
+        role: "Développeur Full Stack",
+        org: "EDF — Division Production Nucléaire",
+        period: "2020 — 2021",
+        blurb:
+          "Développement d’un ERP pour administrer et préparer la maintenance sur site : front-end React dynamique, back-end Symfony, services API Platform et authentification LDAP sécurisée.",
+      },
+    ],
+    focusItems: [
+      {
+        name: "Kubernetes",
+        note: "orchestration des charges de la plateforme — en self-service et encadré par les règles",
+      },
+      {
+        name: "Conteneurisation",
+        note: "images Docker / OCI ; des builds reproductibles qui passent la revue de sécurité par défaut",
+      },
+      {
+        name: "Rust",
+        note: "des systèmes plus sûrs et de l’outillage de plateforme — une justesse démontrable",
+      },
+    ],
+    skillGroups: [
+      {
+        group: "Langages",
+        caption: "Rust quand ça doit être juste, TypeScript quand ça doit sortir",
+        items: ["Rust", "TypeScript", "JavaScript", "PHP", "Python", "SQL"],
+      },
+      {
+        group: "Plateforme & Infra",
+        caption: "le cœur du métier au quotidien — la plateforme elle-même",
+        items: ["Kubernetes", "Docker", "Linux", "Git", "CI/CD", "Observabilité"],
+      },
+      {
+        group: "Backend",
+        caption: "la couche volontairement ennuyeuse sur laquelle tourne une plateforme réglementée",
+        items: ["Symfony", "API Platform", "REST / OpenAPI", "PostgreSQL", "LDAP / SSO"],
+      },
+      {
+        group: "Frontend",
+        caption: "assez de soin pour rendre les systèmes utilisables",
+        items: ["React", "Next.js", "HTML / CSS", "Tailwind"],
+      },
+      {
+        group: "Mathématiques",
+        caption: "le socle des systèmes et du travail sur l’IA",
+        items: ["Algèbre linéaire", "Probabilités & statistiques", "Calcul différentiel", "Mathématiques discrètes", "Optimisation"],
+      },
+      {
+        group: "Sécurité & Gouvernance",
+        caption: "un paramètre de conception dès le départ, pas une case à cocher finale",
+        items: ["Cybersécurité", "Gouvernance IT", "Conduite du changement"],
+      },
+    ],
+    aiThreads: [
+      {
+        name: "Développement augmenté par l’IA",
+        note: "workflows agentiques, développement piloté par les specs et revue assistée par l’IA, comme multiplicateur de force au quotidien",
+      },
+      {
+        name: "Architecture & mécanismes internes",
+        note: "comment les modèles fonctionnent vraiment — transformers, attention, embeddings, RAG et évaluation",
+      },
+    ],
+    aiItems: ["LLM", "RAG", "Embeddings", "Agents", "Prompt engineering", "Fine-tuning"],
   },
   uses: {
     title: "Outils",
