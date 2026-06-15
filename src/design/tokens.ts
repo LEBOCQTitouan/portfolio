@@ -60,12 +60,12 @@ export const TOKENS: Record<SubjectId, SubjectTokens> = {
   ai: {
     accent: { light: "#6d28d9", dark: "#a78bfa" },
     accentFill: "#6d28d9",
-    gradientStops: ["#7c3aed", "#4f63d8", "#0e7d96"],
+    gradientStops: ["#6d3bc9", "#3f54c0", "#15748f"],
     onAccent: "#ffffff",
     accentSoft: { light: "rgba(124,58,237,0.12)", dark: "rgba(167,139,250,0.18)" },
     textGradient: {
-      light: ["#6d28d9", "#4f46e5", "#0e7490"],
-      dark: ["#a78bfa", "#8ab4ff", "#5ad1e0"],
+      light: ["#6d3bc9", "#3f54c0", "#15748f"],
+      dark: ["#ad8df7", "#8ea8ff", "#63cdd8"],
     },
     aura: {
       tint: { light: "rgba(124,58,237,0.07)", dark: "rgba(167,139,250,0.10)" },
