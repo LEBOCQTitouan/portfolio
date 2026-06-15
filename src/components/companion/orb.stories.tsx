@@ -7,9 +7,12 @@ const meta = {
   parameters: { layout: "centered" },
   argTypes: {
     mood: { control: "inline-radio", options: ["calm", "warm", "focused"] },
-    muted: { control: "boolean" },
+    reaction: {
+      control: "inline-radio",
+      options: ["active", "sleepy", "asleep", "annoyed", "angry"],
+    },
   },
-  args: { mood: "calm", muted: false },
+  args: { mood: "calm", reaction: "active", gaze: { x: 0, y: 0 } },
 } satisfies Meta<typeof Orb>;
 
 export default meta;
@@ -18,14 +21,14 @@ type Story = StoryObj<typeof meta>;
 export const Calm: Story = { args: { mood: "calm" } };
 export const Warm: Story = { args: { mood: "warm" } };
 export const Focused: Story = { args: { mood: "focused" } };
-export const Muted: Story = { args: { mood: "calm", muted: true } };
+export const Sleepy: Story = { args: { mood: "calm", reaction: "sleepy" } };
 
 export const AllMoods: Story = {
   render: () => (
     <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
-      <Orb mood="calm" muted={false} />
-      <Orb mood="warm" muted={false} />
-      <Orb mood="focused" muted={false} />
+      <Orb mood="calm" reaction="active" gaze={{ x: 0, y: 0 }} />
+      <Orb mood="warm" reaction="active" gaze={{ x: 0, y: 0 }} />
+      <Orb mood="focused" reaction="active" gaze={{ x: 0, y: 0 }} />
     </div>
   ),
 };

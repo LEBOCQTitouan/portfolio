@@ -29,9 +29,13 @@ export function Companion() {
   const muted = useSyncExternalStore(subscribeMuted, getMuted, () => false);
   const { reaction, poke } = useReaction(muted);
   const [gaze, setGaze] = useState<Gaze>({ x: 0, y: 0 });
+  // Randomised nod duration (2.6–4.2s) so the sleepy nod varies per entry. Kept in a
+  // ref because it is non-reactive cosmetic jitter (a one-render staleness is
+  // irrelevant for an animation duration), and Date.now is impure so it must not run
+  // during render — write it in an effect instead.
   const nodDur = useRef(3.2);
   useEffect(() => {
-    if (reaction === "sleepy") nodDur.current = 2.6 + ((Date.now() % 10) / 10) * 1.6; // 2.6–4.2s, varies per entry
+    if (reaction === "sleepy") nodDur.current = 2.6 + ((Date.now() % 10) / 10) * 1.6;
   }, [reaction]);
   const [slosh, setSlosh] = useState(false);
   const onPoke = () => {
@@ -208,6 +212,7 @@ export function Companion() {
   posPctRef.current = geo ? { x: geo.x, y: geo.y } : { x: target.x, y: target.y };
 
   // Randomised nod duration: applied only while sleepy so it varies per entry.
+  // eslint-disable-next-line react-hooks/refs -- intentional: non-reactive cosmetic jitter (see nodDur above)
   const nodDurStyle: CSSProperties | null = reaction === "sleepy" ? { animationDuration: `5s, ${nodDur.current}s` } : null;
 
   let dockClass: string;

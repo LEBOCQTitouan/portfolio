@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import type { PostMeta } from "@/lib/posts";
+import type { PostMeta } from "@/core/domain/post";
 import { BlogExplorer } from "./blog-explorer";
 
 const posts: PostMeta[] = [

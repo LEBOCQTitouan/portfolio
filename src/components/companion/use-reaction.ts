@@ -7,7 +7,9 @@ export function useReaction(muted: boolean): { reaction: Reaction; poke: () => v
   const [state, dispatch] = useReducer(reduceReaction, undefined, () => initialReactionState(now()));
   const send = (e: ReactionEvent) => dispatch(e);
   const sendRef = useRef(send);
-  sendRef.current = send;
+  useEffect(() => {
+    sendRef.current = send;
+  });
 
   // mute/unmute
   useEffect(() => {

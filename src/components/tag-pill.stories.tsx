@@ -5,7 +5,7 @@ const meta = {
   title: "Content/TagPill",
   component: TagPill,
   parameters: { layout: "centered" },
-  args: { tag: "typescript" },
+  args: { tag: "typescript", lang: "en" },
 } satisfies Meta<typeof TagPill>;
 
 export default meta;
@@ -17,7 +17,7 @@ export const Row: Story = {
   render: () => (
     <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
       {["typescript", "next.js", "design", "cloudflare"].map((t) => (
-        <TagPill key={t} tag={t} />
+        <TagPill key={t} tag={t} lang="en" />
       ))}
     </div>
   ),
