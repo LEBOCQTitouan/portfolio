@@ -14,8 +14,14 @@ export const MOTION = {
   hoverSpeed: 1.0, // idle-drift rate
   velSat: 900, // velocity saturation for squash (px/s)
   smoothRate: 12, // low-pass rate for squash/lean
-  dtMax: 0.032, // clamp dt so a stalled tab can't explode the spring
+  dtMax: 0.032, // rAF loop clamps each frame's delta to this so a stalled tab can't explode the spring
 } as const;
+
+/** leanMax (0.05) × this → ≤ 2° of tilt at full lean. */
+const LEAN_TO_DEG = 40;
+
+/** Horizontal idle drift is gentler than vertical (60%). */
+const HOVER_X_SCALE = 0.6;
 
 export type SpringState = { pos: number; vel: number };
 
@@ -42,7 +48,7 @@ export function hoverOffset(timeMs: number, amp = MOTION.hoverAmp, speed = MOTIO
   // Each axis sums two non-harmonic sines whose peaks total 1.5; scale by
   // (amp / 1.5) so vertical drift peaks at ±amp. Horizontal is gentler (×0.6).
   return {
-    x: (Math.sin(ts * 0.9) + Math.sin(ts * 0.37 + 1.7) * 0.5) * (amp / 1.5) * 0.6,
+    x: (Math.sin(ts * 0.9) + Math.sin(ts * 0.37 + 1.7) * 0.5) * (amp / 1.5) * HOVER_X_SCALE,
     y: (Math.sin(ts * 1.3 + 0.6) + Math.sin(ts * 0.53) * 0.5) * (amp / 1.5),
   };
 }
@@ -73,6 +79,6 @@ export function stepSquash(
   const smoothLean = prevLean + (drive * MOTION.leanMax - prevLean) * rate;
   const scaleY = 1 + smoothSquash;
   const scaleX = 1 / (1 + smoothSquash);
-  const tilt = smoothLean * 40; // small tilt in degrees
+  const tilt = smoothLean * LEAN_TO_DEG;
   return { scaleX, scaleY, tilt, smoothSquash, smoothLean };
 }

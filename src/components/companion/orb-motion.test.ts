@@ -29,7 +29,7 @@ describe("hoverOffset", () => {
     }
   });
 
-  it("is not a degenerate line (x and y differ over time)", () => {
+  it("has independent axes that change over time", () => {
     const a = hoverOffset(1000);
     const b = hoverOffset(4000);
     expect(a.x).not.toBeCloseTo(a.y, 3);
@@ -52,6 +52,15 @@ describe("stepSquash", () => {
     }
     expect(last.smoothSquash).toBeLessThanOrEqual(MOTION.squashMax + 1e-6);
     expect(last.scaleY).toBeLessThanOrEqual(1 + MOTION.squashMax + 1e-6);
+
+    // Negative velocity (downward scroll): smoothSquash goes negative, scaleY < 1.
+    let sq2 = 0, ln2 = 0, last2 = { scaleX: 1, scaleY: 1, tilt: 0, smoothSquash: 0, smoothLean: 0 };
+    for (let i = 0; i < 240; i++) {
+      last2 = stepSquash(-1e9, sq2, ln2, 1 / 60);
+      sq2 = last2.smoothSquash; ln2 = last2.smoothLean;
+    }
+    expect(last2.smoothSquash).toBeGreaterThanOrEqual(-MOTION.squashMax - 1e-6);
+    expect(last2.scaleY).toBeGreaterThanOrEqual(1 - MOTION.squashMax - 1e-6);
   });
 
   it("returns no deformation at zero velocity from rest", () => {
