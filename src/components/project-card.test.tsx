@@ -11,6 +11,7 @@ const project: Project = {
   stack: ["Go", "Postgres"],
   category: "systems",
   links: { repo: "https://github.com/example/ledger" },
+  metrics: [],
   featured: true,
   order: 1,
   content: "",
