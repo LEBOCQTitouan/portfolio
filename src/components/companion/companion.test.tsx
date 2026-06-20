@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Companion } from "./companion";
@@ -92,5 +92,65 @@ describe("Companion", () => {
     setMatchMedia("(prefers-reduced-motion: reduce)", false);
     renderWithSections(["hero", "pillars"]);
     expect(document.querySelector(".companion-gutter")).toBeInTheDocument();
+  });
+});
+
+describe("Companion motion loop re-binding", () => {
+  // Drive requestAnimationFrame manually so we can step the spring loop.
+  let frames: Map<number, FrameRequestCallback>;
+  let nextId: number;
+
+  beforeEach(() => {
+    frames = new Map();
+    nextId = 1;
+    vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => {
+      const id = nextId++;
+      frames.set(id, cb);
+      return id;
+    });
+    vi.stubGlobal("cancelAnimationFrame", (id: number) => {
+      frames.delete(id);
+    });
+    setMatchMedia("(min-width: 1280px)", true); // wide
+    setMatchMedia("(prefers-reduced-motion: reduce)", false); // motion allowed
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  function flushFrame(t: number) {
+    const pending = [...frames.values()];
+    frames.clear();
+    act(() => {
+      for (const cb of pending) cb(t);
+    });
+  }
+
+  // Regression: navigating through a no-narration route (e.g. /blog) unmounts the
+  // orb. The imperative spring loop was keyed on [motionMode] only, so it never
+  // re-bound to the remounted node — it kept driving the detached old node while
+  // the new node sat at left:0/top:0, leaving the orb stuck in the top-left corner.
+  it("re-binds the spring loop after the orb unmounts on a no-narration route", () => {
+    pathname = "/work";
+    document.body.innerHTML = `<div data-narrate="overview" style="height:200px"></div>`;
+    const { container, rerender } = render(withProvider(<Companion />));
+    flushFrame(16);
+    const first = container.querySelector<HTMLElement>(".companion-gutter")!;
+    expect(first.style.transform).not.toBe(""); // loop positioned the original node
+
+    // Blog has no narration → the whole orb unmounts.
+    pathname = "/blog/designing-for-failure";
+    rerender(withProvider(<Companion />));
+    expect(container.querySelector(".companion-gutter")).toBeNull();
+
+    // Back to a narration route → orb remounts as a NEW node; the loop must
+    // re-bind and drive it, otherwise it stays pinned at the top-left corner.
+    pathname = "/work";
+    rerender(withProvider(<Companion />));
+    flushFrame(32);
+    const second = container.querySelector<HTMLElement>(".companion-gutter");
+    expect(second).not.toBeNull();
+    expect(second!.style.transform).not.toBe("");
   });
 });
