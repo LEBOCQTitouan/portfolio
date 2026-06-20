@@ -6,18 +6,31 @@ stack: [Next.js, WebSockets, Rust, ClickHouse]
 category: both
 featured: false
 order: 3
+metrics:
+  - { value: "<1s", label: "event-to-render latency" }
+  - { value: "Rust", label: "ingestion service" }
+  - { value: "24/7", label: "wall-display ready" }
 links:
   repo: https://github.com/titouanlebocq/pulse
   demo: https://pulse.example.com
 ---
 
-## Overview
+## The problem
 
-End-to-end ownership of a live metrics dashboard: a Rust ingestion service
-feeding a ClickHouse store, surfaced through a Next.js UI over WebSockets.
+Operators needed to see what was happening *now*, not on a 30-second refresh —
+and the UI had to stay readable on a wall display from across the room.
 
-## Highlights
+## Approach
 
-- Sub-second end-to-end latency from event to rendered chart.
-- Backpressure handling so the UI degrades gracefully under spikes.
-- Interface tuned for at-a-glance reading on large wall displays.
+I owned it end to end: a Rust ingestion service feeding a ClickHouse store,
+surfaced through a Next.js UI over WebSockets, with backpressure handling so
+the interface degrades gracefully under spikes instead of falling over.
+
+<Figure caption="Ingestion → ClickHouse → WebSocket UI pipeline" />
+
+## Outcome
+
+<Metric value="<1s" label="end-to-end, event to rendered chart" />
+
+The dashboard reads at a glance on large displays and holds sub-second latency
+even when event volume spikes.

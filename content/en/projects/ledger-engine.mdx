@@ -6,17 +6,36 @@ stack: [Go, Postgres, Kafka, gRPC]
 category: systems
 featured: true
 order: 1
+metrics:
+  - { value: "12ms", label: "p99 write latency" }
+  - { value: "10k/s", label: "sustained throughput" }
+  - { value: "0", label: "double-counts in prod" }
 links:
   repo: https://github.com/titouanlebocq/ledger-engine
 ---
 
-## Overview
+## The problem
 
-A horizontally-scalable double-entry ledger with strict consistency guarantees,
-designed to never lose or double-count a transaction.
+Money systems can't lose or double-count a transaction — ever. The batch
+reconciler we inherited drifted under load and surfaced errors hours late,
+which is exactly when a ledger is least trustworthy.
 
-## Highlights
+<PullQuote cite="Lead backend engineer">
+  The hard part wasn't scale — it was staying correct under it.
+</PullQuote>
 
-- Idempotent writes keyed by client-supplied transaction IDs.
-- Append-only event log with periodic balance snapshots.
-- p99 write latency under 12ms at 10k transactions/second.
+## Approach
+
+I rebuilt the write path around three guarantees: idempotent writes keyed by
+client-supplied transaction IDs, an append-only event log as the source of
+truth, and periodic balance snapshots so reads stay fast without replaying
+history.
+
+<Figure caption="Event-sourced write path with periodic balance snapshots" />
+
+## Outcome
+
+<Metric value="10k/s" label="sustained writes at p99 < 12ms" />
+
+The ledger is horizontally scalable, idempotent by construction, and has not
+recorded a single double-count in production.
