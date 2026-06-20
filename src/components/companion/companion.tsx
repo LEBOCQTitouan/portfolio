@@ -58,6 +58,11 @@ export function Companion() {
   const posPctRef = useRef<{ x: number; y: number }>({ x: 90, y: 50 }); // current target (vw/vh %)
   // Spring motion runs in the gutter (wide) when motion is allowed.
   const motionMode = isWide && !reducedMotion;
+  // The orb unmounts on no-narration routes (e.g. /blog). Track its presence so
+  // the imperative spring loop re-binds to the freshly-mounted node on the way
+  // back — otherwise it keeps driving the detached old node and the new one is
+  // left at left:0/top:0 (the top-left corner).
+  const orbMounted = lines.length > 0;
 
   useEffect(() => {
     const mq = window.matchMedia(WIDE_QUERY);
@@ -187,7 +192,7 @@ export function Companion() {
       gutter.style.transform = "";
       squashEl.style.transform = "";
     };
-  }, [motionMode]);
+  }, [motionMode, orbMounted]);
 
   // Reserve bottom space in dock mode so the dock never covers content.
   const dockMode = !isWide;

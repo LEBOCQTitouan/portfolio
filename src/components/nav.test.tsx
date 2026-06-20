@@ -54,4 +54,20 @@ describe("Nav", () => {
     renderNav();
     expect(screen.getByText("Titouan Lebocq")).toHaveClass("font-display");
   });
+
+  it("is expanded (not condensed) at the top of the page", () => {
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true });
+    const { container } = renderNav();
+    const header = container.querySelector("header")!;
+    expect(header).not.toHaveAttribute("data-condensed");
+    expect(header.className).toContain("py-6");
+  });
+
+  it("condenses once the page is scrolled past the threshold", () => {
+    Object.defineProperty(window, "scrollY", { value: 40, configurable: true });
+    const { container } = renderNav();
+    const header = container.querySelector("header")!;
+    expect(header).toHaveAttribute("data-condensed", "true");
+    expect(header.className).toContain("py-3");
+  });
 });
