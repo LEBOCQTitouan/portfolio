@@ -165,6 +165,7 @@ export const fr: Dictionary = {
   uses: {
     title: "Outils",
     metaDescription: "Les outils, le matériel et les logiciels que j'utilise au quotidien.",
+    intro: "Le matériel que j'utilise vraiment — et pourquoi chacun mérite sa place.",
   },
   now: {
     title: "Maintenant",

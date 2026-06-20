@@ -163,6 +163,7 @@ export const en = {
   uses: {
     title: "Uses",
     metaDescription: "The tools, hardware, and software I use day to day.",
+    intro: "The kit I actually reach for — and why each one earns its place.",
   },
   now: {
     title: "Now",
