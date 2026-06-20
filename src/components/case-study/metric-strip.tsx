@@ -8,8 +8,8 @@ export function MetricStrip({
   if (metrics.length === 0) return null;
   return (
     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {metrics.map((m) => (
-        <Metric key={m.label} value={m.value} label={m.label} />
+      {metrics.map((m, i) => (
+        <Metric key={`${m.label}-${i}`} value={m.value} label={m.label} />
       ))}
     </div>
   );

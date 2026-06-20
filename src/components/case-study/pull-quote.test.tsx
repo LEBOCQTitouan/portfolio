@@ -10,7 +10,7 @@ describe("PullQuote", () => {
   });
 
   it("omits the citation when not provided", () => {
-    render(<PullQuote>No cite here.</PullQuote>);
-    expect(screen.queryByText(/^—/)).toBeNull();
+    const { container } = render(<PullQuote>No cite here.</PullQuote>);
+    expect(container.querySelector("figcaption")).toBeNull();
   });
 });
