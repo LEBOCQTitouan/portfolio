@@ -1,4 +1,4 @@
-import { locales, type Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/core/domain/locale";
 import { script } from "./script";
 import type { NarrationLine } from "./types";
 

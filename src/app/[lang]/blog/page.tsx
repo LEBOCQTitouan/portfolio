@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllPostMeta, getAllTags } from "@/composition/server";
 import { BlogExplorer } from "@/components/blog-explorer";
 import { Newsletter } from "@/components/newsletter";
-import { isLocale, defaultLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
 import { MorphTitle } from "@/components/transitions/morph-title";

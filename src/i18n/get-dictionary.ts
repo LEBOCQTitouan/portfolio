@@ -1,5 +1,5 @@
 import "server-only";
-import type { Locale } from "./config";
+import type { Locale } from "@/core/domain/locale";
 import type { Dictionary } from "./dictionaries/en";
 
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {

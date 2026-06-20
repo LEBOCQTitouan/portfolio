@@ -13,7 +13,7 @@ import { SpeechBubble } from "./speech-bubble";
 import { useReaction } from "./use-reaction";
 import type { Gaze } from "./eyes";
 import { useT } from "@/i18n/use-t";
-import { isLocale, defaultLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/core/domain/locale";
 
 const WIDE_QUERY = "(min-width: 1280px)";
 const DOCK_HEIGHT = 76; // px reserved at the bottom in dock mode

@@ -4,7 +4,7 @@ import {
   type Post, type PostMeta,
 } from "@/core/domain/post";
 import { sortProjects, type Project } from "@/core/domain/project";
-import type { Locale } from "@/i18n/config";
+import type { Locale } from "@/core/domain/locale";
 
 export function makeContentUseCases(
   repo: ContentRepository,

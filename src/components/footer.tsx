@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { site } from "@/core/domain/site";
 import type { Dictionary } from "@/i18n/dictionaries/en";
-import type { Locale } from "@/i18n/config";
+import type { Locale } from "@/core/domain/locale";
 import { localizedHref } from "@/i18n/localized-href";
 
 export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"]; lang: Locale }) {

@@ -3,7 +3,7 @@ import { MdxContentRepository } from "@/adapters/content/mdx-content-repository"
 import { ButtondownGateway } from "@/adapters/newsletter/buttondown-gateway";
 import { makeContentUseCases } from "@/core/application/content";
 import { makeSubscribe } from "@/core/application/subscribe";
-import type { Locale } from "@/i18n/config";
+import type { Locale } from "@/core/domain/locale";
 
 const content = makeContentUseCases(new MdxContentRepository(), {
   includeDrafts: process.env.NODE_ENV === "development",
