@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllProjects } from "@/composition/server";
 import { ProjectCard } from "@/components/project-card";
-import { isLocale, defaultLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
 import { MorphTitle } from "@/components/transitions/morph-title";

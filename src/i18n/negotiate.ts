@@ -1,4 +1,4 @@
-import { defaultLocale, isLocale, locales, type Locale } from "./config";
+import { defaultLocale, isLocale, locales, type Locale } from "@/core/domain/locale";
 
 /** Pick the highest-q-weight supported locale from an Accept-Language header. */
 function fromAcceptLanguage(header: string): Locale | null {

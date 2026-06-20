@@ -5,7 +5,7 @@ import { resolveSubject } from "@/core/domain/subject";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
-import { isLocale, defaultLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { workTitleName } from "@/lib/transitions/names";

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getAllPosts, getPostBySlug } from "@/composition/server";
-import { isLocale, defaultLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { site } from "@/core/domain/site";
 
 export const size = { width: 1200, height: 630 };

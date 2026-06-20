@@ -9,7 +9,7 @@ import { Footer } from "@/components/footer";
 import { site } from "@/core/domain/site";
 import { analytics } from "@/composition/client";
 import { Companion } from "@/components/companion/companion";
-import { isLocale, locales, defaultLocale } from "@/i18n/config";
+import { isLocale, locales, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { TranslationProvider } from "@/i18n/translation-provider";
 import { PAGE_AURA } from "@/lib/transitions/names";

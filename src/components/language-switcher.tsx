@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { locales, type Locale } from "@/i18n/config";
+import { locales, type Locale } from "@/core/domain/locale";
 import { useT } from "@/i18n/use-t";
 
 export function swapLocaleInPath(pathname: string, target: Locale): string {
