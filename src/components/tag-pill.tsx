@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Locale } from "@/i18n/config";
+import type { Locale } from "@/core/domain/locale";
 import { localizedHref } from "@/i18n/localized-href";
 
 export function TagPill({ tag, lang }: { tag: string; lang: Locale }) {

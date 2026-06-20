@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Dictionary } from "@/i18n/dictionaries/en";
-import type { Locale } from "@/i18n/config";
+import type { Locale } from "@/core/domain/locale";
 import { localizedHref } from "@/i18n/localized-href";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { PAGE_TITLE } from "@/lib/transitions/names";

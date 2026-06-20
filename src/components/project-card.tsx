@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Project } from "@/core/domain/project";
 import { CategoryBadge } from "@/components/category-badge";
-import type { Locale } from "@/i18n/config";
+import type { Locale } from "@/core/domain/locale";
 import { localizedHref } from "@/i18n/localized-href";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { workTitleName } from "@/lib/transitions/names";

@@ -7,7 +7,7 @@ import { comments } from "@/composition/client";
 import { TagPill } from "@/components/tag-pill";
 import { site } from "@/core/domain/site";
 import { articleJsonLd } from "@/core/domain/seo";
-import { isLocale, defaultLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { PAGE_TITLE } from "@/lib/transitions/names";

@@ -8,7 +8,7 @@ import { PostCard } from "@/components/post-card";
 import { ContactCta } from "@/components/landing/contact-cta";
 import { getFeaturedProjects, getAllProjects } from "@/composition/server";
 import { getAllPosts } from "@/composition/server";
-import { isLocale, defaultLocale } from "@/i18n/config";
+import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
 import { localizedHref } from "@/i18n/localized-href";

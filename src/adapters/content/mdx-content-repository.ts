@@ -6,7 +6,7 @@ import readingTime from "reading-time";
 import type { ContentRepository } from "@/core/ports/content-repository";
 import { parsePost, type Post } from "@/core/domain/post";
 import { parseProject, type Project } from "@/core/domain/project";
-import { defaultLocale, type Locale } from "@/i18n/config";
+import { defaultLocale, type Locale } from "@/core/domain/locale";
 
 function dir(locale: Locale, kind: "posts" | "projects") {
   return path.join(process.cwd(), "content", locale, kind);

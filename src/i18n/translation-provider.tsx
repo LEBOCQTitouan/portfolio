@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, type ReactNode } from "react";
-import type { Locale } from "./config";
+import type { Locale } from "@/core/domain/locale";
 import type { Dictionary } from "./dictionaries/en";
 
 type Ctx = { dictionary: Dictionary; lang: Locale };
