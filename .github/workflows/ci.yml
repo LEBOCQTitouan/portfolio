@@ -33,6 +33,29 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+      # End-to-end guard that Next actually loads the locale proxy in a real
+      # server. The unit tests pass even if the proxy file is misplaced, so this
+      # is the layer that catches a `middleware`/`proxy` rename or wrong-location
+      # regression 404-ing every un-prefixed route in production.
+      - name: Routing smoke test (proxy → locale redirect)
+        run: |
+          npm run start &
+          server_pid=$!
+          trap "kill $server_pid 2>/dev/null || true" EXIT
+          for _ in $(seq 1 30); do
+            curl -sf -o /dev/null http://localhost:3000/en && break
+            sleep 1
+          done
+          check() {
+            loc=$(curl -s -o /dev/null -w '%{redirect_url}' "http://localhost:3000$1")
+            if [ "$loc" != "$2" ]; then
+              echo "FAIL: $1 redirected to '$loc', expected '$2'"
+              exit 1
+            fi
+            echo "OK: $1 -> $loc"
+          }
+          check / http://localhost:3000/en
+          check /work http://localhost:3000/en/work
 
   deploy:
     name: Deploy to Cloudflare
