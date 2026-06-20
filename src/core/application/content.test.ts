@@ -10,7 +10,7 @@ const post = (over: Partial<Post> = {}): Post => ({
 });
 const project = (over: Partial<Project> = {}): Project => ({
   slug: "p", title: "T", summary: "S", role: "R", stack: [], category: "systems",
-  links: {}, featured: false, order: 0, content: "b", ...over,
+  links: {}, metrics: [], featured: false, order: 0, content: "b", ...over,
 });
 
 function uc(posts: Post[] = [], projects: Project[] = [], includeDrafts = false) {
