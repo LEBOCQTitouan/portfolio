@@ -3,12 +3,11 @@ import { notFound } from "next/navigation";
 import { getAllProjects, getProjectBySlug } from "@/composition/server";
 import { resolveSubject } from "@/core/domain/subject";
 import { Mdx } from "@/components/mdx";
-import { CategoryBadge } from "@/components/category-badge";
 import { site } from "@/core/domain/site";
 import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { MorphTitle } from "@/components/transitions/morph-title";
-import { workTitleName } from "@/lib/transitions/names";
+import { CaseHero } from "@/components/case-study/case-hero";
+import { MetricStrip } from "@/components/case-study/metric-strip";
 
 export function generateStaticParams() {
   return getAllProjects("en").map((project) => ({ slug: project.slug }));
@@ -58,55 +57,12 @@ export default async function ProjectPage({
 
   return (
     <article className="py-8" data-subject={resolveSubject({ category: project.category })}>
-      <header className="mb-8" data-narrate="project-header">
-        <div className="flex items-center gap-3">
-          <CategoryBadge category={project.category} />
-          <span className="text-sm text-muted">{project.role}</span>
-        </div>
-        <MorphTitle name={workTitleName(project.slug)}>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight">
-            {project.title}
-          </h1>
-        </MorphTitle>
-        <p className="mt-2 text-muted">{project.summary}</p>
-        {project.stack.length > 0 && (
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {project.stack.map((tech) => (
-              <li
-                key={tech}
-                className="rounded-full border border-border px-2 py-0.5 text-xs text-muted"
-              >
-                {tech}
-              </li>
-            ))}
-          </ul>
-        )}
-        {(project.links.repo || project.links.demo) && (
-          <div className="mt-4 flex gap-4 text-sm">
-            {project.links.repo && (
-              <a
-                href={project.links.repo}
-                target="_blank"
-                rel="noreferrer"
-                className="text-accent hover:underline"
-              >
-                {dict.work.source}
-              </a>
-            )}
-            {project.links.demo && (
-              <a
-                href={project.links.demo}
-                target="_blank"
-                rel="noreferrer"
-                className="text-accent hover:underline"
-              >
-                {dict.work.liveDemo}
-              </a>
-            )}
-          </div>
-        )}
-      </header>
-      <div data-narrate="project-body">
+      <CaseHero
+        project={project}
+        labels={{ source: dict.work.source, liveDemo: dict.work.liveDemo }}
+      />
+      <MetricStrip metrics={project.metrics} />
+      <div className="mt-8" data-narrate="project-body">
         <Mdx source={project.content} />
       </div>
     </article>

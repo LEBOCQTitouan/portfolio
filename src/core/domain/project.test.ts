@@ -3,7 +3,7 @@ import { parseProject, sortProjects, type Project } from "./project";
 
 const make = (over: Partial<Project> = {}): Project => ({
   slug: "s", title: "T", summary: "S", role: "R", stack: [], category: "systems",
-  links: {}, featured: false, order: 0, content: "b", ...over,
+  links: {}, metrics: [], featured: false, order: 0, content: "b", ...over,
 });
 
 describe("parseProject", () => {
@@ -15,6 +15,24 @@ describe("parseProject", () => {
   });
   it("throws on invalid category", () => {
     expect(() => parseProject({ title: "T", summary: "S", role: "R", category: "nope" }, "b", "x")).toThrow(/project "x"/);
+  });
+  it("parses metrics", () => {
+    const p = parseProject(
+      { title: "T", summary: "S", role: "R", category: "systems",
+        metrics: [{ value: "12ms", label: "p99 latency" }] },
+      "b", "x",
+    );
+    expect(p.metrics).toEqual([{ value: "12ms", label: "p99 latency" }]);
+  });
+  it("defaults metrics to an empty array", () => {
+    const p = parseProject({ title: "T", summary: "S", role: "R", category: "systems" }, "b", "x");
+    expect(p.metrics).toEqual([]);
+  });
+  it("rejects more than four metrics", () => {
+    const five = Array.from({ length: 5 }, (_, i) => ({ value: `${i}`, label: `l${i}` }));
+    expect(() =>
+      parseProject({ title: "T", summary: "S", role: "R", category: "systems", metrics: five }, "b", "x"),
+    ).toThrow(/project "x"/);
   });
 });
 

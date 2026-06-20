@@ -6,17 +6,35 @@ stack: [React, TypeScript, Tailwind, Storybook]
 category: interface
 featured: true
 order: 2
+metrics:
+  - { value: "60+", label: "components shipped" }
+  - { value: "100%", label: "keyboard navigable" }
+  - { value: "2", label: "first-class themes" }
 links:
   demo: https://atlas.example.com
 ---
 
-## Overview
+## The problem
 
-A component library built so that accessibility and visual consistency are the
-default, not an afterthought.
+Teams were rebuilding the same buttons, inputs, and modals with subtly
+different spacing, color, and focus behavior. Accessibility was bolted on at
+review time — if at all.
 
-## Highlights
+## Approach
 
-- Token-driven theming with first-class light and dark modes.
-- Every component keyboard-navigable and screen-reader tested.
-- Documented in Storybook with usage and do/don't guidance.
+I made the right thing the default: token-driven theming with first-class
+light and dark modes, every component keyboard-navigable and screen-reader
+tested out of the box, and Storybook docs with usage and do/don't guidance.
+
+<PullQuote>
+  Accessibility and visual consistency should be the default, not an afterthought.
+</PullQuote>
+
+<Figure caption="Token pipeline feeding light and dark themes" />
+
+## Outcome
+
+<Metric value="100%" label="components keyboard navigable & SR-tested" />
+
+Product teams compose screens from a single source of truth, and visual drift
+between surfaces effectively disappeared.

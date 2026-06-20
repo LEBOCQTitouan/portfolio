@@ -1,10 +1,16 @@
 import { z } from "zod";
 
+const metricSchema = z.object({
+  value: z.string().min(1),
+  label: z.string().min(1),
+});
+
 const frontmatterSchema = z.object({
   title: z.string().min(1),
   summary: z.string().min(1),
   role: z.string().min(1),
   stack: z.array(z.string()).default([]),
+  metrics: z.array(metricSchema).max(4).default([]),
   category: z.enum(["systems", "interface", "both"]),
   links: z.object({ repo: z.string().optional(), demo: z.string().optional() }).default({}),
   cover: z.string().optional(),
@@ -20,6 +26,7 @@ export type Project = {
   summary: string;
   role: string;
   stack: string[];
+  metrics: { value: string; label: string }[];
   category: ProjectCategory;
   links: { repo?: string; demo?: string };
   cover?: string;

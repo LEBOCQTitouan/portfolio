@@ -11,6 +11,7 @@ const sample: Project = {
   stack: ["Next.js", "React", "TypeScript", "Tailwind"],
   category: "both",
   links: { repo: "#", demo: "#" },
+  metrics: [],
   featured: true,
   order: 1,
   content: "",

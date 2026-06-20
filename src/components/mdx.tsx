@@ -6,9 +6,15 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import type { MDXComponents } from "mdx/types";
 import { Pre } from "@/components/pre";
+import { Metric } from "@/components/case-study/metric";
+import { PullQuote } from "@/components/case-study/pull-quote";
+import { Figure } from "@/components/case-study/figure";
 
 const components: MDXComponents = {
   pre: Pre,
+  Metric,
+  PullQuote,
+  Figure,
 };
 
 // Fine-grained Shiki highlighter: only the languages/themes we actually use, so
