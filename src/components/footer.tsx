@@ -17,9 +17,6 @@ export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"
         <Link href={localizedHref(lang, "/uses")} className="transition-colors hover:text-foreground">
           {t.uses}
         </Link>
-        <Link href={localizedHref(lang, "/now")} className="transition-colors hover:text-foreground">
-          {t.now}
-        </Link>
         <Link href={localizedHref(lang, "/design-system")} className="transition-colors hover:text-foreground">
           {t.designSystem}
         </Link>

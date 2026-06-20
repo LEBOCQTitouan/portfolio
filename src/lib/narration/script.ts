@@ -17,10 +17,6 @@ export const en: NarrationMap = {
     { id: "intro", mood: "warm", text: "The kit I actually use every day." },
     { id: "tools", mood: "focused", text: "Editor, languages, hardware, services." },
   ],
-  "/now": [
-    { id: "intro", mood: "warm", text: "Here's what has my attention right now." },
-    { id: "focus", mood: "calm", text: "A few things I'm focused on at the moment." },
-  ],
   "/work": [
     { id: "intro", mood: "warm", text: "Selected work, across systems and interfaces." },
     { id: "projects", mood: "calm", text: "Take a look — each one tells its own story." },
@@ -52,10 +48,6 @@ export const fr: NarrationMap = {
   "/uses": [
     { id: "intro", mood: "warm", text: "Le setup que j'utilise vraiment au quotidien." },
     { id: "tools", mood: "focused", text: "Éditeur, langages, matériel, services." },
-  ],
-  "/now": [
-    { id: "intro", mood: "warm", text: "Voilà ce qui retient mon attention en ce moment." },
-    { id: "focus", mood: "calm", text: "Quelques choses sur lesquelles je me concentre." },
   ],
   "/work": [
     { id: "intro", mood: "warm", text: "Une sélection de projets, entre systèmes et interfaces." },

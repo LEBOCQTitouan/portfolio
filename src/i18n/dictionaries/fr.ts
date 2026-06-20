@@ -13,7 +13,6 @@ export const fr: Dictionary = {
   },
   footer: {
     uses: "Outils",
-    now: "Maintenant",
     designSystem: "Système de design",
     github: "GitHub",
     linkedin: "LinkedIn",
@@ -165,13 +164,7 @@ export const fr: Dictionary = {
   uses: {
     title: "Outils",
     metaDescription: "Les outils, le matériel et les logiciels que j'utilise au quotidien.",
-  },
-  now: {
-    title: "Maintenant",
-    metaDescription: "Sur quoi je me concentre en ce moment.",
-    lastUpdated: "Dernière mise à jour",
-    focusedOn: "Ce sur quoi je me concentre en ce moment :",
-    nowPageLabel: "page /now",
+    intro: "Le matériel que j'utilise vraiment — et pourquoi chacun mérite sa place.",
   },
   designSystem: {
     title: "Système de design",
