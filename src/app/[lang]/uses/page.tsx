@@ -5,6 +5,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { PAGE_TITLE } from "@/lib/transitions/names";
+import { getUses } from "@/core/domain/uses";
 
 export async function generateMetadata({
   params,
@@ -35,49 +36,35 @@ export async function generateMetadata({
   };
 }
 
-const categories = [
-  {
-    title: "Editor & Terminal",
-    items: ["VS Code", "Neovim", "Ghostty", "zsh + starship"],
-  },
-  {
-    title: "Languages & Tooling",
-    items: ["TypeScript", "Go", "Rust", "pnpm / npm"],
-  },
-  {
-    title: "Hardware",
-    items: ["MacBook Pro", "External display", "Mechanical keyboard"],
-  },
-  {
-    title: "Services",
-    items: ["Cloudflare", "GitHub", "Linear", "Figma"],
-  },
-];
-
 export default async function UsesPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dict = await getDictionary(lang);
+  const categories = getUses(lang);
 
   return (
     <section className="py-8">
       <MorphTitle name={PAGE_TITLE}>
         <h1 className="text-3xl font-bold tracking-tight">{dict.uses.title}</h1>
       </MorphTitle>
-      <p className="mt-2 text-muted" data-narrate="intro">
-        The tools I reach for day to day. (Edit this list.)
+      <p className="mt-2 max-w-2xl text-muted" data-narrate="intro">
+        {dict.uses.intro}
       </p>
-      <div className="mt-8 space-y-8" data-narrate="tools">
+      <div className="mt-8 space-y-10" data-narrate="tools">
         {categories.map((cat) => (
           <div key={cat.title}>
-            <h2 className="text-lg font-semibold tracking-tight">
-              {cat.title}
-            </h2>
-            <ul className="mt-2 list-disc pl-5 text-muted">
+            <h2 className="text-lg font-semibold tracking-tight">{cat.title}</h2>
+            <dl className="mt-3 space-y-2">
               {cat.items.map((item) => (
-                <li key={item}>{item}</li>
+                <div
+                  key={item.name}
+                  className="grid gap-x-6 gap-y-0.5 sm:grid-cols-[12rem_1fr]"
+                >
+                  <dt className="font-medium text-foreground">{item.name}</dt>
+                  <dd className="text-muted">{item.why}</dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </div>
         ))}
       </div>
