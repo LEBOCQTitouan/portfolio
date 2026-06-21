@@ -60,10 +60,11 @@ export default async function ProjectPage({
       <CaseHero
         project={project}
         labels={{ source: dict.work.source, liveDemo: dict.work.liveDemo }}
+        narrateHeader={project.narrate?.header}
       />
       <MetricStrip metrics={project.metrics} />
-      <div className="mt-8" data-narrate="project-body">
-        <Mdx source={project.content} />
+      <div className="mt-8">
+        <Mdx source={project.content} narrateBeats={project.narrate?.beats} />
       </div>
     </article>
   );
