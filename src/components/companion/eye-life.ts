@@ -55,3 +55,50 @@ export function blinkTransform(
     done: false,
   };
 }
+
+import type { Reaction } from "./reaction-state";
+
+/** Px the eyes travel toward the gaze vector (matches the old MAX_OFFSET). */
+export const EYE_GAZE_PX = 3;
+/** Curious saccade calibration. */
+export const SACCADE = { ampPx: 2.4, smooth: 0.16 } as const;
+/** Startle widen on poke (fraction added to lid scale, decays away). */
+export const STARTLE_AMP = 0.22;
+/** Eye scale while hovering the orb (a focused narrowing on the user). */
+export const FOCUS_SCALE = 0.72;
+
+/** Randomized idle cadence: one blink every 3–6s. */
+export function nextBlinkDelay(rand: () => number): number {
+  return 3000 + rand() * 3000;
+}
+
+/** ~10% of blinks are double-blinks. */
+export function wantsDoubleBlink(rand: () => number): boolean {
+  return rand() < 0.1;
+}
+
+/** Next micro-dart offset (px). Amplitude scales with `intensity`. */
+export function saccadeTarget(rand: () => number, intensity: number): { x: number; y: number } {
+  const ang = rand() * Math.PI * 2;
+  const mag = rand() * SACCADE.ampPx * intensity;
+  return { x: Math.cos(ang) * mag, y: Math.sin(ang) * mag * 0.7 };
+}
+
+/** Calmer eyes while actively scrolling (reading), wandering when idle. */
+export function saccadeIntensity(msSinceScroll: number): number {
+  return msSinceScroll < 1200 ? 0.35 : 1;
+}
+
+/** Blink only when the eyes are alertly open. */
+export function blinkAllowed(reaction: Reaction, shape: EyeShape): boolean {
+  if (shape === "closed" || shape === "angry") return false;
+  if (reaction === "asleep" || reaction === "sleeping" || reaction === "angry" || reaction === "annoyed") {
+    return false;
+  }
+  return true;
+}
+
+/** Steady-state eye scale from hover (startle is a separate transient pulse). */
+export function focusScale(hovering: boolean): number {
+  return hovering ? FOCUS_SCALE : 1;
+}

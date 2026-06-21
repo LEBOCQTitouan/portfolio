@@ -47,3 +47,74 @@ describe("blinkTransform", () => {
     expect(squint).toBeGreaterThan(open);
   });
 });
+
+import {
+  EYE_GAZE_PX, SACCADE, STARTLE_AMP, FOCUS_SCALE,
+  nextBlinkDelay, wantsDoubleBlink, saccadeTarget, saccadeIntensity,
+  blinkAllowed, focusScale,
+} from "./eye-life";
+
+const seq = (values: number[]) => {
+  let i = 0;
+  return () => values[i++ % values.length];
+};
+
+describe("nextBlinkDelay", () => {
+  it("stays within 3–6s for the rand range", () => {
+    expect(nextBlinkDelay(() => 0)).toBeCloseTo(3000, 0);
+    expect(nextBlinkDelay(() => 0.999)).toBeLessThan(6000);
+    expect(nextBlinkDelay(() => 0.999)).toBeGreaterThanOrEqual(3000);
+  });
+});
+
+describe("wantsDoubleBlink", () => {
+  it("fires only in the low ~10% of the rand range", () => {
+    expect(wantsDoubleBlink(() => 0.05)).toBe(true);
+    expect(wantsDoubleBlink(() => 0.5)).toBe(false);
+  });
+});
+
+describe("saccadeTarget", () => {
+  it("scales amplitude with intensity (reading < idle)", () => {
+    const reading = saccadeTarget(seq([0, 1]), 0.35);
+    const idle = saccadeTarget(seq([0, 1]), 1);
+    expect(Math.hypot(idle.x, idle.y)).toBeGreaterThan(Math.hypot(reading.x, reading.y));
+  });
+
+  it("stays within the amplitude envelope", () => {
+    for (let i = 0; i < 50; i++) {
+      const r = seq([i / 50, ((i * 7) % 50) / 50]);
+      const t = saccadeTarget(r, 1);
+      expect(Math.hypot(t.x, t.y)).toBeLessThanOrEqual(SACCADE.ampPx + 1e-6);
+    }
+  });
+});
+
+describe("saccadeIntensity", () => {
+  it("is calmer right after a scroll than when idle", () => {
+    expect(saccadeIntensity(200)).toBeLessThan(saccadeIntensity(5000));
+    expect(saccadeIntensity(5000)).toBe(1);
+  });
+});
+
+describe("blinkAllowed", () => {
+  it("blinks only in alert-open states", () => {
+    expect(blinkAllowed("active", "open")).toBe(true);
+    expect(blinkAllowed("active", "happy")).toBe(true);
+    expect(blinkAllowed("active", "squint")).toBe(true); // focused mood
+    expect(blinkAllowed("sleepy", "open")).toBe(true);
+    expect(blinkAllowed("annoyed", "squint")).toBe(false);
+    expect(blinkAllowed("angry", "angry")).toBe(false);
+    expect(blinkAllowed("asleep", "closed")).toBe(false);
+    expect(blinkAllowed("sleeping", "closed")).toBe(false);
+  });
+});
+
+describe("focusScale", () => {
+  it("narrows on hover, rests otherwise", () => {
+    expect(focusScale(true)).toBeCloseTo(FOCUS_SCALE, 3);
+    expect(focusScale(false)).toBe(1);
+    expect(EYE_GAZE_PX).toBeGreaterThan(0);
+    expect(STARTLE_AMP).toBeGreaterThan(0);
+  });
+});
