@@ -380,15 +380,16 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; z-index: 5;
 }
 .companion-eye {
-  width: 9px; height: 15px; border-radius: 50%; background: #15202e;
+  width: 9px; height: 15px; display: flex; align-items: center; justify-content: center;
   transform: translate(var(--gx, 0), var(--gy, 0));
 }
-.companion-eyes[data-shape="squint"] .companion-eye { height: 5px; border-radius: 4px; }
-.companion-eyes[data-shape="happy"] .companion-eye { height: 7px; width: 12px; background: transparent; border-bottom: 3px solid #15202e; border-radius: 0 0 12px 12px; }
-.companion-eyes[data-shape="closed"] .companion-eye { height: 3px; border-radius: 3px; }
-.companion-eyes[data-shape="angry"] .companion-eye { height: 4px; border-radius: 3px; }
-.companion-eyes[data-shape="angry"] .companion-eye:first-child { transform: translate(var(--gx,0), var(--gy,0)) rotate(20deg); }
-.companion-eyes[data-shape="angry"] .companion-eye:last-child { transform: translate(var(--gx,0), var(--gy,0)) rotate(-20deg); }
+.companion-eye__lid { width: 9px; height: 15px; border-radius: 50%; background: #15202e; }
+.companion-eyes[data-shape="squint"] .companion-eye__lid { height: 5px; border-radius: 4px; }
+.companion-eyes[data-shape="happy"] .companion-eye__lid { height: 7px; width: 12px; background: transparent; border-bottom: 3px solid #15202e; border-radius: 0 0 12px 12px; }
+.companion-eyes[data-shape="closed"] .companion-eye__lid { height: 3px; border-radius: 3px; }
+.companion-eyes[data-shape="angry"] .companion-eye__lid { height: 4px; border-radius: 3px; }
+.companion-eyes[data-shape="angry"] .companion-eye:first-child .companion-eye__lid { transform: rotate(20deg); }
+.companion-eyes[data-shape="angry"] .companion-eye:last-child .companion-eye__lid { transform: rotate(-20deg); }
 
 /* Glassmorphism + motion only when allowed */
 @media (prefers-reduced-motion: no-preference) {
@@ -403,11 +404,6 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   .companion-orb[data-reaction="sleepy"] .companion-orb__blob,
   .companion-orb[data-reaction="asleep"] .companion-orb__blob,
   .companion-orb[data-reaction="sleeping"] .companion-orb__blob { animation-duration: 12s; opacity: 0.5; }
-  .companion-eyes[data-shape="open"] .companion-eye { animation: eye-blink 5.5s infinite; }
-  @keyframes eye-blink {
-    0%, 92%, 100% { transform: translate(var(--gx,0), var(--gy,0)) scaleY(1); }
-    96% { transform: translate(var(--gx,0), var(--gy,0)) scaleY(0.1); }
-  }
   @keyframes orb-breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
   @keyframes orb-wobble { 0%,100%{border-radius:50%} 33%{border-radius:54% 46% 52% 48%} 66%{border-radius:47% 53% 48% 52%} }
   @keyframes orb-flow1 { 0%,100%{transform:translate(-10px,8px) scale(1)} 50%{transform:translate(14px,-9px) scale(1.3)} }
