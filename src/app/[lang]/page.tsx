@@ -5,6 +5,7 @@ import { Hero } from "@/components/landing/hero";
 import { PillarCard } from "@/components/landing/pillar-card";
 import { ProjectCard } from "@/components/project-card";
 import { PostCard } from "@/components/post-card";
+import { GlowGroup } from "@/components/glow-group";
 import { ContactCta } from "@/components/landing/contact-cta";
 import { getFeaturedProjects, getAllProjects } from "@/composition/server";
 import { getAllPosts } from "@/composition/server";
@@ -70,9 +71,11 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             <Link href={localizedHref(lang, "/work")} className="text-sm text-accent hover:underline">{dict.home.viewAll}</Link>
           </div>
           <div className="mt-2">
-            {projects.map((project) => (
-              <ProjectCard key={project.slug} project={project} lang={lang} />
-            ))}
+            <GlowGroup>
+              {projects.map((project) => (
+                <ProjectCard key={project.slug} project={project} lang={lang} />
+              ))}
+            </GlowGroup>
           </div>
         </section>
       )}
@@ -84,9 +87,11 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             <Link href={localizedHref(lang, "/blog")} className="text-sm text-accent hover:underline">{dict.home.readAll}</Link>
           </div>
           <div className="mt-2">
-            {posts.map((post) => (
-              <PostCard key={post.slug} post={post} />
-            ))}
+            <GlowGroup>
+              {posts.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </GlowGroup>
           </div>
         </section>
       )}

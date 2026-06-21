@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { PostMeta } from "@/core/domain/post";
 import { PostCard } from "@/components/post-card";
+import { GlowGroup } from "@/components/glow-group";
 import { filterPosts } from "@/core/domain/search";
 import { useT } from "@/i18n/use-t";
 
@@ -62,7 +63,11 @@ export function BlogExplorer({
         {filtered.length === 0 ? (
           <p className="text-muted">{t.blog.noMatch}</p>
         ) : (
-          filtered.map((post) => <PostCard key={post.slug} post={post} />)
+          <GlowGroup>
+            {filtered.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </GlowGroup>
         )}
       </div>
     </div>

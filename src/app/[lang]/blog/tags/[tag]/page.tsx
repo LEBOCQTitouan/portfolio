@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllTags, getPostsByTag } from "@/composition/server";
 import { PostCard } from "@/components/post-card";
+import { GlowGroup } from "@/components/glow-group";
 import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
@@ -56,9 +57,11 @@ export default async function TagPage({
         <h1 className="mt-1 text-3xl font-bold tracking-tight">#{tag}</h1>
       </MorphTitle>
       <div className="mt-8">
-        {posts.map((post) => (
-          <PostCard key={post.slug} post={post} />
-        ))}
+        <GlowGroup>
+          {posts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </GlowGroup>
       </div>
     </section>
   );
