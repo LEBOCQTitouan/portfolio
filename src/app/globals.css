@@ -422,7 +422,9 @@ body:has([data-page-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent
   .card-glow:hover .card-pills > *,
   .card-glow:focus-within .card-pills > *,
   .card-glow:hover .card-subject,
-  .card-glow:hover .card-subject .card-dot {
+  .card-glow:focus-within .card-subject,
+  .card-glow:hover .card-subject .card-dot,
+  .card-glow:focus-within .card-subject .card-dot {
     transition: none !important;
   }
 }
