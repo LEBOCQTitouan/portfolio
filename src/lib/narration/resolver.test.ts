@@ -9,7 +9,14 @@ describe("getNarration", () => {
 
   it("resolves any /work/<slug> to the project template", () => {
     const lines = getNarration("/work/ledger-engine", "en");
-    expect(lines.map((l) => l.id)).toEqual(["project-header", "project-body"]);
+    expect(lines.map((l) => l.id)).toEqual([
+      "project-header", "section-1", "section-2", "section-3", "section-last",
+    ]);
+  });
+
+  it("gives /work/<slug> the focused→calm→warm mood arc", () => {
+    const lines = getNarration("/work/x", "en");
+    expect(lines.map((l) => l.mood)).toEqual(["warm", "focused", "calm", "focused", "warm"]);
   });
 
   it("treats /work (index) as its own route, not a slug", () => {
@@ -33,7 +40,9 @@ describe("getNarration", () => {
 
   it("strips /fr/ prefix from deeper paths", () => {
     const lines = getNarration("/fr/work/my-project", "fr");
-    expect(lines.map((l) => l.id)).toEqual(["project-header", "project-body"]);
+    expect(lines.map((l) => l.id)).toEqual([
+      "project-header", "section-1", "section-2", "section-3", "section-last",
+    ]);
   });
 
   it("returns empty array for unknown locale-prefixed route", () => {

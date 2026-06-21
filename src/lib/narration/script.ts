@@ -26,8 +26,11 @@ export const en: NarrationMap = {
     { id: "projects", mood: "calm", text: "Take a look — each one tells its own story." },
   ],
   "/work/[slug]": [
-    { id: "project-header", mood: "focused", text: "Here's the shape of this one." },
-    { id: "project-body", mood: "calm", text: "And here's how it actually came together." },
+    { id: "project-header", mood: "warm", text: "Pull up a chair — every project here is a small story." },
+    { id: "section-1", mood: "focused", text: "It always starts with something quietly broken." },
+    { id: "section-2", mood: "calm", text: "So I made a bet on how to fix it. Here's the bet." },
+    { id: "section-3", mood: "focused", text: "Every bet costs something. Here's what this one cost." },
+    { id: "section-last", mood: "warm", text: "And here's how it paid off." },
   ],
   "/design-system": [
     { id: "problem", mood: "focused", text: "The system behind the site — here's how it thinks." },
@@ -62,8 +65,11 @@ export const fr: NarrationMap = {
     { id: "projects", mood: "calm", text: "Jette un œil — chacun raconte sa propre histoire." },
   ],
   "/work/[slug]": [
-    { id: "project-header", mood: "focused", text: "Voilà la forme de celui-ci." },
-    { id: "project-body", mood: "calm", text: "Et voilà comment ça s'est vraiment construit." },
+    { id: "project-header", mood: "warm", text: "Installe-toi — chaque projet ici raconte une petite histoire." },
+    { id: "section-1", mood: "focused", text: "Tout commence par quelque chose de discrètement cassé." },
+    { id: "section-2", mood: "calm", text: "Alors j'ai fait un pari sur la façon de le réparer. Voici le pari." },
+    { id: "section-3", mood: "focused", text: "Tout pari a un coût. Voici ce que celui-ci a coûté." },
+    { id: "section-last", mood: "warm", text: "Et voilà comment ça a payé." },
   ],
   "/design-system": [
     { id: "problem", mood: "focused", text: "Le système derrière le site — voici comment il raisonne." },
