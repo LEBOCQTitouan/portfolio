@@ -8,5 +8,6 @@ export const site = {
   social: {
     github: "https://github.com/LEBOCQTitouan",
     linkedin: "https://www.linkedin.com/in/titouan-lebocq/",
+    dotfiles: "https://github.com/LEBOCQTitouan/dotfiles",
   },
 } as const;

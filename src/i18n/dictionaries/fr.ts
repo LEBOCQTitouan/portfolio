@@ -163,8 +163,9 @@ export const fr: Dictionary = {
   },
   uses: {
     title: "Outils",
-    metaDescription: "Les outils, le matériel et les logiciels que j'utilise au quotidien.",
+    metaDescription: "Les outils et logiciels que j'utilise au quotidien.",
     intro: "Le matériel que j'utilise vraiment — et pourquoi chacun mérite sa place.",
+    dotfilesLabel: "Mes dotfiles",
   },
   designSystem: {
     title: "Système de design",
