@@ -19,7 +19,7 @@ export function CaseHero({
       {...(narrateHeader ? { "data-narrate-text": narrateHeader } : {})}
     >
       <div className="flex items-center gap-3">
-        <CategoryBadge category={project.category} />
+        <CategoryBadge category={project.category} accent />
         <span className="text-sm text-muted">{project.role}</span>
       </div>
       <MorphTitle name={workTitleName(project.slug)}>

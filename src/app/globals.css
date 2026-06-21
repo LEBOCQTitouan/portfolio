@@ -405,11 +405,24 @@ body:has([data-page-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent
   color: var(--accent);
 }
 
+/* subject badge on the hovered/focused row — blooms with the pills */
+.card-glow:hover .card-subject,
+.card-glow:focus-within .card-subject {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.card-glow:hover .card-subject .card-dot,
+.card-glow:focus-within .card-subject .card-dot {
+  background: var(--accent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card-glow::before,
   .card-edge-light,
   .card-glow:hover .card-pills > *,
-  .card-glow:focus-within .card-pills > * {
+  .card-glow:focus-within .card-pills > *,
+  .card-glow:hover .card-subject,
+  .card-glow:hover .card-subject .card-dot {
     transition: none !important;
   }
 }
