@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useT } from "@/i18n/use-t";
-import { buttonClass } from "@/components/ui/styles";
+import { buttonClass, panelClass } from "@/components/ui/styles";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -37,7 +37,7 @@ export function Newsletter() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-card border border-border bg-card p-5">
+    <form onSubmit={onSubmit} className={panelClass()}>
       <p className="font-semibold tracking-tight">{t.newsletter.title}</p>
       <p className="mt-1 text-sm text-muted">{t.newsletter.body}</p>
       <div className="mt-3 flex flex-wrap gap-2">

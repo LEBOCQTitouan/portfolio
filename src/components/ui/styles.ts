@@ -47,3 +47,30 @@ export type PillTone = keyof typeof pillTones;
 export function pillClass(tone: PillTone = "muted", opts?: { interactive?: boolean; extra?: string }): string {
   return cn(pillBase, pillTones[tone], opts?.interactive && pillHover[tone], opts?.extra);
 }
+
+/* ── Surfaces: Card (interactive box) / Panel (static container) ──── */
+
+const cardBase = cn(
+  "block rounded-card border border-border bg-card p-5",
+  "transition-[transform,border-color] duration-[var(--dur-ui)] ease-[var(--ease-standard)]",
+  "hover:border-accent/50 motion-safe:hover:-translate-y-0.5",
+);
+
+export function cardClass(extra?: string): string {
+  return cn(cardBase, extra);
+}
+
+export function panelClass(opts?: {
+  variant?: "default" | "accent-soft";
+  padding?: string;
+  extra?: string;
+}): string {
+  const variant = opts?.variant ?? "default";
+  const padding = opts?.padding ?? "p-6";
+  return cn(
+    "rounded-panel border",
+    variant === "accent-soft" ? "border-accent/15 bg-[var(--accent-soft)]" : "border-border bg-card",
+    padding,
+    opts?.extra,
+  );
+}

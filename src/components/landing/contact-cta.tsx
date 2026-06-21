@@ -1,12 +1,12 @@
 import { site } from "@/core/domain/site";
 import type { Dictionary } from "@/i18n/dictionaries/en";
-import { buttonClass } from "@/components/ui/styles";
+import { buttonClass, panelClass } from "@/components/ui/styles";
 
 export function ContactCta({ t }: { t: Dictionary["contact"] }) {
   return (
     <section
       data-narrate="contact"
-      className="my-8 rounded-panel border border-border bg-card px-6 py-12 text-center"
+      className={panelClass({ padding: "px-6 py-12", extra: "my-8 text-center" })}
     >
       <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
         {t.title}
