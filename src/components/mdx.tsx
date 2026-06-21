@@ -3,6 +3,7 @@ import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { createHighlighterCore } from "shiki/core";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 import rehypeSlug from "rehype-slug";
+import { rehypeNarrateSections } from "@/lib/mdx/rehype-narrate-sections";
 import remarkGfm from "remark-gfm";
 import type { MDXComponents } from "mdx/types";
 import { Pre } from "@/components/pre";
@@ -33,7 +34,7 @@ function getHighlighter() {
   return highlighter;
 }
 
-export async function Mdx({ source }: { source: string }) {
+export async function Mdx({ source, narrateBeats }: { source: string; narrateBeats?: string[] }) {
   const hl = await getHighlighter();
   return (
     <div className="prose-content">
@@ -45,6 +46,7 @@ export async function Mdx({ source }: { source: string }) {
             remarkPlugins: [remarkGfm],
             rehypePlugins: [
               rehypeSlug,
+              [rehypeNarrateSections, { texts: narrateBeats ?? [] }],
               [
                 rehypeShikiFromHighlighter,
                 hl,
