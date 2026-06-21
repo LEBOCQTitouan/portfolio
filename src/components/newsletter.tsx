@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useT } from "@/i18n/use-t";
+import { buttonClass } from "@/components/ui/styles";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -36,7 +37,7 @@ export function Newsletter() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-xl border border-border bg-card p-5">
+    <form onSubmit={onSubmit} className="rounded-card border border-border bg-card p-5">
       <p className="font-semibold tracking-tight">{t.newsletter.title}</p>
       <p className="mt-1 text-sm text-muted">{t.newsletter.body}</p>
       <div className="mt-3 flex flex-wrap gap-2">
@@ -47,12 +48,12 @@ export function Newsletter() {
           onChange={(e) => setEmail(e.target.value)}
           aria-label={t.newsletter.emailLabel}
           placeholder={t.newsletter.placeholder}
-          className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm"
+          className="min-w-0 flex-1 rounded-input border border-border bg-background px-3 py-2 text-sm transition-[border-color,box-shadow] duration-[var(--dur-micro)] hover:border-accent/40 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
         />
         <button
           type="submit"
           disabled={status === "loading"}
-          className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:opacity-90 disabled:opacity-60"
+          className={buttonClass("primary", "disabled:opacity-60 disabled:pointer-events-none")}
         >
           {status === "loading" ? "…" : t.newsletter.submit}
         </button>

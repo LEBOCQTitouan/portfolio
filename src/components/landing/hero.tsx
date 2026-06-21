@@ -4,6 +4,8 @@ import type { Locale } from "@/core/domain/locale";
 import { localizedHref } from "@/i18n/localized-href";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { PAGE_TITLE } from "@/lib/transitions/names";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { buttonClass } from "@/components/ui/styles";
 
 // Aura hero: the orb (rendered by <Companion/>) sits behind this headline as a
 // large ambient aura, then shrinks into the traveling companion on scroll.
@@ -12,9 +14,7 @@ export function Hero({ t, lang }: { t: Dictionary["hero"]; lang: Locale }) {
   return (
     <section data-orb-home className="relative isolate py-20 sm:py-28">
       <div className="relative z-10" data-narrate="hero">
-        <p className="text-sm font-semibold uppercase tracking-wide text-accent">
-          {t.eyebrow}
-        </p>
+        <Eyebrow>{t.eyebrow}</Eyebrow>
         <MorphTitle name={PAGE_TITLE}>
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">
             {t.title}
@@ -24,16 +24,10 @@ export function Hero({ t, lang }: { t: Dictionary["hero"]; lang: Locale }) {
           {t.subtitle}
         </p>
         <div className="mt-8 flex flex-wrap gap-3 text-sm">
-          <Link
-            href={localizedHref(lang, "/work")}
-            className="rounded-md bg-foreground px-4 py-2 font-medium text-background transition hover:opacity-90"
-          >
+          <Link href={localizedHref(lang, "/work")} className={buttonClass("primary")}>
             {t.viewWork}
           </Link>
-          <Link
-            href={localizedHref(lang, "/blog")}
-            className="rounded-md border border-border px-4 py-2 font-medium transition hover:text-accent"
-          >
+          <Link href={localizedHref(lang, "/blog")} className={buttonClass("secondary")}>
             {t.readWriting}
           </Link>
         </div>

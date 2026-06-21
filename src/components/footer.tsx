@@ -14,10 +14,10 @@ export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"
     <footer className="flex flex-col gap-3 border-t border-border py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
       <span>© {year} Titouan Lebocq</span>
       <nav className="flex gap-4">
-        <Link href={localizedHref(lang, "/uses")} className="transition-colors hover:text-foreground">
+        <Link href={localizedHref(lang, "/uses")} className="link-underline transition-colors hover:text-foreground">
           {t.uses}
         </Link>
-        <Link href={localizedHref(lang, "/design-system")} className="transition-colors hover:text-foreground">
+        <Link href={localizedHref(lang, "/design-system")} className="link-underline transition-colors hover:text-foreground">
           {t.designSystem}
         </Link>
       </nav>
@@ -28,7 +28,7 @@ export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"
             href={social.href}
             target="_blank"
             rel="noreferrer"
-            className="transition-colors hover:text-foreground"
+            className="link-underline transition-colors hover:text-foreground"
           >
             {social.label}
           </a>

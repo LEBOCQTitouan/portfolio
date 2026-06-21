@@ -6,6 +6,7 @@ import { localizedHref } from "@/i18n/localized-href";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { workTitleName } from "@/lib/transitions/names";
 import { resolveSubject } from "@/core/domain/subject";
+import { pillClass } from "@/components/ui/styles";
 
 export function ProjectCard({ project, lang }: { project: Project; lang: Locale }) {
   return (
@@ -30,10 +31,7 @@ export function ProjectCard({ project, lang }: { project: Project; lang: Locale 
       {project.stack.length > 0 && (
         <ul className="card-pills mt-3 flex flex-wrap gap-2">
           {project.stack.map((tech) => (
-            <li
-              key={tech}
-              className="rounded-full border border-border px-2 py-0.5 text-xs text-muted"
-            >
+            <li key={tech} className={pillClass("muted")}>
               {tech}
             </li>
           ))}

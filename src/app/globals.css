@@ -24,6 +24,26 @@
   --glow-r: 240px;
   --card-edge: 2px;
   --glow-neutral: rgba(80, 86, 100, 0.16);
+
+  /* ── Motion vocabulary — three tiers + three eases ───────────────
+     Every transition/animation routes through these so timing reads as
+     one hand. micro = hover/press feedback · ui = state/glow changes ·
+     page = entrances & view-transitions. standard = the authored page
+     curve (shared with view transitions) · out = expo-out for reveals ·
+     spring = the slosh curve, for press/pop overshoot. */
+  --dur-micro: 150ms;
+  --dur-ui: 300ms;
+  --dur-page: 520ms;
+  --ease-standard: cubic-bezier(0.6, 0.02, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.3, 0.64, 1);
+
+  /* ── Radius scale — five named roles, no raw px in components ──── */
+  --radius-code: 0.25rem;   /* inline code, chips */
+  --radius-input: 0.5rem;   /* inputs, small controls */
+  --radius-card: 0.75rem;   /* cards, bubbles */
+  --radius-panel: 1rem;     /* large surfaces — CTA, case hero */
+  --radius-pill: 9999px;    /* pills, round buttons */
 }
 
 .dark {
@@ -92,6 +112,52 @@
   --color-ring: var(--ring);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-dragonsteel), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Type scale — named roles generate text-* utilities ───────────
+   size + line-height + tracking + weight travel together so a heading
+   is one class (text-h1), not a copy-pasted "text-3xl font-bold
+   tracking-tight" string. Primitives (Heading/PageHeader/Eyebrow)
+   consume these; .prose-content (below) is derived from the same set. */
+@theme {
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.08em;
+  --text-eyebrow--font-weight: 600;
+
+  --text-meta: 0.875rem;
+  --text-meta--line-height: 1.45;
+
+  --text-lede: 1.125rem;
+  --text-lede--line-height: 1.6;
+
+  --text-h3: 1.125rem;
+  --text-h3--line-height: 1.4;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 600;
+
+  --text-h2: 1.25rem;
+  --text-h2--line-height: 1.3;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 600;
+
+  --text-h1: 1.875rem;
+  --text-h1--line-height: 1.15;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 700;
+
+  --text-display: 2.25rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 700;
+
+  /* Radius scale → rounded-code / rounded-input / rounded-card /
+     rounded-panel / rounded-pill utilities (mirror :root values). */
+  --radius-code: 0.25rem;
+  --radius-input: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-panel: 1rem;
+  --radius-pill: 9999px;
 }
 
 body {
@@ -173,18 +239,21 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 .prose-content {
   line-height: 1.75;
 }
+/* Long-form heads sit one notch above the UI scale — articles read
+   larger than chrome — but share its weights and tracking. */
 .prose-content h2 {
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 .prose-content h3 {
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+  font-size: var(--text-h3); /* 1.125rem — same as UI h3 */
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 .prose-content p,
 .prose-content ul,
@@ -201,7 +270,7 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   text-underline-offset: 2px;
 }
 .prose-content :not(pre) > code {
-  border-radius: 4px;
+  border-radius: var(--radius-code);
   border: 1px solid var(--border);
   padding: 0.1rem 0.3rem;
   font-size: 0.875em;
@@ -218,6 +287,36 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 }
 .dark .prose-content pre {
   background: var(--shiki-dark-bg);
+}
+
+/* ── Link underline-grow — shared nav/footer affordance ─────────── */
+/* An accent rule that wipes in from the left on hover, and sits full
+   when the link is the current page (aria-current). One recipe so every
+   text link animates the same way. */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-micro) var(--ease-standard);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after,
+.link-underline[aria-current]::after {
+  transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .link-underline::after {
+    transition: none;
+  }
 }
 
 /* Visible keyboard focus */
@@ -240,7 +339,7 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
     }
   }
   .animate-in {
-    animation: fade-in-up 0.5s ease-out both;
+    animation: fade-in-up var(--dur-page) var(--ease-out) both;
   }
 }
 
@@ -263,7 +362,7 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
     transparent 70%
   );
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--dur-ui) var(--ease-standard);
 }
 [data-glow-group][data-on] .card-glow::before { opacity: 1; }
 .card-glow[data-hot]::before,
@@ -294,7 +393,7 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
     linear-gradient(#000, #000) top / 100% var(--card-edge) no-repeat,
     linear-gradient(#000, #000) bottom / 100% var(--card-edge) no-repeat;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity var(--dur-ui) var(--ease-standard);
 }
 .card-glow:hover .card-edge-light,
 .card-glow:focus-within .card-edge-light { opacity: 1; }
@@ -436,7 +535,7 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 .companion-bubble {
   max-width: 220px;
   padding: 10px 13px;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   font-size: 13px;
   line-height: 1.5;
   background: var(--card);
@@ -451,7 +550,7 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   z-index: 41;
   width: 30px;
   height: 30px;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--muted);
@@ -469,7 +568,7 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
 }
 ::view-transition-old(page-aura),
 ::view-transition-new(page-aura) {
-  animation-timing-function: cubic-bezier(0.6, 0.02, 0.2, 1);
+  animation-timing-function: var(--ease-standard);
 }
 
 /* The heading morph: softened with a brief blur to hide pixel interpolation. */
