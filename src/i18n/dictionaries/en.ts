@@ -11,6 +11,7 @@ export const en = {
   },
   footer: {
     uses: "Uses",
+    now: "Now",
     designSystem: "Design system",
     github: "GitHub",
     linkedin: "LinkedIn",
@@ -164,6 +165,13 @@ export const en = {
     metaDescription: "The tools and software I reach for day to day.",
     intro: "The kit I actually reach for — and why each one earns its place.",
     dotfilesLabel: "My dotfiles",
+  },
+  now: {
+    title: "Now",
+    metaDescription: "What I'm focused on right now.",
+    updatedPrefix: "Updated",
+    focusedOn: "What I'm focused on at the moment:",
+    nowPageLabel: "/now page",
   },
   designSystem: {
     title: "Design system",
