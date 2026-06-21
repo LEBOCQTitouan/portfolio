@@ -1,13 +1,13 @@
 // Local minimal hast types — @types/hast is not installed; we only touch a few
 // fields, so a structural subset keeps the plugin typed without a new dependency.
-type HastNode = {
+export type HastNode = {
   type: string;
   tagName?: string;
   properties?: Record<string, unknown>;
   children?: HastNode[];
   [key: string]: unknown;
 };
-type HastRoot = { type: "root"; children: HastNode[] };
+export type HastRoot = { type: "root"; children: HastNode[] };
 
 /**
  * Groups each top-level `<h2>` and its following siblings into a
