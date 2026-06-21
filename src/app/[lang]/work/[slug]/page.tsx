@@ -56,7 +56,11 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   return (
-    <article className="py-8" data-subject={resolveSubject({ category: project.category })}>
+    <article
+      className="py-8"
+      data-subject={resolveSubject({ category: project.category })}
+      data-page-subject={resolveSubject({ category: project.category })}
+    >
       <CaseHero
         project={project}
         labels={{ source: dict.work.source, liveDemo: dict.work.liveDemo }}

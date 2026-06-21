@@ -65,7 +65,11 @@ export default async function PostPage({
   if (!post) notFound();
 
   return (
-    <article className="py-8" data-subject={resolveSubject({ tags: post.tags })}>
+    <article
+      className="py-8"
+      data-subject={resolveSubject({ tags: post.tags })}
+      data-page-subject={resolveSubject({ tags: post.tags })}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
