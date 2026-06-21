@@ -18,6 +18,10 @@ export type EyeLifeInputs = {
   pokeNonce: number;
   gaze: { x: number; y: number };
   reducedMotion: boolean;
+  /** True when the Orb is mounted (lines.length > 0). Included in the rAF effect
+   *  deps so the loop re-binds to freshly-mounted eye nodes after the Orb unmounts
+   *  on no-narration routes (e.g. /blog) and remounts on the way back. */
+  orbMounted: boolean;
 };
 
 const now = () => (typeof performance !== "undefined" ? performance.now() : Date.now());
@@ -45,7 +49,12 @@ export function useEyeLife(inputs: EyeLifeInputs) {
     if (!container) return;
     const wraps = Array.from(container.querySelectorAll<HTMLElement>(".companion-eye"));
     const lids = Array.from(container.querySelectorAll<HTMLElement>(".companion-eye__lid"));
-    if (wraps.length === 0 || lids.length === 0) return;
+    if (wraps.length === 0 || lids.length === 0) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[useEyeLife] no .companion-eye/.companion-eye__lid nodes in containerRef; eyes will not animate");
+      }
+      return;
+    }
 
     let raf = 0;
     let sx = 0, sy = 0; // eased saccade offset (px)
@@ -126,6 +135,9 @@ export function useEyeLife(inputs: EyeLifeInputs) {
     };
     // Re-create the loop only when the binding context changes; live values are
     // read through `ref`. `shape`/`reaction`/`gaze`/`hovering` deliberately omitted.
+    // `orbMounted` is included so the effect tears down and re-runs when the Orb
+    // unmounts/remounts across routes, re-querying the fresh eye nodes — same reason
+    // the spring loop in companion.tsx includes it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputs.reducedMotion, inputs.containerRef]);
+  }, [inputs.reducedMotion, inputs.containerRef, inputs.orbMounted]);
 }

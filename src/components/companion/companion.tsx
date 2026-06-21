@@ -220,6 +220,7 @@ export function Companion() {
     pokeNonce,
     gaze,
     reducedMotion,
+    orbMounted,
   });
 
   if (lines.length === 0) return null;
