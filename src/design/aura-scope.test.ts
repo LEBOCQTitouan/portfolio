@@ -17,8 +17,10 @@ describe("aura/companion subject is page-scoped, not card-scoped", () => {
   });
 
   it("every --subject-accent lift rule keys off data-page-subject", () => {
-    const lift = (css.match(/^body:has\([^)]*\)\s*\{[^}]*--subject-accent[^}]*\}/gm) ?? [])
-      .concat(css.match(/^\.dark body:has\([^)]*\)\s*\{[^}]*--subject-accent[^}]*\}/gm) ?? []);
+    const lift = [
+      ...(css.match(/^body:has\([^)]*\)\s*\{[^}]*--subject-accent[^}]*\}/gm) ?? []),
+      ...(css.match(/^\.dark body:has\([^)]*\)\s*\{[^}]*--subject-accent[^}]*\}/gm) ?? []),
+    ];
     expect(lift.length).toBeGreaterThanOrEqual(3);
     for (const r of lift) {
       expect(r).toContain("data-page-subject");
