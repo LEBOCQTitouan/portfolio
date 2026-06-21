@@ -1,3 +1,5 @@
+import type { Reaction } from "./reaction-state";
+
 /**
  * Pure, deterministic helpers for the companion's eye "life" (blink, saccades,
  * reactivity). The hook (use-eye-life.ts) runs these inside a requestAnimationFrame
@@ -55,8 +57,6 @@ export function blinkTransform(
     done: false,
   };
 }
-
-import type { Reaction } from "./reaction-state";
 
 /** Px the eyes travel toward the gaze vector (matches the old MAX_OFFSET). */
 export const EYE_GAZE_PX = 3;

@@ -71,6 +71,7 @@ describe("wantsDoubleBlink", () => {
   it("fires only in the low ~10% of the rand range", () => {
     expect(wantsDoubleBlink(() => 0.05)).toBe(true);
     expect(wantsDoubleBlink(() => 0.5)).toBe(false);
+    expect(wantsDoubleBlink(() => 0.1)).toBe(false);
   });
 });
 
@@ -94,6 +95,8 @@ describe("saccadeIntensity", () => {
   it("is calmer right after a scroll than when idle", () => {
     expect(saccadeIntensity(200)).toBeLessThan(saccadeIntensity(5000));
     expect(saccadeIntensity(5000)).toBe(1);
+    expect(saccadeIntensity(1200)).toBe(1);
+    expect(saccadeIntensity(1199)).toBe(0.35);
   });
 });
 
