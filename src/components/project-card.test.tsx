@@ -37,4 +37,15 @@ describe("ProjectCard", () => {
     render(<ProjectCard project={project} lang="en" />);
     expect(screen.getByText(/systems/i)).toBeInTheDocument();
   });
+
+  it("scopes the subject and exposes glow hooks", () => {
+    const { container } = render(<ProjectCard project={project} lang="en" />);
+    const article = container.querySelector("article")!;
+    expect(article).toHaveClass("card-glow");
+    expect(article).toHaveAttribute("data-glow-row");
+    expect(article).toHaveAttribute("data-subject", "systems"); // category "systems"
+    const edge = article.querySelector(".card-edge-light")!;
+    expect(edge).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelector("ul.card-pills")).not.toBeNull();
+  });
 });
