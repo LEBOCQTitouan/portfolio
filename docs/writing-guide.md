@@ -176,3 +176,35 @@ through the whole system:
 That single week of real work demonstrates all three AI angles **in priority
 order**, proves the craft/systems moat, and is fully authentic because it was
 lived. That is the shape to aim for every time.
+
+---
+
+## 8. Companion narration on case studies
+
+The orb narrates a `/work` case study section-by-section. You control it from one
+optional frontmatter block — no anchors, no wrappers, no mood-picking.
+
+```yaml
+narrate:                                    # entire block optional
+  header: "Realtime Sync. The promise: your edits never collide, never vanish."
+  beats:                                    # map top-to-bottom onto your ## sections
+    - "Last-write-wins quietly ate people's work — nobody noticed until it was gone."
+    - "So I bet on CRDTs: merge by construction, no central referee, no lock."
+    - "Now it's zero lost edits in prod, and it just works on a plane."
+```
+
+Rules:
+- **Headings define beats.** Each `## ` section becomes one orb line; `beats` map
+  onto them in order. Content before the first `##` is unnarrated lead.
+- **Want a demo to be its own beat?** Give it its own `## heading`.
+- **Partial is fine.** Fewer beats than sections → the rest fall back to the
+  generic arc. Omit `narrate` entirely → fully generic. Moods are assigned
+  automatically (focused→calm→warm).
+
+### Two flavors, one file
+
+A case study can be **text-led** (prose under each heading) or **demo-led** (live
+components, code blocks, animations placed under the headings). Both are the *same
+file shape and the same narration* — the only difference is how much you put under
+each `##`. There is no "type" to choose: drop a `<Demo/>` under a heading and it
+becomes part of that beat.
