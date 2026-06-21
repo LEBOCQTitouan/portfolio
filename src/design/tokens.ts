@@ -60,7 +60,10 @@ export const TOKENS: Record<SubjectId, SubjectTokens> = {
   ai: {
     accent: { light: "#6d28d9", dark: "#a78bfa" },
     accentFill: "#6d28d9",
-    gradientStops: ["#6d3bc9", "#3f54c0", "#15748f"],
+    // Every hex painted by --ai-deep in globals.css (violet field, base
+    // start+end, teal field). Kept in sync by tokens-css-sync.test.ts so the
+    // WCAG contrast suite covers exactly what ships. Order = visual layering.
+    gradientStops: ["#6d3bc9", "#5b3bc4", "#3f54c0", "#15748f"],
     onAccent: "#ffffff",
     accentSoft: { light: "rgba(124,58,237,0.12)", dark: "rgba(167,139,250,0.18)" },
     textGradient: {

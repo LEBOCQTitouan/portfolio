@@ -36,7 +36,7 @@ export function PostCard({ post }: { post: PostMeta }) {
       {post.tags.length > 0 && (
         <div className="card-pills mt-3 flex flex-wrap gap-2">
           {post.tags.map((tag) => (
-            <TagPill key={tag} tag={tag} lang={lang} />
+            <TagPill key={tag} tag={tag} lang={lang} tone="muted" />
           ))}
         </div>
       )}

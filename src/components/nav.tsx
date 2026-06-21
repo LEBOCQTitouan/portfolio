@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Logo } from "@/components/logo";
 import { useT } from "@/i18n/use-t";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { localizedHref } from "@/i18n/localized-href";
+import { cn } from "@/components/ui/styles";
 
 // The sticky bar condenses (tighter padding, smaller logo, translucent
 // backdrop) on scroll. Two thresholds, not one: condense on the way down past
@@ -24,6 +26,7 @@ const EXPAND_AT = 8;
 
 export function Nav() {
   const { t, lang } = useT();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
 
   // Track scroll across the hysteresis band, rAF-throttled. Only flips state on
@@ -80,15 +83,22 @@ export function Nav() {
         <span className="font-display">Titouan Lebocq</span>
       </Link>
       <nav className="flex items-center gap-5 text-sm text-muted">
-        {LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="transition-colors hover:text-foreground"
-          >
-            {link.label}
-          </Link>
-        ))}
+        {LINKS.map((link) => {
+          const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "link-underline py-1 transition-colors hover:text-foreground",
+                active && "text-foreground",
+              )}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
         <LanguageSwitcher />
         <ThemeToggle />
       </nav>

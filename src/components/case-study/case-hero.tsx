@@ -2,6 +2,7 @@ import type { Project } from "@/core/domain/project";
 import { CategoryBadge } from "@/components/category-badge";
 import { MorphTitle } from "@/components/transitions/morph-title";
 import { workTitleName } from "@/lib/transitions/names";
+import { panelClass, pillClass } from "@/components/ui/styles";
 
 export function CaseHero({
   project,
@@ -14,12 +15,12 @@ export function CaseHero({
 }) {
   return (
     <header
-      className="mb-8 rounded-2xl border border-accent/15 bg-[var(--accent-soft)] p-6"
+      className={panelClass({ variant: "accent-soft", extra: "mb-8" })}
       data-narrate="project-header"
       {...(narrateHeader ? { "data-narrate-text": narrateHeader } : {})}
     >
       <div className="flex items-center gap-3">
-        <CategoryBadge category={project.category} />
+        <CategoryBadge category={project.category} accent />
         <span className="text-sm text-muted">{project.role}</span>
       </div>
       <MorphTitle name={workTitleName(project.slug)}>
@@ -31,7 +32,7 @@ export function CaseHero({
           {project.stack.map((tech) => (
             <li
               key={tech}
-              className="rounded-full border border-border px-2 py-0.5 text-xs text-muted"
+              className={pillClass("muted")}
             >
               {tech}
             </li>

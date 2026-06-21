@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cn, cardClass } from "@/components/ui/styles";
 
 export function PillarCard({
   label,
@@ -12,7 +13,7 @@ export function PillarCard({
   return (
     <Link
       href={href}
-      className="group rounded-xl border border-border bg-card p-5 transition hover:border-accent/50"
+      className={cn("group", cardClass())}
     >
       <span className="block font-semibold tracking-tight">{label}</span>
       <span className="mt-1 block text-sm text-muted">{description}</span>
