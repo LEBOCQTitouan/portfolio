@@ -161,8 +161,9 @@ export const en = {
   },
   uses: {
     title: "Uses",
-    metaDescription: "The tools, hardware, and software I use day to day.",
+    metaDescription: "The tools and software I reach for day to day.",
     intro: "The kit I actually reach for — and why each one earns its place.",
+    dotfilesLabel: "My dotfiles",
   },
   designSystem: {
     title: "Design system",

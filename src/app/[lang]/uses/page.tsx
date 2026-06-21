@@ -50,6 +50,16 @@ export default async function UsesPage({ params }: { params: Promise<{ lang: str
       <p className="mt-2 max-w-2xl text-muted" data-narrate="intro">
         {dict.uses.intro}
       </p>
+      <p className="mt-2 text-sm">
+        <a
+          href={site.social.dotfiles}
+          target="_blank"
+          rel="noreferrer"
+          className="text-accent hover:underline"
+        >
+          {dict.uses.dotfilesLabel} →
+        </a>
+      </p>
       <div className="mt-8 space-y-10" data-narrate="tools">
         {categories.map((cat) => (
           <div key={cat.title}>
