@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { Project } from "@/core/domain/project";
 import { ProjectCard } from "./project-card";
+import { GlowGroup } from "./glow-group";
 
 const sample: Project = {
   slug: "companion-orb",
@@ -21,6 +22,7 @@ const meta = {
   title: "Content/ProjectCard",
   component: ProjectCard,
   args: { project: sample, lang: "en" },
+  decorators: [(Story) => <GlowGroup>{Story()}</GlowGroup>],
 } satisfies Meta<typeof ProjectCard>;
 
 export default meta;

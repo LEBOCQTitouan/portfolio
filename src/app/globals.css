@@ -20,6 +20,10 @@
   --accent-soft: rgba(0,113,227,0.10);
   --on-accent: #ffffff;
   --ring: var(--accent);
+  /* Card hover glow knobs */
+  --glow-r: 240px;
+  --card-edge: 2px;
+  --glow-neutral: rgba(80, 86, 100, 0.16);
 }
 
 .dark {
@@ -33,6 +37,7 @@
   --accent: #2997ff;
   --accent-soft: rgba(41,151,255,0.16);
   /* --accent-fill / --accent-gradient / --on-accent are mode-stable */
+  --glow-neutral: rgba(225, 230, 242, 0.18);
 }
 
 /* ── Layer 3: subject skins (values mirror src/design/tokens.ts) ── */
@@ -236,6 +241,77 @@ body:has([data-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent-soft
   }
   .animate-in {
     animation: fade-in-up 0.5s ease-out both;
+  }
+}
+
+/* ── Card hover glow — cursor-driven light on card-list rows ──── */
+/* Rows opt in with .card-glow + data-glow-row; a <GlowGroup> parent sets
+   --mx/--my and data-hot / [data-on] on pointer move. Subject color comes
+   from the row's own data-subject via color-mix(--accent). */
+.card-glow { position: relative; isolation: isolate; }
+
+/* interior glow — neutral by default; subject on the hovered/focused row */
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+  background: radial-gradient(
+    var(--glow-r) circle at var(--mx, 50%) var(--my, 50%),
+    var(--glow-neutral),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+[data-glow-group][data-on] .card-glow::before { opacity: 1; }
+.card-glow[data-hot]::before,
+.card-glow:focus-within::before {
+  background: radial-gradient(
+    var(--glow-r) circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--accent) 20%, transparent),
+    transparent 70%
+  );
+}
+.card-glow:focus-within::before { opacity: 1; }
+
+/* edge light — same light source, masked to TOP + BOTTOM lines only */
+.card-edge-light {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    var(--glow-r) circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--accent) 85%, transparent),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000, #000) top / 100% var(--card-edge) no-repeat,
+    linear-gradient(#000, #000) bottom / 100% var(--card-edge) no-repeat;
+  mask:
+    linear-gradient(#000, #000) top / 100% var(--card-edge) no-repeat,
+    linear-gradient(#000, #000) bottom / 100% var(--card-edge) no-repeat;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.card-glow:hover .card-edge-light,
+.card-glow:focus-within .card-edge-light { opacity: 1; }
+
+/* pill tint on the hovered/focused row */
+.card-glow:hover .card-pills > *,
+.card-glow:focus-within .card-pills > * {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-glow::before,
+  .card-edge-light,
+  .card-glow:hover .card-pills > *,
+  .card-glow:focus-within .card-pills > * {
+    transition: none !important;
   }
 }
 
