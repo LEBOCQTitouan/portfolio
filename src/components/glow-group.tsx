@@ -28,13 +28,14 @@ export function GlowGroup({
     const apply = () => {
       frame = 0;
       if (!last) return;
+      if (!rows.length) return;
       const { x, y } = last;
       rows.forEach((row, i) => {
         const rect = rects[i];
         if (!rect) return;
         row.style.setProperty("--mx", `${x - rect.left}px`);
         row.style.setProperty("--my", `${y - rect.top}px`);
-        row.toggleAttribute("data-hot", y >= rect.top && y <= rect.bottom);
+        row.toggleAttribute("data-hot", y >= rect.top && y < rect.bottom);
       });
     };
 
@@ -54,6 +55,9 @@ export function GlowGroup({
       rows.forEach((row) => row.removeAttribute("data-hot"));
     };
 
+    const observer = new MutationObserver(measure);
+    observer.observe(root, { childList: true, subtree: true });
+
     measure();
     root.addEventListener("pointermove", onMove as EventListener);
     root.addEventListener("pointerleave", onLeave);
@@ -62,6 +66,7 @@ export function GlowGroup({
 
     return () => {
       if (frame) cancelAnimationFrame(frame);
+      observer.disconnect();
       root.removeEventListener("pointermove", onMove as EventListener);
       root.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("scroll", measure);

@@ -78,6 +78,51 @@ describe("GlowGroup", () => {
     expect(r0).not.toHaveAttribute("data-hot");
   });
 
+  it("re-measures when children change", async () => {
+    // Spy on prototype so rects are determined at measure()-call-time, after
+    // the new DOM nodes exist. r2 lives at top=200..300, r3 at top=300..400.
+    const rectSpy = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      const tid = this.getAttribute("data-testid");
+      if (tid === "r2") return { left: 0, top: 200, right: 200, bottom: 300, width: 200, height: 100, x: 0, y: 200, toJSON() {} } as DOMRect;
+      if (tid === "r3") return { left: 0, top: 300, right: 200, bottom: 400, width: 200, height: 100, x: 0, y: 300, toJSON() {} } as DOMRect;
+      return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0, x: 0, y: 0, toJSON() {} } as DOMRect;
+    });
+
+    const { container, rerender } = render(
+      <GlowGroup>
+        <article key="r0" data-glow-row data-testid="r0" />
+        <article key="r1" data-glow-row data-testid="r1" />
+      </GlowGroup>,
+    );
+    const group = container.querySelector("[data-glow-group]") as HTMLElement;
+
+    // Different keys force React to remove r0/r1 and insert r2/r3 as new DOM
+    // nodes — the childList mutation triggers MutationObserver → measure().
+    rerender(
+      <GlowGroup>
+        <article key="r2" data-glow-row data-testid="r2" />
+        <article key="r3" data-glow-row data-testid="r3" />
+      </GlowGroup>,
+    );
+    const r2 = container.querySelector('[data-testid="r2"]') as HTMLElement;
+    const r3 = container.querySelector('[data-testid="r3"]') as HTMLElement;
+
+    // MutationObserver callbacks are microtasks; flush before asserting.
+    await new Promise((r) => setTimeout(r, 0));
+
+    // Move pointer into r3 (y=350 is inside [300, 400)).
+    // Only succeeds if measure() re-ran and rows now contains r2/r3.
+    pointerMove(group, { clientX: 50, clientY: 350 });
+
+    expect(r3).toHaveAttribute("data-hot");
+    expect(r2).not.toHaveAttribute("data-hot");
+    expect(r3.style.getPropertyValue("--my")).toBe("50px"); // 350 - 300
+
+    rectSpy.mockRestore();
+  });
+
   it("removes listeners on unmount", () => {
     const { container, unmount } = render(
       <GlowGroup>
