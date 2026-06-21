@@ -29,6 +29,7 @@ const now = () => (typeof performance !== "undefined" ? performance.now() : Date
 export function useEyeLife(inputs: EyeLifeInputs) {
   // Latest inputs, read inside the rAF loop without re-subscribing.
   const ref = useRef(inputs);
+  // eslint-disable-next-line react-hooks/refs -- intentional: latest-props-in-a-ref so the rAF loop reads live inputs without re-creating
   ref.current = inputs;
   // Commands from React effects into the running loop.
   const cmd = useRef({ wantBlink: false, wantStartle: false });
@@ -138,6 +139,5 @@ export function useEyeLife(inputs: EyeLifeInputs) {
     // `orbMounted` is included so the effect tears down and re-runs when the Orb
     // unmounts/remounts across routes, re-querying the fresh eye nodes — same reason
     // the spring loop in companion.tsx includes it.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputs.reducedMotion, inputs.containerRef, inputs.orbMounted]);
 }
