@@ -6,7 +6,7 @@ import { locales } from "@/core/domain/locale";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ["", "/blog", "/work", "/about", "/uses"];
+  const staticPaths = ["", "/blog", "/work", "/about", "/uses", "/now"];
 
   const staticRoutes: MetadataRoute.Sitemap = staticPaths.flatMap((p) =>
     locales.map((locale) => ({
