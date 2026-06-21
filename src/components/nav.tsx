@@ -9,24 +9,38 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { localizedHref } from "@/i18n/localized-href";
 import { cn } from "@/components/ui/styles";
 
-// Past this scroll offset the sticky bar condenses (tighter padding, smaller
-// logo, translucent backdrop). Small so the tightening reads as soon as you move.
-const CONDENSE_AT = 8;
+// The sticky bar condenses (tighter padding, smaller logo, translucent
+// backdrop) on scroll. Two thresholds, not one: condense on the way down past
+// CONDENSE_AT, expand on the way back up past EXPAND_AT. The gap between them is
+// hysteresis and it is load-bearing — without it the bar flickers.
+//
+// Why: this header is `position: sticky; top: 0` AND the first in-flow element,
+// and condensing changes its own height by ~24px (py-6 -> py-3). Near the top,
+// where the header is still in normal flow (not yet stuck), resizing it makes
+// the browser nudge scrollY to keep content stable. With a single threshold
+// that nudge re-crosses the line, flipping the state back — a self-sustaining
+// condense/expand loop. The band must stay wider than the height delta so a
+// resize-induced nudge can never reach the opposite threshold.
+const CONDENSE_AT = 56;
+const EXPAND_AT = 8;
 
 export function Nav() {
   const { t, lang } = useT();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
 
-  // Track scroll past the threshold, rAF-throttled. Only flips state on a
-  // boundary crossing so we don't re-render every pixel.
+  // Track scroll across the hysteresis band, rAF-throttled. Only flips state on
+  // a boundary crossing so we don't re-render every pixel; inside the band the
+  // current state is held.
   useEffect(() => {
     let raf = 0;
     const update = () => {
       raf = 0;
       setScrolled((prev) => {
-        const next = window.scrollY > CONDENSE_AT;
-        return prev === next ? prev : next;
+        const y = window.scrollY;
+        if (!prev && y > CONDENSE_AT) return true;
+        if (prev && y < EXPAND_AT) return false;
+        return prev;
       });
     };
     const onScroll = () => {
