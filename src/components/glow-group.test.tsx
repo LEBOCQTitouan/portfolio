@@ -85,8 +85,13 @@ describe("GlowGroup", () => {
       </GlowGroup>,
     );
     const group = container.querySelector("[data-glow-group]") as HTMLElement;
-    const spy = vi.spyOn(group, "removeEventListener");
+    const groupSpy = vi.spyOn(group, "removeEventListener");
+    const windowSpy = vi.spyOn(window, "removeEventListener");
     unmount();
-    expect(spy).toHaveBeenCalledWith("pointermove", expect.any(Function));
+    expect(groupSpy).toHaveBeenCalledWith("pointermove", expect.any(Function));
+    expect(groupSpy).toHaveBeenCalledWith("pointerleave", expect.any(Function));
+    expect(windowSpy).toHaveBeenCalledWith("scroll", expect.any(Function));
+    expect(windowSpy).toHaveBeenCalledWith("resize", expect.any(Function));
+    windowSpy.mockRestore();
   });
 });
