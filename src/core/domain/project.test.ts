@@ -34,6 +34,33 @@ describe("parseProject", () => {
       parseProject({ title: "T", summary: "S", role: "R", category: "systems", metrics: five }, "b", "x"),
     ).toThrow(/project "x"/);
   });
+  it("parses a narrate block with header and beats", () => {
+    const p = parseProject(
+      { title: "T", summary: "S", role: "R", category: "systems",
+        narrate: { header: "H", beats: ["one", "two"] } },
+      "b", "x",
+    );
+    expect(p.narrate).toEqual({ header: "H", beats: ["one", "two"] });
+  });
+  it("leaves narrate undefined when absent", () => {
+    const p = parseProject({ title: "T", summary: "S", role: "R", category: "systems" }, "b", "x");
+    expect(p.narrate).toBeUndefined();
+  });
+  it("drops non-string beats entries instead of throwing", () => {
+    const p = parseProject(
+      { title: "T", summary: "S", role: "R", category: "systems",
+        narrate: { beats: ["ok", 42, null, "fine"] } },
+      "b", "x",
+    );
+    expect(p.narrate?.beats).toEqual(["ok", "fine"]);
+  });
+  it("drops a malformed narrate block (not an object) without throwing", () => {
+    const p = parseProject(
+      { title: "T", summary: "S", role: "R", category: "systems", narrate: "nope" },
+      "b", "x",
+    );
+    expect(p.narrate).toBeUndefined();
+  });
 });
 
 describe("sortProjects", () => {

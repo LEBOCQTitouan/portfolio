@@ -6,14 +6,17 @@ import { workTitleName } from "@/lib/transitions/names";
 export function CaseHero({
   project,
   labels,
+  narrateHeader,
 }: {
   project: Project;
   labels: { source: string; liveDemo: string };
+  narrateHeader?: string;
 }) {
   return (
     <header
       className="mb-8 rounded-2xl border border-accent/15 bg-[var(--accent-soft)] p-6"
       data-narrate="project-header"
+      {...(narrateHeader ? { "data-narrate-text": narrateHeader } : {})}
     >
       <div className="flex items-center gap-3">
         <CategoryBadge category={project.category} />

@@ -12,6 +12,12 @@ metrics:
   - { value: "0", label: "double-counts in prod" }
 links:
   repo: https://github.com/titouanlebocq/ledger-engine
+narrate:
+  header: "Ledger Engine. Its one job: never lie about money."
+  beats:
+    - "The old reconciler drifted under load — and told us hours too late."
+    - "So I rebuilt the write path to be idempotent by construction."
+    - "Result: 10k writes a second, and zero double-counts in prod. Ever."
 ---
 
 ## The problem

@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { getNarration } from "@/lib/narration/resolver";
+import { resolveLineText } from "@/lib/narration/resolve-line-text";
 import { pickActiveSection } from "./active-section";
 import { getMuted, setMuted, subscribeMuted } from "./mute-storage";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -44,7 +45,7 @@ export function Companion() {
     setSlosh(true);
     window.setTimeout(() => setSlosh(false), 600);
   };
-  const [active, setActive] = useState<{ route: string; id: string } | null>(null);
+  const [active, setActive] = useState<{ route: string; id: string; text?: string } | null>(null);
   const [isWide, setIsWide] = useState(true);
   const [progress, setProgress] = useState(0);
   const [heroPresent, setHeroPresent] = useState(false);
@@ -113,7 +114,8 @@ export function Companion() {
         const next = pickActiveSection(ratios.current);
         if (next) {
           activeIdRef.current = next;
-          setActive({ route: pathname, id: next });
+          const el = document.querySelector<HTMLElement>(`[data-narrate="${next}"]`);
+          setActive({ route: pathname, id: next, text: el?.dataset.narrateText });
           recompute();
         }
       },
@@ -206,6 +208,7 @@ export function Companion() {
 
   const activeId = active?.route === pathname ? active.id : null;
   const activeLine = lines.find((l) => l.id === activeId) ?? lines[0];
+  const activeText = resolveLineText(active?.route === pathname ? active.text : undefined, activeLine.text);
 
   // Hero aura only on the landing, wide, not muted, not reduced-motion.
   const heroPhase = heroPresent && isWide && !muted && !reducedMotion;
@@ -259,7 +262,7 @@ export function Companion() {
         aria-hidden="true"
         {...(dockMode ? { "data-dock-active": !muted ? "true" : undefined } : {})}
       >
-        {showBubble && <SpeechBubble text={activeLine.text} reducedMotion={reducedMotion} />}
+        {showBubble && <SpeechBubble text={activeText} reducedMotion={reducedMotion} />}
         <span
           ref={squashRef}
           style={{ position: "relative", display: "inline-flex", pointerEvents: "auto" }}

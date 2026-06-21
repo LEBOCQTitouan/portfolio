@@ -39,4 +39,17 @@ describe("CaseHero", () => {
     const { container } = render(<CaseHero project={project} labels={labels} />);
     expect(container.querySelector('[data-narrate="project-header"]')).not.toBeNull();
   });
+
+  it("sets data-narrate-text on the header when narrateHeader is provided", () => {
+    const { container } = render(
+      <CaseHero project={project} labels={labels} narrateHeader="Ledger Engine. Never lie about money." />,
+    );
+    expect(container.querySelector('[data-narrate="project-header"]'))
+      .toHaveAttribute("data-narrate-text", "Ledger Engine. Never lie about money.");
+  });
+  it("omits data-narrate-text when narrateHeader is absent", () => {
+    const { container } = render(<CaseHero project={project} labels={labels} />);
+    expect(container.querySelector('[data-narrate="project-header"]'))
+      .not.toHaveAttribute("data-narrate-text");
+  });
 });

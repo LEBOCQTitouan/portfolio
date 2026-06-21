@@ -5,6 +5,18 @@ const metricSchema = z.object({
   label: z.string().min(1),
 });
 
+const narrateSchema = z
+  .object({
+    header: z.string().optional(),
+    beats: z
+      .preprocess(
+        (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string") : v),
+        z.array(z.string()).optional(),
+      ),
+  })
+  .optional()
+  .catch(undefined);
+
 const frontmatterSchema = z.object({
   title: z.string().min(1),
   summary: z.string().min(1),
@@ -16,6 +28,7 @@ const frontmatterSchema = z.object({
   cover: z.string().optional(),
   featured: z.boolean().default(false),
   order: z.number().default(0),
+  narrate: narrateSchema,
 });
 
 export type ProjectCategory = "systems" | "interface" | "both";
@@ -32,6 +45,7 @@ export type Project = {
   cover?: string;
   featured: boolean;
   order: number;
+  narrate?: { header?: string; beats?: string[] };
   content: string;
 };
 
