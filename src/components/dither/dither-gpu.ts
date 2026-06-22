@@ -17,9 +17,15 @@ export function createWebGLDither(canvas: HTMLCanvasElement): DitherBackend | nu
   const vs = compile(gl, gl.VERTEX_SHADER, VERTEX_SRC);
   const fs = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT_SRC);
   if (!vs || !fs) return null;
-  const prog = gl.createProgram()!;
+  const prog = gl.createProgram();
+  if (!prog) return null;
   gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    gl.deleteProgram(prog);
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+    return null;
+  }
   gl.useProgram(prog);
 
   const buf = gl.createBuffer();
