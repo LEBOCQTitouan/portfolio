@@ -58,10 +58,14 @@ export function blinkTransform(
   };
 }
 
-/** Px the eyes travel toward the gaze vector (matches the old MAX_OFFSET). */
-export const EYE_GAZE_PX = 3;
-/** Curious saccade calibration. */
-export const SACCADE = { ampPx: 2.4, smooth: 0.16 } as const;
+/** Px the eyes travel toward the gaze vector. Kept subtle, but large enough that
+ *  cursor-following reads clearly above the saccade jitter. */
+export const EYE_GAZE_PX = 4;
+/** Curious saccade calibration. `ampPx` is intentionally well below EYE_GAZE_PX so
+ *  the random darts stay a faint accent and never mask the directional gaze.
+ *  `dwellMinMs`/`dwellMaxMs` are the fixation hold between darts — the eyes rest
+ *  (following the cursor) instead of perpetually drifting to new targets. */
+export const SACCADE = { ampPx: 1.3, smooth: 0.16, dwellMinMs: 600, dwellMaxMs: 1500 } as const;
 /** Startle widen on poke (fraction added to lid scale, decays away). */
 export const STARTLE_AMP = 0.22;
 /** Eye scale while hovering the orb (a focused narrowing on the user). */
@@ -87,6 +91,12 @@ export function saccadeTarget(rand: () => number, intensity: number): { x: numbe
 /** Calmer eyes while actively scrolling (reading), wandering when idle. */
 export function saccadeIntensity(msSinceScroll: number): number {
   return msSinceScroll < 1200 ? 0.35 : 1;
+}
+
+/** Fixation hold (ms) before the eyes dart to a new saccade target. The dwell is
+ *  why cursor-following is visible: between darts the eyes rest on the gaze point. */
+export function nextSaccadeDelay(rand: () => number): number {
+  return SACCADE.dwellMinMs + rand() * (SACCADE.dwellMaxMs - SACCADE.dwellMinMs);
 }
 
 /** Blink only when the eyes are alertly open. */
