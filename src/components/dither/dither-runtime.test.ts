@@ -13,13 +13,20 @@ describe("computeBackingSize", () => {
 });
 
 describe("resolvePrecision", () => {
-  it("stays within [0,1] and is larger when hovered", () => {
+  it("rests at/near full precision (crisp anchor) and dips coarser as the wave rises", () => {
     const opts = { ambient: 0.2, hover: 0.6, speed: 1 };
-    const rest = resolvePrecision(opts, 1570, false); // sin peak near here
-    const hov = resolvePrecision(opts, 1570, true);
-    expect(rest).toBeGreaterThanOrEqual(0);
-    expect(hov).toBeLessThanOrEqual(1);
-    expect(hov).toBeGreaterThanOrEqual(rest);
+    const atZero = resolvePrecision(opts, 0, false); // wave=0.5 -> 1 - 0.1 = 0.9
+    expect(atZero).toBeGreaterThan(0.5);
+    expect(atZero).toBeLessThanOrEqual(1);
+  });
+  it("hover deepens the coarse excursion (lower precision) at the same time", () => {
+    const opts = { ambient: 0.2, hover: 0.6, speed: 1 };
+    const t = 1570; // wave ~1
+    const rest = resolvePrecision(opts, t, false);
+    const hov = resolvePrecision(opts, t, true);
+    expect(hov).toBeLessThanOrEqual(rest);
+    expect(hov).toBeGreaterThanOrEqual(0);
+    expect(rest).toBeLessThanOrEqual(1);
   });
 });
 

@@ -40,6 +40,7 @@ export function DitherImage({
   const isVideo = kind === "video" || /\.(mp4|webm)$/i.test(src);
   const reduced = useReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rendererRef = useRef<DitherRenderer | null>(null);
   const [supported, setSupported] = useState<boolean | null>(null);
 
   const animateOff = animate === false;
@@ -80,8 +81,9 @@ export function DitherImage({
       animate: anim,
       isVideo,
     });
+    rendererRef.current = renderer;
     setSupported(renderer.supported);
-    return () => renderer.destroy();
+    return () => { renderer.destroy(); rendererRef.current = null; };
   }, [src, isVideo, pattern, levels, cellSize, threshold, contrast, ink, paper, animateOff, aAmbient, aHover, aSpeed, reduced]);
 
   if (supported === false) {
@@ -98,6 +100,8 @@ export function DitherImage({
       aria-label={alt}
       className={className}
       style={{ display: "block", width: "100%", height: "auto" }}
+      onPointerEnter={() => rendererRef.current?.setHovered(true)}
+      onPointerLeave={() => rendererRef.current?.setHovered(false)}
     />
   );
 }

@@ -11,9 +11,9 @@ export function computeBackingSize(
 }
 
 export function resolvePrecision(opts: AnimateOpts, timeMs: number, hovered: boolean): number {
-  const wave = 0.5 + 0.5 * Math.sin(timeMs * 0.001 * opts.speed);
+  const wave = 0.5 + 0.5 * Math.sin(timeMs * 0.001 * opts.speed); // 0..1
   const amp = opts.ambient + (hovered ? opts.hover : 0);
-  const p = amp * wave;
+  const p = 1 - amp * wave; // 1 = finest (resting/crisp); dips toward coarse on the wave, deeper on hover
   return p < 0 ? 0 : p > 1 ? 1 : p;
 }
 
