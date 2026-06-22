@@ -14,6 +14,8 @@ export function ProjectCard({ project, lang }: { project: Project; lang: Locale 
       className="card-glow border-b border-border py-6"
       data-glow-row
       data-subject={resolveSubject({ category: project.category })}
+      data-bp-reveal
+      {...(project.cover ? { "data-reveal-src": project.cover, "data-reveal-cap": project.title } : {})}
     >
       <span className="card-edge-light" aria-hidden="true" />
       <div className="flex items-start justify-between gap-4">

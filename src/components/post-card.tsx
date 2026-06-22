@@ -14,6 +14,8 @@ export function PostCard({ post }: { post: PostMeta }) {
       className="card-glow border-b border-border py-6"
       data-glow-row
       data-subject={resolveSubject({ tags: post.tags })}
+      data-bp-reveal
+      {...(post.cover ? { "data-reveal-src": post.cover, "data-reveal-cap": post.title } : {})}
     >
       <span className="card-edge-light" aria-hidden="true" />
       <div className="flex items-baseline justify-between gap-4 text-sm text-muted">

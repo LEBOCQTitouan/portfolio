@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { BP } from "@/design/blueprint";
 import { useReducedMotion } from "@/components/companion/use-reduced-motion";
 import {
-  DPR_CAP, alignedOriginX, suppression, warpOffset, convergeOffset, type Rect,
+  DPR_CAP, alignedOriginX, suppression, warpOffset, convergeOffset, rasterBlock, type Rect,
 } from "./geometry";
 
 // Reads a CSS custom property off <body> (theme-aware).
@@ -28,6 +28,7 @@ function rgba(k: number[], a: number): string { return `rgba(${k[0] | 0},${k[1] 
 
 export default function BlueprintField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const floatRef = useRef<HTMLCanvasElement>(null);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -47,6 +48,38 @@ export default function BlueprintField() {
     const ptr = { x: -9999, y: -9999, on: false };
     let sx = -9999, sy = -9999, amp = 0;
     let raf = 0;
+
+    // Floating preview state
+    const fineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const fcanvas = floatRef.current;
+    const fctx = fcanvas?.getContext("2d") ?? null;
+    const off = document.createElement("canvas");
+    let reveal: { img: HTMLImageElement; cap: string } | null = null;
+    let fprog = 0, fx = -9999, fy = -9999;
+
+    const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-bp-reveal]"));
+    const imgCache = new Map<string, HTMLImageElement>();
+    const rowHandlers: Array<[HTMLElement, () => void, () => void]> = [];
+    if (!reduced && fineHover && fcanvas && fctx) {
+      for (const row of rows) {
+        const src = row.dataset.revealSrc; if (!src) continue;
+        let img = imgCache.get(src);
+        if (!img) { img = new Image(); img.decoding = "async"; img.src = src; imgCache.set(src, img); }
+        const cap = row.dataset.revealCap ?? "";
+        const enter = () => { reveal = { img: img!, cap }; };
+        const leave = () => { if (reveal?.img === img) reveal = null; };
+        row.addEventListener("pointerenter", enter);
+        row.addEventListener("pointerleave", leave);
+        rowHandlers.push([row, enter, leave]);
+      }
+    }
+
+    const drawCover = (octx: CanvasRenderingContext2D, img: HTMLImageElement, w: number, h: number) => {
+      const ir = img.width / img.height, rr = w / h; let sw, sh, ix, iy;
+      if (ir > rr) { sh = img.height; sw = sh * rr; ix = (img.width - sw) / 2; iy = 0; }
+      else { sw = img.width; sh = sw / rr; ix = 0; iy = (img.height - sh) / 2; }
+      octx.drawImage(img, ix, iy, sw, sh, 0, 0, w, h);
+    };
 
     const measure = () => {
       const el = document.querySelector("[data-bp-column]") ?? document.querySelector("main");
@@ -145,6 +178,29 @@ export default function BlueprintField() {
       if (hot) actRgb = hot.rgb;
       over += ((hot ? 1 : 0) - over) * 0.12;
       draw(true);
+      // Floating preview — fine pointer + non-reduced-motion only
+      if (!reduced && fineHover && fcanvas && fctx) {
+        const active = !!reveal && reveal.img.complete && reveal.img.naturalWidth > 0;
+        fprog += ((active ? 1 : 0) - fprog) * 0.12;
+        if (fx < -9000) { fx = ptr.x; fy = ptr.y; }
+        fx += (ptr.x - fx) * BP.reveal.follow; fy += (ptr.y - fy) * BP.reveal.follow;
+        const sc = BP.reveal.scaleMin + (1 - BP.reveal.scaleMin) * fprog;
+        fcanvas.style.transform = `translate(${fx + BP.reveal.offset.x}px,${fy + BP.reveal.offset.y}px) scale(${sc})`;
+        fcanvas.style.filter = `grayscale(${(1 - fprog).toFixed(2)})`;
+        fcanvas.style.opacity = active || fprog > 0.02 ? "1" : "0";
+        if (reveal) {
+          const w = fcanvas.clientWidth, h = fcanvas.clientHeight;
+          if (w >= 2) {
+            if (fcanvas.width !== Math.round(w * dpr)) { fcanvas.width = Math.round(w * dpr); fcanvas.height = Math.round(h * dpr); }
+            const block = rasterBlock(fprog, BP.reveal.coarse);
+            const sw = Math.max(1, Math.round(w / block)), sh = Math.max(1, Math.round(h / block));
+            off.width = sw; off.height = sh;
+            const octx = off.getContext("2d")!; octx.imageSmoothingEnabled = true; drawCover(octx, reveal.img, sw, sh);
+            fctx.setTransform(dpr, 0, 0, dpr, 0, 0); fctx.imageSmoothingEnabled = false;
+            fctx.clearRect(0, 0, w, h); fctx.drawImage(off, 0, 0, sw, sh, 0, 0, w, h);
+          }
+        }
+      }
       raf = requestAnimationFrame(frame);
     };
 
@@ -171,14 +227,29 @@ export default function BlueprintField() {
       window.removeEventListener("scroll", measure);
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerleave", onLeave);
+      for (const [row, enter, leave] of rowHandlers) {
+        row.removeEventListener("pointerenter", enter);
+        row.removeEventListener("pointerleave", leave);
+      }
     };
   }, [reduced]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      style={{ position: "fixed", inset: 0, width: "100%", height: "100%", zIndex: 0, pointerEvents: "none" }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        style={{ position: "fixed", inset: 0, width: "100%", height: "100%", zIndex: 0, pointerEvents: "none" }}
+      />
+      <canvas
+        ref={floatRef}
+        aria-hidden="true"
+        style={{
+          position: "fixed", left: 0, top: 0, width: 320, height: 200, borderRadius: 10,
+          zIndex: 6, pointerEvents: "none", opacity: 0, transition: "opacity .2s ease",
+          boxShadow: "0 14px 34px rgba(16,32,64,0.18)",
+        }}
+      />
+    </>
   );
 }
