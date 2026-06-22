@@ -46,6 +46,7 @@ export default function BlueprintField() {
         const b = e.getBoundingClientRect();
         return { l: b.left, t: b.top, r: b.right, b: b.bottom, m: Number(e.dataset.bpClear) || BP.clear.text };
       });
+      if (reduced) draw(false);
     };
 
     const resize = () => {
@@ -128,7 +129,7 @@ export default function BlueprintField() {
     window.addEventListener("scroll", measure, { passive: true });
     if (!reduced) {
       window.addEventListener("pointermove", onMove);
-      window.addEventListener("pointerleave", onLeave);
+      document.addEventListener("pointerleave", onLeave);
       raf = requestAnimationFrame(frame);
     } else {
       draw(false);
@@ -139,7 +140,7 @@ export default function BlueprintField() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", measure);
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerleave", onLeave);
+      document.removeEventListener("pointerleave", onLeave);
     };
   }, [reduced]);
 
