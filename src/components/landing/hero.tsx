@@ -24,10 +24,10 @@ export function Hero({ t, lang }: { t: Dictionary["hero"]; lang: Locale }) {
           {t.subtitle}
         </p>
         <div className="mt-8 flex flex-wrap gap-3 text-sm">
-          <Link href={localizedHref(lang, "/work")} className={buttonClass("primary")}>
+          <Link href={localizedHref(lang, "/work")} className={buttonClass("primary")} data-bp-attract data-subject="brand">
             {t.viewWork}
           </Link>
-          <Link href={localizedHref(lang, "/blog")} className={buttonClass("secondary")}>
+          <Link href={localizedHref(lang, "/blog")} className={buttonClass("secondary")} data-bp-attract data-subject="brand">
             {t.readWriting}
           </Link>
         </div>

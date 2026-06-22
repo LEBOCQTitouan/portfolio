@@ -4,12 +4,21 @@ import { useEffect, useRef } from "react";
 import { BP } from "@/design/blueprint";
 import { useReducedMotion } from "@/components/companion/use-reduced-motion";
 import {
-  DPR_CAP, alignedOriginX, suppression, warpOffset, type Rect,
+  DPR_CAP, alignedOriginX, suppression, warpOffset, convergeOffset, type Rect,
 } from "./geometry";
 
 // Reads a CSS custom property off <body> (theme-aware).
 function cssVar(name: string): string {
   return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+function hexRgb(h: string): [number, number, number] {
+  h = h.replace("#", "").trim();
+  if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+  const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+function lerp3(k: number[], c: number[], t: number): number[] {
+  t = Math.min(1, Math.max(0, t));
+  return [k[0] + (c[0] - k[0]) * t, k[1] + (c[1] - k[1]) * t, k[2] + (c[2] - k[2]) * t];
 }
 function ink(): [number, number, number] {
   return cssVar("--bp-ink").split(",").map((s) => parseInt(s.trim(), 10)) as [number, number, number];
@@ -31,6 +40,9 @@ export default function BlueprintField() {
     let W = 0, H = 0, dpr = 1;
     let baseX = 0, cMin = 0, cMax = 0, rMin = 0, rMax = 0;
     let clears: Array<Rect & { m: number }> = [];
+    let attract: Array<Rect & { rgb: [number, number, number] }> = [];
+    let actRgb: [number, number, number] = [0, 113, 227];
+    let over = 0;
     let col = { l: 0, r: 0 }, inner = { l: 0, r: 0 };
     const ptr = { x: -9999, y: -9999, on: false };
     let sx = -9999, sy = -9999, amp = 0;
@@ -45,6 +57,10 @@ export default function BlueprintField() {
       clears = Array.from(document.querySelectorAll<HTMLElement>("[data-bp-clear]")).map((e) => {
         const b = e.getBoundingClientRect();
         return { l: b.left, t: b.top, r: b.right, b: b.bottom, m: Number(e.dataset.bpClear) || BP.clear.text };
+      });
+      attract = Array.from(document.querySelectorAll<HTMLElement>("[data-bp-attract]")).map((e) => {
+        const b = e.getBoundingClientRect();
+        return { l: b.left, t: b.top, r: b.right, b: b.bottom, rgb: hexRgb(getComputedStyle(e).getPropertyValue("--accent").trim()) };
       });
       if (reduced) draw(false);
     };
@@ -96,15 +112,23 @@ export default function BlueprintField() {
         const sup = suppression(hx, hy, clears);
         if (sup >= 0.98) continue;
         const isMajor = c % BP.MAJOR === 0 && r % BP.MAJOR === 0;
-        const al = Math.min(0.85, a * (isMajor ? 1.5 : 1) * (1 - sup));
-        if (al <= 0.004) continue;
         const w = animate ? warpAt(hx, hy) : { dx: 0, dy: 0 };
-        const x = hx + w.dx, y = hy + w.dy;
+        const cv = animate ? convergeOffset(hx, hy, sx, sy, over, BP.converge) : { dx: 0, dy: 0, infl: 0 };
+        const x = hx + w.dx + cv.dx, y = hy + w.dy + cv.dy;
+        let cc = k as number[]; let al = a * (isMajor ? 1.5 : 1) * (1 - sup);
+        if (cv.infl > 0) {
+          const t = Math.min(1, cv.infl * 1.4);
+          cc = lerp3(k, actRgb, t);
+          al = Math.max(al, (a + (0.8 - a) * t) * (1 - sup));
+        }
+        al = Math.min(al, 0.85);
+        if (al <= 0.004) continue;
         if (isMajor) {
-          ctx.strokeStyle = rgba(k, Math.min(1, al * 1.5)); ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(x - 3, y); ctx.lineTo(x + 3, y); ctx.moveTo(x, y - 3); ctx.lineTo(x, y + 3); ctx.stroke();
+          const s = 3 + cv.infl * 1.6;
+          ctx.strokeStyle = rgba(cc, Math.min(1, al * 1.5)); ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(x - s, y); ctx.lineTo(x + s, y); ctx.moveTo(x, y - s); ctx.lineTo(x, y + s); ctx.stroke();
         } else {
-          ctx.beginPath(); ctx.fillStyle = rgba(k, al); ctx.arc(x, y, 1, 0, 6.283); ctx.fill();
+          ctx.beginPath(); ctx.fillStyle = rgba(cc, al); ctx.arc(x, y, 1 + cv.infl * 1.5, 0, 6.283); ctx.fill();
         }
       }
       vline(col.l, Math.min(0.45, a * 1.5), k); vline(col.r, Math.min(0.45, a * 1.5), k);
@@ -114,6 +138,12 @@ export default function BlueprintField() {
     const frame = () => {
       if (ptr.on) { if (sx < -9000) { sx = ptr.x; sy = ptr.y; } sx += (ptr.x - sx) * 0.2; sy += (ptr.y - sy) * 0.2; }
       amp += ((ptr.on ? 1 : 0) - amp) * 0.08;
+      let hot: typeof attract[number] | null = null;
+      for (const r of attract) {
+        if (sx >= r.l && sx < r.r && sy >= r.t && sy < r.b) hot = r;
+      }
+      if (hot) actRgb = hot.rgb;
+      over += ((hot ? 1 : 0) - over) * 0.12;
       draw(true);
       raf = requestAnimationFrame(frame);
     };

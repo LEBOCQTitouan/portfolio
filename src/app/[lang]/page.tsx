@@ -59,8 +59,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <section className="py-8" data-narrate="pillars">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">{dict.home.whatIDo}</h2>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
-          <PillarCard label={dict.home.systems} description={dict.home.systemsDesc} href={localizedHref(lang, "/work")} />
-          <PillarCard label={dict.home.interfaces} description={dict.home.interfacesDesc} href={localizedHref(lang, "/work")} />
+          <PillarCard label={dict.home.systems} description={dict.home.systemsDesc} href={localizedHref(lang, "/work")} subject="systems" />
+          <PillarCard label={dict.home.interfaces} description={dict.home.interfacesDesc} href={localizedHref(lang, "/work")} subject="interface" />
         </div>
       </section>
 
