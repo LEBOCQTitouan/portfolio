@@ -3,6 +3,7 @@ import { site } from "@/core/domain/site";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { Locale } from "@/core/domain/locale";
 import { localizedHref } from "@/i18n/localized-href";
+import { TitleBlock, DraftingMarks } from "@/components/blueprint/blueprint-frame";
 
 export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"]; lang: Locale }) {
   const SOCIALS = [
@@ -11,7 +12,7 @@ export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"
   ];
 
   return (
-    <footer className="flex flex-col gap-3 border-t border-border py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between" data-bp-clear>
+    <footer className="relative flex flex-col gap-3 border-t border-border py-8 pb-44 text-sm text-muted sm:flex-row sm:items-center sm:justify-between" data-bp-clear>
       <span>© {year} Titouan Lebocq</span>
       <nav className="flex gap-4">
         <Link href={localizedHref(lang, "/uses")} className="link-underline transition-colors hover:text-foreground">
@@ -37,6 +38,8 @@ export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"
           </a>
         ))}
       </nav>
+      <DraftingMarks />
+      <TitleBlock lang={lang} />
     </footer>
   );
 }
