@@ -1,3 +1,5 @@
+import { DitherImage } from "@/components/dither/dither-image";
+
 export function Figure({
   src,
   alt,
@@ -10,10 +12,9 @@ export function Figure({
   return (
     <figure className="my-6">
       {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <DitherImage
           src={src}
-          alt={alt ?? ""}
+          alt={alt ?? caption ?? ""}
           className="w-full rounded-panel border border-border"
         />
       ) : (

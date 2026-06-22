@@ -3,8 +3,9 @@ import { describe, it, expect } from "vitest";
 import { Figure } from "@/components/case-study/figure";
 
 describe("Figure", () => {
-  it("renders an image when src is provided", () => {
+  it("renders an accessible dithered image when src is provided", () => {
     render(<Figure src="/work/arch.svg" alt="architecture" caption="Write path" />);
+    // jsdom has no WebGL → DitherImage falls back to <img>, preserving the contract
     const img = screen.getByRole("img", { name: /architecture/i });
     expect(img).toHaveAttribute("src", "/work/arch.svg");
     expect(screen.getByText(/write path/i)).toBeInTheDocument();
