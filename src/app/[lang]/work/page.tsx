@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllProjects } from "@/composition/server";
 import { ProjectCard } from "@/components/project-card";
-import { GlowGroup } from "@/components/glow-group";
 import { isLocale, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { site } from "@/core/domain/site";
@@ -56,11 +55,11 @@ export default async function WorkPage({ params }: { params: Promise<{ lang: str
         {projects.length === 0 ? (
           <p className="text-muted">{dict.work.empty}</p>
         ) : (
-          <GlowGroup>
+          <>
             {projects.map((project) => (
               <ProjectCard key={project.slug} project={project} lang={lang} />
             ))}
-          </GlowGroup>
+          </>
         )}
       </div>
     </section>

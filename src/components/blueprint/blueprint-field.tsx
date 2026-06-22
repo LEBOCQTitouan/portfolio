@@ -57,22 +57,9 @@ export default function BlueprintField() {
     let reveal: { img: HTMLImageElement; cap: string } | null = null;
     let fprog = 0, fx = -9999, fy = -9999;
 
-    const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-bp-reveal]"));
     const imgCache = new Map<string, HTMLImageElement>();
-    const rowHandlers: Array<[HTMLElement, () => void, () => void]> = [];
-    if (!reduced && fineHover && fcanvas && fctx) {
-      for (const row of rows) {
-        const src = row.dataset.revealSrc; if (!src) continue;
-        let img = imgCache.get(src);
-        if (!img) { img = new Image(); img.decoding = "async"; img.src = src; imgCache.set(src, img); }
-        const cap = row.dataset.revealCap ?? "";
-        const enter = () => { reveal = { img: img!, cap }; };
-        const leave = () => { if (reveal?.img === img) reveal = null; };
-        row.addEventListener("pointerenter", enter);
-        row.addEventListener("pointerleave", leave);
-        rowHandlers.push([row, enter, leave]);
-      }
-    }
+    type RevealRow = { l: number; t: number; r: number; b: number; img: HTMLImageElement; cap: string };
+    let revealRows: RevealRow[] = [];
 
     const drawCover = (octx: CanvasRenderingContext2D, img: HTMLImageElement, w: number, h: number) => {
       const ir = img.width / img.height, rr = w / h; let sw, sh, ix, iy;
@@ -95,6 +82,15 @@ export default function BlueprintField() {
         const b = e.getBoundingClientRect();
         return { l: b.left, t: b.top, r: b.right, b: b.bottom, rgb: hexRgb(getComputedStyle(e).getPropertyValue("--accent").trim()) };
       });
+      if (fineHover && !reduced) {
+        revealRows = Array.from(document.querySelectorAll<HTMLElement>("[data-bp-reveal][data-reveal-src]")).map((e) => {
+          const b = e.getBoundingClientRect();
+          const src = e.dataset.revealSrc!;
+          let img = imgCache.get(src);
+          if (!img) { img = new Image(); img.decoding = "async"; img.src = src; imgCache.set(src, img); }
+          return { l: b.left, t: b.top, r: b.right, b: b.bottom, img, cap: e.dataset.revealCap ?? "" };
+        });
+      }
       if (reduced) draw(false);
     };
 
@@ -208,8 +204,25 @@ export default function BlueprintField() {
     const onMove = (e: PointerEvent) => {
       if (e.pointerType && e.pointerType !== "mouse") return;
       ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
+      if (revealRows.length > 0) {
+        let hit: typeof revealRows[number] | null = null;
+        for (const row of revealRows) {
+          if (ptr.x >= row.l && ptr.x < row.r && ptr.y >= row.t && ptr.y < row.b) { hit = row; break; }
+        }
+        reveal = hit ? { img: hit.img, cap: hit.cap } : null;
+      }
     };
-    const onLeave = () => { ptr.on = false; };
+    const onLeave = () => { ptr.on = false; reveal = null; };
+
+    // MutationObserver: re-measure when content subtree changes (route transitions, list updates).
+    // Coalesced via a single rAF so a burst of mutations only triggers one measure().
+    let mutRaf = 0;
+    const observer = new MutationObserver(() => {
+      if (mutRaf) return;
+      mutRaf = requestAnimationFrame(() => { mutRaf = 0; measure(); });
+    });
+    const observeRoot = document.querySelector("[data-bp-column]") ?? document.body;
+    observer.observe(observeRoot, { childList: true, subtree: true });
 
     resize();
     window.addEventListener("resize", resize);
@@ -224,14 +237,12 @@ export default function BlueprintField() {
 
     return () => {
       if (raf) cancelAnimationFrame(raf);
+      if (mutRaf) cancelAnimationFrame(mutRaf);
+      observer.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", measure);
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerleave", onLeave);
-      for (const [row, enter, leave] of rowHandlers) {
-        row.removeEventListener("pointerenter", enter);
-        row.removeEventListener("pointerleave", leave);
-      }
     };
   }, [reduced]);
 
