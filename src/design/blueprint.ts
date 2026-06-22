@@ -11,3 +11,13 @@ export const BP = {
   reveal: { follow: 0.11, coarse: 18, scaleMin: 0.92, offset: { x: 26, y: -96 } },
   clear: { text: 16, pillar: 18, button: 28, row: 14 }, // keep-out margins
 } as const;
+
+// Title-block fields for the blueprint frame (mono drafting plate).
+export const BP_FRAME = {
+  name: "TITOUAN LEBOCQ",
+  title: "Portfolio",
+  rev: "2026.06",
+  sheet: "01 / 04",
+  scale: "1 : 1",
+  status: "LIVE",
+} as const;
