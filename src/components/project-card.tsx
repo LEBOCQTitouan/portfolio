@@ -11,13 +11,11 @@ import { pillClass } from "@/components/ui/styles";
 export function ProjectCard({ project, lang }: { project: Project; lang: Locale }) {
   return (
     <article
-      className="card-glow border-b border-border py-6"
-      data-glow-row
+      className="border-b border-border py-6"
       data-subject={resolveSubject({ category: project.category })}
       data-bp-reveal
       {...(project.cover ? { "data-reveal-src": project.cover, "data-reveal-cap": project.title } : {})}
     >
-      <span className="card-edge-light" aria-hidden="true" />
       <div className="flex items-start justify-between gap-4">
         <MorphTitle name={workTitleName(project.slug)}>
           <h2 className="text-xl font-semibold tracking-tight">

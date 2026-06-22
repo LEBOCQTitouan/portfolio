@@ -13,7 +13,7 @@ import { buttonClass } from "@/components/ui/styles";
 export function Hero({ t, lang }: { t: Dictionary["hero"]; lang: Locale }) {
   return (
     <section data-orb-home className="relative isolate py-20 sm:py-28">
-      <div className="relative z-10" data-narrate="hero">
+      <div className="relative z-10" data-narrate="hero" data-bp-clear>
         <Eyebrow>{t.eyebrow}</Eyebrow>
         <MorphTitle name={PAGE_TITLE}>
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">

@@ -11,7 +11,7 @@ export function Footer({ year, t, lang }: { year: number; t: Dictionary["footer"
   ];
 
   return (
-    <footer className="flex flex-col gap-3 border-t border-border py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+    <footer className="flex flex-col gap-3 border-t border-border py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between" data-bp-clear>
       <span>© {year} Titouan Lebocq</span>
       <nav className="flex gap-4">
         <Link href={localizedHref(lang, "/uses")} className="link-underline transition-colors hover:text-foreground">

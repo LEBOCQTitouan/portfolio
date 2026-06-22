@@ -38,14 +38,11 @@ describe("PostCard", () => {
     expect(screen.getByText(/4 min read/i)).toBeInTheDocument();
   });
 
-  it("scopes the subject and exposes glow hooks", () => {
+  it("scopes the subject and exposes blueprint hooks", () => {
     const { container } = renderPostCard();
     const article = container.querySelector("article")!;
-    expect(article).toHaveClass("card-glow");
-    expect(article).toHaveAttribute("data-glow-row");
     expect(article).toHaveAttribute("data-subject", "systems"); // tags ["systems"]
-    const edge = article.querySelector(".card-edge-light")!;
-    expect(edge).toHaveAttribute("aria-hidden", "true");
+    expect(article).toHaveAttribute("data-bp-reveal");
     expect(container.querySelector(".card-pills")).not.toBeNull();
   });
 });

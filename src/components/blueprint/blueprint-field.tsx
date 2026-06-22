@@ -188,6 +188,7 @@ export default function BlueprintField() {
         fcanvas.style.transform = `translate(${fx + BP.reveal.offset.x}px,${fy + BP.reveal.offset.y}px) scale(${sc})`;
         fcanvas.style.filter = `grayscale(${(1 - fprog).toFixed(2)})`;
         fcanvas.style.opacity = active || fprog > 0.02 ? "1" : "0";
+        fcanvas.style.willChange = fprog > 0.02 ? "transform" : "auto";
         if (reveal) {
           const w = fcanvas.clientWidth, h = fcanvas.clientHeight;
           if (w >= 2) {
