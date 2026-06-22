@@ -24,4 +24,10 @@ describe("Eyes", () => {
     expect(root.style.getPropertyValue("--gx")).not.toBe("");
     expect(root.style.getPropertyValue("--gy")).not.toBe("");
   });
+
+  it("renders a lid inside each eye wrapper", () => {
+    const { container } = render(<Eyes mood="calm" reaction="active" gaze={{ x: 0, y: 0 }} />);
+    expect(container.querySelectorAll(".companion-eye")).toHaveLength(2);
+    expect(container.querySelectorAll(".companion-eye .companion-eye__lid")).toHaveLength(2);
+  });
 });

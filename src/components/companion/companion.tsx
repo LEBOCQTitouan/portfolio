@@ -13,6 +13,8 @@ import { Orb } from "./orb";
 import { SpeechBubble } from "./speech-bubble";
 import { useReaction } from "./use-reaction";
 import type { Gaze } from "./eyes";
+import { useEyeLife } from "./use-eye-life";
+import { eyeShape } from "./eyes";
 import { useT } from "@/i18n/use-t";
 import { isLocale, defaultLocale } from "@/core/domain/locale";
 
@@ -39,8 +41,12 @@ export function Companion() {
     if (reaction === "sleepy") nodDur.current = 2.6 + ((Date.now() % 10) / 10) * 1.6;
   }, [reaction]);
   const [slosh, setSlosh] = useState(false);
+  const eyesRef = useRef<HTMLDivElement | null>(null);
+  const [hovering, setHovering] = useState(false);
+  const [pokeNonce, setPokeNonce] = useState(0);
   const onPoke = () => {
     poke();
+    setPokeNonce((n) => n + 1);
     if (muted) return;
     setSlosh(true);
     window.setTimeout(() => setSlosh(false), 600);
@@ -204,6 +210,19 @@ export function Companion() {
     return () => document.documentElement.style.setProperty("--companion-dock-h", "0px");
   }, [dockMode, lines.length, muted]);
 
+  const eyeReactionShape = eyeShape(lines[0]?.mood ?? "calm", reaction);
+  useEyeLife({
+    containerRef: eyesRef,
+    reaction,
+    shape: eyeReactionShape,
+    activeKey: active?.id ?? null,
+    hovering,
+    pokeNonce,
+    gaze,
+    reducedMotion,
+    orbMounted,
+  });
+
   if (lines.length === 0) return null;
 
   const activeId = active?.route === pathname ? active.id : null;
@@ -267,11 +286,13 @@ export function Companion() {
           ref={squashRef}
           style={{ position: "relative", display: "inline-flex", pointerEvents: "auto" }}
           onPointerDown={onPoke}
+          onPointerEnter={() => setHovering(true)}
+          onPointerLeave={() => setHovering(false)}
         >
           {reaction === "asleep" && (
             <div className="companion-dream" aria-hidden="true"><span>z</span><span>z</span></div>
           )}
-          <Orb mood={activeLine.mood} reaction={reaction} gaze={gaze} style={orbStyle} className={slosh ? "is-sloshing" : undefined} />
+          <Orb mood={activeLine.mood} reaction={reaction} gaze={gaze} style={orbStyle} className={slosh ? "is-sloshing" : undefined} eyesRef={eyesRef} />
         </span>
       </div>
       <button
