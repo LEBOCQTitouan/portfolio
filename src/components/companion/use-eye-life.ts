@@ -3,7 +3,7 @@ import type { Reaction } from "./reaction-state";
 import type { EyeShape } from "./eyes";
 import {
   BLINK, blinkTransform, nextBlinkDelay, wantsDoubleBlink,
-  saccadeTarget, saccadeIntensity, blinkAllowed, focusScale,
+  saccadeTarget, saccadeIntensity, nextSaccadeDelay, blinkAllowed, focusScale,
   EYE_GAZE_PX, SACCADE, STARTLE_AMP,
 } from "./eye-life";
 
@@ -66,6 +66,7 @@ export function useEyeLife(inputs: EyeLifeInputs) {
     let secondBlinkAt = Infinity; // queued double-blink time
     let lastScrollAt = -Infinity;
     let nextBlinkAt = now() + nextBlinkDelay(Math.random);
+    let nextSaccadeAt = now() + nextSaccadeDelay(Math.random);
 
     const onScroll = () => { lastScrollAt = now(); };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -90,11 +91,13 @@ export function useEyeLife(inputs: EyeLifeInputs) {
       }
       if (t >= secondBlinkAt) { secondBlinkAt = Infinity; tryStartBlink(t, inp); }
 
-      // Saccade: pick a new dart once we've settled on the last one.
+      // Saccade: dart to a new target, then FIXATE (hold) for a randomized dwell
+      // so the eyes rest on the gaze point and cursor-following stays readable.
       const intensity = saccadeIntensity(t - lastScrollAt);
-      if (Math.abs(sx - tx) < 0.2 && Math.abs(sy - ty) < 0.2) {
+      if (t >= nextSaccadeAt) {
         const tgt = saccadeTarget(Math.random, intensity);
         tx = tgt.x; ty = tgt.y;
+        nextSaccadeAt = t + nextSaccadeDelay(Math.random);
       }
       sx += (tx - sx) * SACCADE.smooth;
       sy += (ty - sy) * SACCADE.smooth;
