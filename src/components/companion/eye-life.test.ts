@@ -50,7 +50,7 @@ describe("blinkTransform", () => {
 
 import {
   EYE_GAZE_PX, SACCADE, STARTLE_AMP, FOCUS_SCALE,
-  nextBlinkDelay, wantsDoubleBlink, saccadeTarget, saccadeIntensity,
+  nextBlinkDelay, wantsDoubleBlink, saccadeTarget, saccadeIntensity, nextSaccadeDelay,
   blinkAllowed, focusScale,
 } from "./eye-life";
 
@@ -97,6 +97,19 @@ describe("saccadeIntensity", () => {
     expect(saccadeIntensity(5000)).toBe(1);
     expect(saccadeIntensity(1200)).toBe(1);
     expect(saccadeIntensity(1199)).toBe(0.35);
+  });
+});
+
+describe("nextSaccadeDelay", () => {
+  it("stays within the fixation-dwell range for the rand range", () => {
+    expect(nextSaccadeDelay(() => 0)).toBe(SACCADE.dwellMinMs);
+    expect(nextSaccadeDelay(() => 0.999)).toBeLessThan(SACCADE.dwellMaxMs);
+    expect(nextSaccadeDelay(() => 0.5)).toBeGreaterThan(SACCADE.dwellMinMs);
+  });
+
+  it("keeps the dwell well above the saccade ease time so the eyes actually rest", () => {
+    // amplitude stays a faint accent below the gaze travel
+    expect(SACCADE.ampPx).toBeLessThan(EYE_GAZE_PX);
   });
 });
 
