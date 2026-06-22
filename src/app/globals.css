@@ -206,7 +206,7 @@ body {
 .page-aura {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   --aura-tint: rgba(0,113,227,0.06);   /* default = brand (light) */
   --aura-glow: rgba(0,113,227,0.16);
@@ -225,6 +225,10 @@ body:has([data-page-subject="ai"]) .page-aura { --aura-tint: rgba(124,58,237,0.0
 .dark body:has([data-page-subject="systems"]) .page-aura { --aura-tint: rgba(32,200,184,0.10); --aura-glow: rgba(32,200,184,0.20); }
 .dark body:has([data-page-subject="interface"]) .page-aura { --aura-tint: rgba(240,101,149,0.10); --aura-glow: rgba(240,101,149,0.20); }
 .dark body:has([data-page-subject="ai"]) .page-aura { --aura-tint: rgba(167,139,250,0.10); --aura-glow: rgba(167,139,250,0.22); }
+
+/* ── Blueprint field ink (mono; subject colour enters only via interaction) ── */
+:root { --bp-ink: 18, 38, 66; --bp-ink-a: 0.12; }
+.dark { --bp-ink: 140, 175, 215; --bp-ink-a: 0.15; }
 
 /* ── Subject accent lifted to <body> for off-scope consumers (the companion) ── */
 :root { --subject-accent: var(--accent); --subject-accent-soft: var(--accent-soft); }
@@ -340,92 +344,6 @@ body:has([data-page-subject="ai"]) { --subject-accent: #6d28d9; --subject-accent
   }
   .animate-in {
     animation: fade-in-up var(--dur-page) var(--ease-out) both;
-  }
-}
-
-/* ── Card hover glow — cursor-driven light on card-list rows ──── */
-/* Rows opt in with .card-glow + data-glow-row; a <GlowGroup> parent sets
-   --mx/--my and data-hot / [data-on] on pointer move. Subject color comes
-   from the row's own data-subject via color-mix(--accent). */
-.card-glow { position: relative; isolation: isolate; }
-
-/* interior glow — neutral by default; subject on the hovered/focused row */
-.card-glow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-  pointer-events: none;
-  background: radial-gradient(
-    var(--glow-r) circle at var(--mx, 50%) var(--my, 50%),
-    var(--glow-neutral),
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity var(--dur-ui) var(--ease-standard);
-}
-[data-glow-group][data-on] .card-glow::before { opacity: 1; }
-.card-glow[data-hot]::before,
-.card-glow:focus-within::before {
-  background: radial-gradient(
-    var(--glow-r) circle at var(--mx, 50%) var(--my, 50%),
-    color-mix(in srgb, var(--accent) 20%, transparent),
-    transparent 70%
-  );
-}
-.card-glow:focus-within::before { opacity: 1; }
-
-/* edge light — same light source, masked to TOP + BOTTOM lines only */
-.card-edge-light {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    var(--glow-r) circle at var(--mx, 50%) var(--my, 50%),
-    color-mix(in srgb, var(--accent) 85%, transparent),
-    transparent 70%
-  );
-  -webkit-mask:
-    linear-gradient(#000, #000) top / 100% var(--card-edge) no-repeat,
-    linear-gradient(#000, #000) bottom / 100% var(--card-edge) no-repeat;
-  mask:
-    linear-gradient(#000, #000) top / 100% var(--card-edge) no-repeat,
-    linear-gradient(#000, #000) bottom / 100% var(--card-edge) no-repeat;
-  opacity: 0;
-  transition: opacity var(--dur-ui) var(--ease-standard);
-}
-.card-glow:hover .card-edge-light,
-.card-glow:focus-within .card-edge-light { opacity: 1; }
-
-/* pill tint on the hovered/focused row */
-.card-glow:hover .card-pills > *,
-.card-glow:focus-within .card-pills > * {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* subject badge on the hovered/focused row — blooms with the pills */
-.card-glow:hover .card-subject,
-.card-glow:focus-within .card-subject {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.card-glow:hover .card-subject .card-dot,
-.card-glow:focus-within .card-subject .card-dot {
-  background: var(--accent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-glow::before,
-  .card-edge-light,
-  .card-glow:hover .card-pills > *,
-  .card-glow:focus-within .card-pills > *,
-  .card-glow:hover .card-subject,
-  .card-glow:focus-within .card-subject,
-  .card-glow:hover .card-subject .card-dot,
-  .card-glow:focus-within .card-subject .card-dot {
-    transition: none !important;
   }
 }
 

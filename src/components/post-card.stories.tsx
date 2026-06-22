@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { PostMeta } from "@/core/domain/post";
 import { PostCard } from "./post-card";
-import { GlowGroup } from "./glow-group";
 
 const sample: PostMeta = {
   slug: "engineering-with-craft",
@@ -18,7 +17,6 @@ const meta = {
   title: "Content/PostCard",
   component: PostCard,
   args: { post: sample },
-  decorators: [(Story) => <GlowGroup>{Story()}</GlowGroup>],
 } satisfies Meta<typeof PostCard>;
 
 export default meta;

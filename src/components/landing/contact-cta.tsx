@@ -15,7 +15,7 @@ export function ContactCta({ t }: { t: Dictionary["contact"] }) {
         {t.body}
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
-        <a href="mailto:lebocq.titouan@gmail.com" className={buttonClass("primary")}>
+        <a href="mailto:lebocq.titouan@gmail.com" className={buttonClass("primary")} data-bp-attract data-subject="brand">
           {t.getInTouch}
         </a>
         <a

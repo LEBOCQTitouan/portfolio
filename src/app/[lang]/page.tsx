@@ -5,7 +5,6 @@ import { Hero } from "@/components/landing/hero";
 import { PillarCard } from "@/components/landing/pillar-card";
 import { ProjectCard } from "@/components/project-card";
 import { PostCard } from "@/components/post-card";
-import { GlowGroup } from "@/components/glow-group";
 import { ContactCta } from "@/components/landing/contact-cta";
 import { getFeaturedProjects, getAllProjects } from "@/composition/server";
 import { getAllPosts } from "@/composition/server";
@@ -57,25 +56,23 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <Hero t={dict.hero} lang={lang} />
 
       <section className="py-8" data-narrate="pillars">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">{dict.home.whatIDo}</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted" data-bp-clear>{dict.home.whatIDo}</h2>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
-          <PillarCard label={dict.home.systems} description={dict.home.systemsDesc} href={localizedHref(lang, "/work")} />
-          <PillarCard label={dict.home.interfaces} description={dict.home.interfacesDesc} href={localizedHref(lang, "/work")} />
+          <PillarCard label={dict.home.systems} description={dict.home.systemsDesc} href={localizedHref(lang, "/work")} subject="systems" />
+          <PillarCard label={dict.home.interfaces} description={dict.home.interfacesDesc} href={localizedHref(lang, "/work")} subject="interface" />
         </div>
       </section>
 
       {projects.length > 0 && (
         <section className="py-8" data-narrate="work">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">{dict.home.selectedWork}</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted" data-bp-clear>{dict.home.selectedWork}</h2>
             <Link href={localizedHref(lang, "/work")} className="text-sm text-accent hover:underline">{dict.home.viewAll}</Link>
           </div>
           <div className="mt-2">
-            <GlowGroup>
-              {projects.map((project) => (
-                <ProjectCard key={project.slug} project={project} lang={lang} />
-              ))}
-            </GlowGroup>
+            {projects.map((project) => (
+              <ProjectCard key={project.slug} project={project} lang={lang} />
+            ))}
           </div>
         </section>
       )}
@@ -83,15 +80,13 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       {posts.length > 0 && (
         <section className="py-8" data-narrate="writing">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">{dict.home.latestWriting}</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted" data-bp-clear>{dict.home.latestWriting}</h2>
             <Link href={localizedHref(lang, "/blog")} className="text-sm text-accent hover:underline">{dict.home.readAll}</Link>
           </div>
           <div className="mt-2">
-            <GlowGroup>
-              {posts.map((post) => (
-                <PostCard key={post.slug} post={post} />
-              ))}
-            </GlowGroup>
+            {posts.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
           </div>
         </section>
       )}

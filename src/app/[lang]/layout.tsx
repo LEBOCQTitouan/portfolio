@@ -13,6 +13,7 @@ import { isLocale, locales, defaultLocale } from "@/core/domain/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { TranslationProvider } from "@/i18n/translation-provider";
 import { PAGE_AURA } from "@/lib/transitions/names";
+import BlueprintField from "@/components/blueprint/blueprint-field";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -79,6 +80,7 @@ export default async function RootLayout({
           aria-hidden="true"
           style={{ viewTransitionName: PAGE_AURA }}
         />
+        <BlueprintField />
         <analytics.Beacon />
         <ThemeProvider
           attribute="class"
@@ -87,7 +89,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider dictionary={dict} lang={lang}>
-            <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-6">
+            <div data-bp-column className="mx-auto flex min-h-screen max-w-3xl flex-col px-6">
               <a
                 href="#main"
                 className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
