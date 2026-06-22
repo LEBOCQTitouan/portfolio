@@ -14,6 +14,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { TranslationProvider } from "@/i18n/translation-provider";
 import { PAGE_AURA } from "@/lib/transitions/names";
 import BlueprintField from "@/components/blueprint/blueprint-field";
+import { Dimension } from "@/components/blueprint/blueprint-frame";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -97,7 +98,8 @@ export default async function RootLayout({
                 {dict.common.skipToContent}
               </a>
               <Nav />
-              <main id="main" className="flex-1 py-8 animate-in" style={{ paddingBottom: "var(--companion-dock-h, 0px)" }}>
+              <main id="main" className="relative flex-1 py-8 animate-in" style={{ paddingBottom: "var(--companion-dock-h, 0px)" }}>
+                <Dimension />
                 {children}
               </main>
               <Footer year={new Date().getFullYear()} t={dict.footer} lang={lang} />
