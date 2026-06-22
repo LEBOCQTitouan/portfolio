@@ -178,3 +178,44 @@ Coherence = grid aligned to layout + clearings (figure-ground). Presence tuned t
 Colour = action-elements-only. Buttons = elevated above the grid. Gutter = subtle section
 hatch. Reveal = cursor-float, grayscale→colour raster, hidden at rest. Companion = coexists
 unchanged. These were each validated live during the brainstorm.
+
+## 10. Blueprint frame — peripheral annotations (added 2026-06-22)
+
+A second, separate brainstorm (after the field shipped) decided how to use the *drafting
+annotations* (dimensions, title block, drafting marks). The discipline: **use them like a real
+blueprint — a sparse peripheral frame, never scattered through the content.** The drawing is
+framed and dimensioned at its edges; the content column stays undimensioned. (Earlier attempts
+that tagged individual components / pinned a sticky top dimension were rejected as "too much".)
+
+**Rendering decision: the frame is DOM/SVG, NOT canvas.** These elements are static, sparse,
+and text-heavy — DOM/CSS gives crisp type, precise layout-driven placement (no hand-computed
+canvas coordinates, which proved bug-prone), and is genuinely more "designed". So:
+**frame = DOM/SVG components; interactive grid = the canvas `BlueprintField` (§1–§9).**
+
+### 10.1 Elements (all mono except one sanctioned accent)
+- **Overall dimension (top).** A horizontal dimension of the content column — value `768`
+  (computed from the real column box) — drawn with a dimension line, end **arrowheads**, and the
+  value **breaking the line**; plus a small `24` **gutter sub-dimension** at the left. Lives in
+  the first content section's top padding (below the nav, above the eyebrow); scrolls with the
+  page. Stated **once**.
+- **Title block (bottom-right of the footer "sheet" strip).** A designed plate: a header row
+  (name + `01 / 04` sheet index), a **single subject-accent hairline** across the top (the *one*
+  sanctioned colour deviation from mono — toggleable), then a **ledger** of label/value pairs:
+  `TITLE · REV · SHEET · LANG · SCALE · STATUS` (small uppercase mono labels over mono values).
+  ("Ledger" is the chosen variant; a compact "Stamp" variant exists but is not used by default.)
+- **Drafting marks (bottom-left of the footer strip).** A **registration crosshair** + a
+  **scale bar** (`0–96px`). Tasteful, sparse.
+- Content stays clean; the calm dot grid / column guides / gutter hatch (canvas) remain behind.
+
+### 10.2 Architecture
+A small `BlueprintFrame` group of focused components (e.g. `Dimension`, `TitleBlock`,
+`DraftingMarks`), rendered once in the layout (dimension near the top of the content; title block
++ marks inside the footer). The overall dimension derives its value from the column width; the
+title-block fields come from a small config object (name, rev, sheet, lang, scale, status). All
+`aria-hidden` / decorative. Static — unaffected by `prefers-reduced-motion`. Mono via the same
+`--bp-ink` tokens; the title-block accent hairline uses `--subject-accent`.
+
+### 10.3 Decisions
+Frame, not content annotations. DOM/SVG, not canvas. Title block = Ledger, accent hairline ON.
+Drafting marks (registration + scale bar) included. One overall dimension (`768` + `24`), once,
+top. Validated live via the `reco-dom` companion mock.
