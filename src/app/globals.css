@@ -206,7 +206,7 @@ body {
 .page-aura {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   --aura-tint: rgba(0,113,227,0.06);   /* default = brand (light) */
   --aura-glow: rgba(0,113,227,0.16);
