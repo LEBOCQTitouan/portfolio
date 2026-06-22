@@ -42,6 +42,11 @@ export function DitherImage({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [supported, setSupported] = useState<boolean | null>(null);
 
+  const animateOff = animate === false;
+  const aAmbient = animate === false ? null : (animate?.ambient ?? 0.15);
+  const aHover = animate === false ? null : (animate?.hover ?? 0.5);
+  const aSpeed = animate === false ? null : (animate?.speed ?? 1);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -66,8 +71,8 @@ export function DitherImage({
     }
 
     const anim = reduced ? false
-      : (animate === false ? false
-        : { ambient: animate?.ambient ?? 0.15, hover: animate?.hover ?? 0.5, speed: animate?.speed ?? 1 });
+      : (animateOff ? false
+        : { ambient: aAmbient!, hover: aHover!, speed: aSpeed! });
 
     const renderer: DitherRenderer = createDitherRenderer(canvas, {
       getParams: () => params,
@@ -77,7 +82,7 @@ export function DitherImage({
     });
     setSupported(renderer.supported);
     return () => renderer.destroy();
-  }, [src, isVideo, pattern, levels, cellSize, threshold, contrast, ink, paper, animate, reduced]);
+  }, [src, isVideo, pattern, levels, cellSize, threshold, contrast, ink, paper, animateOff, aAmbient, aHover, aSpeed, reduced]);
 
   if (supported === false) {
     return isVideo
