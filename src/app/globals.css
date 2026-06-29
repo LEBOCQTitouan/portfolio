@@ -246,7 +246,7 @@ body:has([data-page-subject="ai"]) .page-aura { --aura-tint: rgba(124,58,237,0.0
 .bp-arr.r { border-left: 6px solid rgba(var(--bp-ink), .34); }
 
 /* title block — designed plate, bottom-right of the footer strip */
-.bp-tb { position: absolute; right: 0; bottom: 24px; width: 316px; border: 1px solid rgba(var(--bp-ink), .34);
+.bp-tb { position: absolute; right: 0; bottom: 24px; width: 316px; border: 1.5px solid rgba(var(--bp-ink), .5);
   background: rgba(var(--bp-ink), .035); font-family: var(--bp-mono); }
 .bp-tb { border-top: 2px solid var(--subject-accent, #0071e3); }      /* the one sanctioned accent */
 .bp-tb__head { display: flex; align-items: baseline; justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid rgba(var(--bp-ink), .34); }
@@ -262,9 +262,9 @@ body:has([data-page-subject="ai"]) .page-aura { --aura-tint: rgba(124,58,237,0.0
 /* drafting marks — registration crosshair + scale bar, bottom-left of the footer strip */
 .bp-marks { position: absolute; left: 0; bottom: 24px; display: flex; align-items: flex-end; gap: 18px; }
 .bp-reg { width: 18px; height: 18px; position: relative; }
-.bp-reg::before, .bp-reg::after { content: ""; position: absolute; background: rgba(var(--bp-ink), .34); }
-.bp-reg::before { left: 8px; top: -3px; bottom: -3px; width: 1px; }
-.bp-reg::after { top: 8px; left: -3px; right: -3px; height: 1px; }
+.bp-reg::before, .bp-reg::after { content: ""; position: absolute; }
+.bp-reg::before { left: 8px; top: -4px; bottom: -4px; width: 1px; background: repeating-linear-gradient(to bottom, rgba(var(--bp-ink), .34) 0 4px, transparent 4px 7px); }
+.bp-reg::after { top: 8px; left: -4px; right: -4px; height: 1px; background: repeating-linear-gradient(to right, rgba(var(--bp-ink), .34) 0 4px, transparent 4px 7px); }
 .bp-reg i { position: absolute; inset: 2px; border: 1px solid rgba(var(--bp-ink), .34); border-radius: 50%; }
 .bp-scale { font-family: var(--bp-mono); font-size: 9px; color: rgba(var(--bp-ink), .58); }
 .bp-scale__bar { display: flex; height: 8px; width: 96px; border: 1px solid rgba(var(--bp-ink), .34); border-radius: 1px; overflow: hidden; }
